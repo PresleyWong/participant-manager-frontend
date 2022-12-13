@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/participant-manager-frontend/static/css/main.dc20f36b.css",
+    "main.js": "/participant-manager-frontend/static/js/main.ef2dd871.js",
+    "static/js/787.5e2534be.chunk.js": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js",
+    "index.html": "/participant-manager-frontend/index.html",
+    "main.dc20f36b.css.map": "/participant-manager-frontend/static/css/main.dc20f36b.css.map",
+    "main.ef2dd871.js.map": "/participant-manager-frontend/static/js/main.ef2dd871.js.map",
+    "787.5e2534be.chunk.js.map": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dc20f36b.css",
+    "static/js/main.ef2dd871.js"
+  ]
+}
