@@ -4,7 +4,7 @@ export const indexApi = createApi({
   reducerPath: "indexApi",
   baseQuery: fetchBaseQuery({
     // baseUrl: "http://localhost:5000/api/v1/",
-    baseUrl: "http://participant-manager.fly.dev/api/v1/",
+    baseUrl: "https://participant-manager.fly.dev/api/v1/",
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
       if (token) {
