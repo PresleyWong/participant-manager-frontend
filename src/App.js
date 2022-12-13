@@ -14,7 +14,7 @@ import Signup from "./pages/Signup";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Layout>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -66,7 +66,7 @@ const App = () => {
           />
         </Routes>
       </Layout>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
