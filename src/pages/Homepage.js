@@ -62,7 +62,7 @@ const Homepage = () => {
   return (
     <Grid templateColumns="repeat(12, 1fr)" gap={5}>
       <GridItem colSpan={3}>{!currentUser && <Login />}</GridItem>
-      <GridItem colSpan={9}>
+      <GridItem colSpan={9} minW={currentUser ? "8xl" : "0xl"}>
         <Card bg={backgroundColor} boxShadow={"lg"}>
           <CardHeader
             bg={useColorModeValue("#55624d", "gray.500")}
