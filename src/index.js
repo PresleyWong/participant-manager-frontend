@@ -1,19 +1,48 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './index.css';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+// import "./index.css";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
+import { FaBold } from "react-icons/fa";
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container);
+
+const customTheme = extendTheme({
+  fonts: {
+    heading: `'Open Sans', sans-serif`,
+    body: `'helvetica', sans-serif`,
+  },
+  styles: {
+    global: (props) => ({
+      body: {
+        fontSize: "1rem",
+      },
+      table: {
+        bg: mode("#fdfdf5", "#212121")(props),
+      },
+      thead: {
+        bg: mode("#55624d", "#212121")(props),
+      },
+      th: {
+        color: "#ffffff !important",
+        textTransform: "capitalize !important",
+      },
+    }),
+  },
+});
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ChakraProvider theme={customTheme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ChakraProvider>
   </React.StrictMode>
 );
 
