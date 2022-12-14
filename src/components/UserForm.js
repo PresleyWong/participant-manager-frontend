@@ -75,17 +75,19 @@ const UserForm = ({ data, onClose, createNew = false }) => {
             <ModalBody pb={6}>
               <Stack spacing={4}>
                 <InputControl
+                  isRequired
                   name="email"
                   label="Email"
                   inputProps={{ type: "email" }}
                 />
 
                 <InputControl
+                  isRequired
                   name="password"
                   label="Password"
                   inputProps={{ type: "password" }}
                 />
-                <InputControl name="locality" label="Locality" />
+                <InputControl isRequired name="locality" label="Locality" />
                 <InputControl name="name" label="Name" />
                 <SwitchControl name="isAdmin" label="Is Admin?" />
               </Stack>

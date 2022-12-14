@@ -74,23 +74,27 @@ const EventForm = ({ data, onClose, createNew = false }) => {
           <Form>
             <ModalBody pb={6}>
               <Stack spacing={4}>
-                <InputControl label="Title" name="title" />
+                <InputControl isRequired label="Title" name="title" />
                 <InputControl
+                  isRequired
                   label="Start Date"
                   name="startDate"
                   inputProps={{ type: "date" }}
                 />
                 <InputControl
+                  isRequired
                   label="End Date"
                   name="endDate"
                   inputProps={{ type: "date" }}
                 />
                 <InputControl
+                  isRequired
                   label="Start Time"
                   name="startTime"
                   inputProps={{ type: "time" }}
                 />
                 <InputControl
+                  isRequired
                   label="End Time"
                   name="endTime"
                   inputProps={{ type: "time" }}

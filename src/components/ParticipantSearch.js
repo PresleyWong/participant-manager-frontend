@@ -32,7 +32,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
 
-const SearchTable = ({ data, eventId }) => {
+const SearchTable = ({ data, eventId, eventParticipants }) => {
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
@@ -89,6 +89,7 @@ const SearchTable = ({ data, eventId }) => {
       case "Actions":
         return (
           <Button
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
             size="sm"
             className="primary-button"
             onClick={() =>
@@ -160,7 +161,7 @@ const SearchTable = ({ data, eventId }) => {
   return content;
 };
 
-const SearchResults = ({ searchTerm, eventId }) => {
+const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   const [filteredSearchTerm, setFilteredSearchTerm] = useState(searchTerm);
   const { data, error, isLoading, isFetching } = useGetParticipantSearchQuery(
     filteredSearchTerm,
@@ -195,7 +196,13 @@ const SearchResults = ({ searchTerm, eventId }) => {
   }
 
   if (results.length > 0) {
-    return <SearchTable data={results} eventId={eventId} />;
+    return (
+      <SearchTable
+        data={results}
+        eventId={eventId}
+        eventParticipants={eventParticipants}
+      />
+    );
   }
 };
 
@@ -215,7 +222,7 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const ParticipantSearch = ({ eventId }) => {
+const ParticipantSearch = ({ eventId, eventParticipants }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -237,6 +244,7 @@ const ParticipantSearch = ({ eventId }) => {
       <SearchResults
         searchTerm={debouncedSearchTerm}
         eventId={eventId}
+        eventParticipants={eventParticipants}
       ></SearchResults>
     </VStack>
   );

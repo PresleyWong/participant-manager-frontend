@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
 import {
   useUpdateParticipantMutation,
@@ -54,14 +53,14 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
 
   const validationSchema = Yup.object({
     english_name: Yup.string().required("Required"),
-    chinese_name: Yup.string().required("Required"),
+    // chinese_name: Yup.string().required("Required"),
     email: Yup.string().email("Invalid email format").required("Required"),
     phone: Yup.number().required("Required"),
     language: Yup.string().required("Required"),
     locality: Yup.string().required("Required"),
     gender: Yup.string().required("Required"),
-    college: Yup.string().required("Required"),
-    academic_year: Yup.number().required("Required"),
+    // college: Yup.string().required("Required"),
+    // academic_year: Yup.number().required("Required"),
   });
 
   const onSubmit = async (values) => {
@@ -102,9 +101,14 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
           <Form>
             <ModalBody pb={6}>
               <Stack spacing={4}>
-                <InputControl label="English Name" name="english_name" />
+                <InputControl
+                  isRequired
+                  label="English Name"
+                  name="english_name"
+                />
                 <InputControl label="Chinese Name" name="chinese_name" />
                 <SelectControl
+                  isRequired
                   label="Gender"
                   name="gender"
                   selectProps={{ placeholder: "Select option" }}
@@ -118,6 +122,7 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                   })}
                 </SelectControl>
                 <InputControl
+                  isRequired
                   label="Email"
                   name="email"
                   inputProps={{ type: "email" }}
@@ -129,6 +134,7 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                 />
 
                 <SelectControl
+                  isRequired
                   label="Language"
                   name="language"
                   selectProps={{ placeholder: "Select option" }}
@@ -141,7 +147,7 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                     );
                   })}
                 </SelectControl>
-                <InputControl label="Locality" name="locality" />
+                <InputControl isRequired label="Locality" name="locality" />
                 <InputControl label="College" name="college" />
                 <NumberInputControl
                   label="Academic Year"

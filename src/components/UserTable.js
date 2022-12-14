@@ -7,6 +7,7 @@ import {
   Tr,
   Th,
   Td,
+  Icon,
   chakra,
   Button,
   IconButton,
@@ -28,6 +29,8 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
+import { HiCheck } from "react-icons/hi";
 import { useDeleteUserMutation } from "../redux/api/userApi";
 import UserForm from "./UserForm";
 import Pagination from "./Pagination";
@@ -93,6 +96,13 @@ const CellFormater = ({ cell }) => {
         <div className="datetime-break-line">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
+      );
+    case "Is Admin?":
+      return (
+        <Icon
+          boxSize={5}
+          as={cell.row.original.is_admin ? HiCheck : IoMdClose}
+        />
       );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
