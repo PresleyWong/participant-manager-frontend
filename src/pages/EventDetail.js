@@ -25,8 +25,11 @@ const EventDetail = () => {
     useGetEventDetailWithAppointmentsQuery(eventId);
   const currentUser = useSelector(selectCurrentUser);
   let mainContent;
+  let eventParticipants = [];
 
   if (isSuccess) {
+    data.participants.map((p) => eventParticipants.push(p.id));
+
     const filteredData = data.participants.map(
       ({
         id,
@@ -47,7 +50,10 @@ const EventDetail = () => {
             <p className="event-title">{data.event.title}</p>
           </VStack>
 
-          <ParticipantSearch eventId={data.event.id} />
+          <ParticipantSearch
+            eventId={data.event.id}
+            eventParticipants={eventParticipants}
+          />
 
           <VStack>
             <Box className="align-left">
