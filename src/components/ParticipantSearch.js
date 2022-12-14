@@ -27,8 +27,6 @@ import {
   getSortedRowModel,
   createColumnHelper,
 } from "@tanstack/react-table";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
-
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
 
@@ -188,11 +186,11 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   }
 
   if (isFetching) {
-    return <div className="text-hint">Fetching participants...</div>;
+    return <div className="text-hint">Fetching saints...</div>;
   }
 
   if (results.length === 0 && searchTerm.length > 0) {
-    return <div className="text-hint">No participants found</div>;
+    return <div className="text-hint">No saints found</div>;
   }
 
   if (results.length > 0) {
@@ -235,7 +233,7 @@ const ParticipantSearch = ({ eventId, eventParticipants }) => {
         />
         <Input
           type="tel"
-          placeholder="Search participants"
+          placeholder="Search saints"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

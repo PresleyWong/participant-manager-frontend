@@ -16,6 +16,8 @@ import {
 import ParticipantForm from "../components/ParticipantForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import ImportButton from "../components/ImportButton";
+import cloneDeep from "lodash.clonedeep";
 
 const Participants = () => {
   const { data, isLoading, isSuccess, isError, error } =
@@ -30,6 +32,11 @@ const Participants = () => {
   let content;
 
   if (isSuccess) {
+    let customData = cloneDeep(data);
+    customData.map((p) => {
+      p["name"] = `${p.english_name} ${p.chinese_name}`;
+    });
+
     content = (
       <>
         <Modal isOpen={isOpenNew} onClose={onCloseNew}>
@@ -42,9 +49,10 @@ const Participants = () => {
             </ModalBody>
           </ModalContent>
         </Modal>
-        <ParticipantTable data={data} />
-        <Stack direction="row" spacing={4} mt={"1rem"} align="center">
-          {currentUser.isAdmin && (
+        <ParticipantTable data={customData} />
+
+        {currentUser.isAdmin && (
+          <Stack direction="row" spacing={4} mt={"1rem"} align="center">
             <Button
               size="sm"
               className="primary-button"
@@ -53,8 +61,9 @@ const Participants = () => {
             >
               Create New Participant
             </Button>
-          )}
-        </Stack>
+            <ImportButton />
+          </Stack>
+        )}
       </>
     );
   } else if (isLoading) {

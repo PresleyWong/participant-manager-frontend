@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Spinner,
@@ -14,10 +13,10 @@ import {
 import { useGetEventDetailWithAppointmentsQuery } from "../redux/api/eventApi";
 import RegistrantTable from "../components/RegistrantTable";
 import ParticipantSearch from "../components/ParticipantSearch";
-import ImportButton from "../components/ImportButton";
 import ExportButton from "../components/ExportButton";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import cloneDeep from "lodash.clonedeep";
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -28,19 +27,14 @@ const EventDetail = () => {
   let eventParticipants = [];
 
   if (isSuccess) {
-    data.participants.map((p) => eventParticipants.push(p.id));
+    let customData = cloneDeep(data);
+    customData.participants.map((p) => {
+      eventParticipants.push(p.id);
+      p["name"] = `${p.english_name} ${p.chinese_name}`;
+    });
 
-    const filteredData = data.participants.map(
-      ({
-        id,
-        created_at,
-        updated_at,
-        event_id,
-        server,
-        register_date,
-        locality,
-        ...item
-      }) => item
+    const exportData = data.participants.map(
+      ({ id, created_at, updated_at, event_id, server, ...item }) => item
     );
 
     mainContent = (
@@ -60,17 +54,16 @@ const EventDetail = () => {
               <p>Registrants</p>
             </Box>
 
-            <RegistrantTable data={data.participants} />
+            <RegistrantTable data={customData.participants} />
           </VStack>
         </Stack>
         {currentUser.isAdmin && (
           <Stack direction="row" spacing={4} mt={"1rem"} align="center">
             <ExportButton
-              apiArray={filteredData}
+              apiArray={exportData}
               fileName={"participant_export.xls"}
               buttonTitle={"Export"}
             />
-            <ImportButton />
           </Stack>
         )}
       </>

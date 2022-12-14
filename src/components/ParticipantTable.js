@@ -65,6 +65,24 @@ const CellFormater = ({ cell }) => {
           </Modal>
         </>
       );
+    case "Name":
+      let nameArray = cell.row.original.name.split(" ");
+      return (
+        <>
+          <span
+            className={
+              "bold-text " +
+              (cell.row.original.gender === "Brother"
+                ? "brother-color"
+                : "sister-color")
+            }
+          >
+            {nameArray[0]}
+          </span>
+          <br />
+          {nameArray.length > 1 && nameArray[1]}
+        </>
+      );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
   }
@@ -89,6 +107,10 @@ const ParticipantTable = ({ data }) => {
     columnHelper.accessor("chinese_name", {
       cell: (info) => info.getValue(),
       header: "Chinese Name",
+    }),
+    columnHelper.accessor("name", {
+      cell: (info) => info.getValue(),
+      header: "Name",
     }),
     columnHelper.accessor("email", {
       cell: (info) => info.getValue(),
@@ -135,7 +157,11 @@ const ParticipantTable = ({ data }) => {
       sorting,
     },
     initialState: {
-      columnVisibility: { id: false },
+      columnVisibility: {
+        gender: false,
+        english_name: false,
+        chinese_name: false,
+      },
       pagination: { pageSize: 15 },
     },
   });

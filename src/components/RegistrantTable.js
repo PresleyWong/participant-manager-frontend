@@ -78,13 +78,8 @@ const CellFormater = ({ cell }) => {
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
       );
-    case "English Name":
-      return (
-        <span className="bold-text">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </span>
-      );
     case "Name":
+      let nameArray = cell.row.original.name.split(" ");
       return (
         <>
           <span
@@ -95,10 +90,10 @@ const CellFormater = ({ cell }) => {
                 : "sister-color")
             }
           >
-            {cell.row.original.english_name}
+            {nameArray[0]}
           </span>
           <br />
-          {cell.row.original.chinese_name}
+          {nameArray.length > 1 && nameArray[1]}
         </>
       );
 

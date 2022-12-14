@@ -206,7 +206,7 @@ const EventTable = ({ data }) => {
       sorting,
     },
     initialState: {
-      columnVisibility: { id: false },
+      // columnVisibility: { id: false },
       pagination: { pageSize: 15 },
     },
   });
