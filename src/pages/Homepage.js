@@ -60,7 +60,11 @@ const Homepage = () => {
   };
 
   return (
-    <Grid templateColumns="repeat(12, 1fr)" gap={5}>
+    <Grid
+      templateColumns={{ lg: "repeat(12, 1fr)", base: "repeat(1, 1fr)" }}
+      columnGap={{ lg: 5 }}
+      rowGap={{ base: 5 }}
+    >
       <GridItem colSpan={3}>{!currentUser && <Login />}</GridItem>
       <GridItem colSpan={9} minW={currentUser ? "8xl" : "0xl"}>
         <Card bg={backgroundColor} boxShadow={"lg"}>

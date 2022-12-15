@@ -26,7 +26,7 @@ const customTheme = extendTheme({
         bg: mode("#fdfdf5", "#212121")(props),
       },
       thead: {
-        bg: mode("#55624d", "#212121")(props),
+        bg: mode("#55624d", "gray.400")(props),
       },
       th: {
         color: "#ffffff !important",

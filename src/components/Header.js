@@ -31,7 +31,7 @@ const NavLink = ({ children }) => (
     rounded={"md"}
     _hover={{
       textDecoration: "none",
-      bg: useColorModeValue("gray.200", "gray.700"),
+      bg: useColorModeValue("teal.600", "teal.300"),
     }}
     as={ReachLink}
     to={children.href}
@@ -128,6 +128,8 @@ const Header = () => {
             aria-label={"Open Menu"}
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
+            bg={useColorModeValue("#386a24", "gray.500")}
+            colorScheme="teal"
           />
           <HStack spacing={8} alignItems={"center"}>
             <HStack
@@ -143,13 +145,20 @@ const Header = () => {
         </Flex>
 
         {isOpen ? (
-          <Box px={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
-              {LinkItems.map((link, index) => (
-                <NavLink key={index}>{link}</NavLink>
-              ))}
-            </Stack>
-          </Box>
+          <HStack spacing={8} alignItems={"center"} justifyContent={"center"}>
+            <Box px={4} display={{ md: "none" }}>
+              <Stack
+                as={"nav"}
+                spacing={4}
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                {LinkItems.map((link, index) => (
+                  <NavLink key={index}>{link}</NavLink>
+                ))}
+              </Stack>
+            </Box>
+          </HStack>
         ) : null}
       </Box>
     </>
