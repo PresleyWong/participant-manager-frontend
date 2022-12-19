@@ -7,7 +7,7 @@ const Layout = (props) => {
   return (
     <Box bg={useColorModeValue("#fdfdf5", "gray.900")} minH={"100vh"}>
       <Header />
-      <Container maxW={"8xl"} my={5} centerContent>
+      <Container maxW={"8xl"} my={5} centerContent display={"grid"}>
         {props.children}
       </Container>
       <Footer />

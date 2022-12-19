@@ -12,6 +12,7 @@ import {
   Spinner,
   useColorModeValue,
   Center,
+  Container,
 } from "@chakra-ui/react";
 import Login from "./Login";
 import { useGetEventsWithLimitQuery } from "../redux/api/eventApi";
@@ -61,12 +62,14 @@ const Homepage = () => {
 
   return (
     <Grid
-      templateColumns={{ lg: "repeat(12, 1fr)", base: "repeat(1, 1fr)" }}
-      columnGap={{ lg: 5 }}
+      templateColumns={{ md: "repeat(12, 1fr)", base: "repeat(1, 1fr)" }}
+      columnGap={{ md: 5 }}
       rowGap={{ base: 5 }}
     >
-      <GridItem colSpan={3}>{!currentUser && <Login />}</GridItem>
-      <GridItem colSpan={9} minW={currentUser ? "8xl" : "0xl"}>
+      <GridItem colSpan={{ lg: currentUser ? 0 : 3, md: currentUser ? 0 : 5 }}>
+        {!currentUser && <Login />}
+      </GridItem>
+      <GridItem colSpan={{ lg: currentUser ? 12 : 9, md: currentUser ? 0 : 7 }}>
         <Card bg={backgroundColor} boxShadow={"lg"}>
           <CardHeader
             bg={useColorModeValue("#55624d", "gray.500")}
