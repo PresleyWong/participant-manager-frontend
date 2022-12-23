@@ -158,6 +158,7 @@ const ParticipantTable = ({ data }) => {
     },
     initialState: {
       columnVisibility: {
+        id: false,
         gender: false,
         english_name: false,
         chinese_name: false,

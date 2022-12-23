@@ -51,19 +51,17 @@ const Participants = () => {
         </Modal>
         <ParticipantTable data={customData} />
 
-        {currentUser.isAdmin && (
-          <Stack direction="row" spacing={4} mt={"1rem"} align="center">
-            <Button
-              size="sm"
-              className="primary-button"
-              variant="solid"
-              onClick={onOpenNew}
-            >
-              Create New Participant
-            </Button>
-            <ImportButton />
-          </Stack>
-        )}
+        <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+          <Button
+            size="sm"
+            className="primary-button"
+            variant="solid"
+            onClick={onOpenNew}
+          >
+            Add New Saint
+          </Button>
+          {currentUser.isAdmin && <ImportButton />}
+        </Stack>
       </>
     );
   } else if (isLoading) {

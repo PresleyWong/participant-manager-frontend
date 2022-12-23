@@ -23,6 +23,7 @@ import {
   useColorMode,
   Icon,
 } from "@chakra-ui/react";
+import { indexApi } from "../redux/api/indexApi";
 
 const NavLink = ({ children }) => (
   <Link
@@ -50,6 +51,7 @@ const Header = () => {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(clearCredentials());
+    dispatch(indexApi.util.resetApiState());
     navigate("/");
   };
 

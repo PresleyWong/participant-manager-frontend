@@ -50,7 +50,7 @@ const Users = () => {
               variant="solid"
               onClick={onOpenNew}
             >
-              Create New User
+              Add New Serving One
             </Button>
           )}
         </Stack>

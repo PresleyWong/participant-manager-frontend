@@ -11,10 +11,13 @@ import {
   TextareaControl,
   NumberInputControl,
 } from "formik-chakra-ui";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 
 const ParticipantForm = ({ data, onClose, createNew = false }) => {
   const [update, updateResponse] = useUpdateParticipantMutation();
   const [create, createResponse] = useCreateNewParticipantMutation();
+  const currentUser = useSelector(selectCurrentUser);
 
   let response = createResponse;
   let formAction = create;
@@ -30,7 +33,7 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
     college: "",
     academic_year: "",
     remarks: "",
-    locality: "",
+    locality: currentUser.isAdmin ? "" : currentUser.locality,
   };
 
   if (!createNew) {
@@ -147,7 +150,12 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                     );
                   })}
                 </SelectControl>
-                <InputControl isRequired label="Locality" name="locality" />
+                <InputControl
+                  isRequired
+                  label="Locality"
+                  name="locality"
+                  hidden={!currentUser.isAdmin}
+                />
                 <InputControl label="College" name="college" />
                 <NumberInputControl
                   label="Academic Year"

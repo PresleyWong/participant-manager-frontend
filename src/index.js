@@ -31,6 +31,7 @@ const customTheme = extendTheme({
       th: {
         color: "#ffffff !important",
         textTransform: "capitalize !important",
+        cursor: "pointer",
       },
     }),
   },
