@@ -11,8 +11,11 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import EventDetail from "./pages/EventDetail";
 import Signup from "./pages/Signup";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <HashRouter>
       <Layout>
@@ -24,7 +27,7 @@ const App = () => {
           <Route
             path="/events"
             element={
-              <PrivateRoute>
+              <PrivateRoute isAllowed={!!user}>
                 <Events />
               </PrivateRoute>
             }
@@ -32,7 +35,7 @@ const App = () => {
           <Route
             path="/events/:eventId"
             element={
-              <PrivateRoute>
+              <PrivateRoute isAllowed={!!user}>
                 <EventDetail />
               </PrivateRoute>
             }
@@ -41,7 +44,7 @@ const App = () => {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute isAllowed={!!user}>
                 <Dashboard />
               </PrivateRoute>
             }
@@ -50,7 +53,7 @@ const App = () => {
           <Route
             path="/participants"
             element={
-              <PrivateRoute>
+              <PrivateRoute isAllowed={!!user}>
                 <Participants />
               </PrivateRoute>
             }
@@ -59,7 +62,7 @@ const App = () => {
           <Route
             path="/users"
             element={
-              <PrivateRoute>
+              <PrivateRoute isAllowed={!!user && user.isAdmin}>
                 <Users />
               </PrivateRoute>
             }
