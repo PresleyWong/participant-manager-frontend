@@ -66,10 +66,10 @@ const Homepage = () => {
       columnGap={{ md: 5 }}
       rowGap={{ base: 5 }}
     >
-      <GridItem colSpan={{ lg: currentUser ? 0 : 3, md: currentUser ? 0 : 5 }}>
+      <GridItem colSpan={{ lg: currentUser ? 0 : 4, md: currentUser ? 0 : 5 }}>
         {!currentUser && <Login />}
       </GridItem>
-      <GridItem colSpan={{ lg: currentUser ? 12 : 9, md: currentUser ? 0 : 7 }}>
+      <GridItem colSpan={{ lg: currentUser ? 12 : 8, md: currentUser ? 0 : 7 }}>
         <Card bg={backgroundColor} boxShadow={"lg"}>
           <CardHeader
             bg={useColorModeValue("#55624d", "gray.500")}

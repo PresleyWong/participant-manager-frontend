@@ -16,6 +16,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
+  Center,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -72,12 +73,7 @@ const CellFormater = ({ cell }) => {
           </Modal>
         </>
       );
-    case "Registered Time":
-      return (
-        <div className="datetime-break-line">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
+
     case "Name":
       let nameArray = cell.row.original.name.split(" ");
       return (
@@ -95,6 +91,30 @@ const CellFormater = ({ cell }) => {
           <br />
           {nameArray.length > 1 && nameArray[1]}
         </>
+      );
+    case "Academic Year":
+      return (
+        <Center>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </Center>
+      );
+    case "Language":
+      return (
+        <Center>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </Center>
+      );
+    case "Registered By":
+      return (
+        <Center>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </Center>
+      );
+    case "Registered Time":
+      return (
+        <div className="datetime-break-line">
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </div>
       );
 
     default:
@@ -138,10 +158,6 @@ const RegistrantTable = ({ data }) => {
       cell: (info) => info.getValue(),
       header: "Language",
     }),
-    columnHelper.accessor("register_time", {
-      cell: (info) => info.getValue(),
-      header: "Registered Time",
-    }),
     columnHelper.accessor("college", {
       cell: (info) => info.getValue(),
       header: "College",
@@ -157,6 +173,10 @@ const RegistrantTable = ({ data }) => {
     columnHelper.accessor("remarks", {
       cell: (info) => info.getValue(),
       header: "Remarks",
+    }),
+    columnHelper.accessor("register_time", {
+      cell: (info) => info.getValue(),
+      header: "Registered Time",
     }),
     columnHelper.accessor("", {
       cell: () => {},

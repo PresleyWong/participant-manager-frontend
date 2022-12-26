@@ -44,6 +44,7 @@ table td {
 
 .datetime-break-line {
   max-width: 10ch !important;  /*10 characters width*/
+  text-align: center;
 }
 
 
@@ -56,5 +57,9 @@ table td {
 }
 
 .sister-color {
+  color: #B22B26;
+}
+
+#error-message {
   color: #B22B26;
 }

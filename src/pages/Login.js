@@ -43,7 +43,9 @@ const Login = () => {
       if (state) navigate(state.from.pathname);
       else navigate("/events");
     } catch (err) {
-      alert(err.data.message);
+      // alert(err.data.message);
+      document.getElementById("error-message").innerHTML =
+        "Incorrect email or password";
     }
   };
 
@@ -58,22 +60,20 @@ const Login = () => {
           <Box rounded={"lg"} bg={backgroundColor} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
               <Form>
-                <InputControl
-                  name="email"
-                  label="Email"
-                  inputProps={{ type: "email" }}
-                />
-                <InputControl
-                  name="password"
-                  label="Password"
-                  inputProps={{ type: "password" }}
-                />
-                <Stack spacing={10}>
-                  <Stack
-                    direction={{ base: "column", sm: "row" }}
-                    align={"start"}
-                    justify={"space-between"}
-                  ></Stack>
+                <Stack spacing={4}>
+                  <InputControl
+                    name="email"
+                    label="Email"
+                    inputProps={{ type: "email" }}
+                  />
+                  <InputControl
+                    name="password"
+                    label="Password"
+                    inputProps={{ type: "password" }}
+                  />
+
+                  <Box id="error-message"></Box>
+
                   <Button
                     type="submit"
                     disabled={!formik.isValid}

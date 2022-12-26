@@ -15,6 +15,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
+  Center,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -82,6 +83,18 @@ const CellFormater = ({ cell }) => {
           <br />
           {nameArray.length > 1 && nameArray[1]}
         </>
+      );
+    case "Academic Year":
+      return (
+        <Center>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </Center>
+      );
+    case "Language":
+      return (
+        <Center>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </Center>
       );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());

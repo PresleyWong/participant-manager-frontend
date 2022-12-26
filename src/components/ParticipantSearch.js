@@ -50,6 +50,10 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
       cell: (info) => info.getValue(),
       header: "Chinese Name",
     }),
+    columnHelper.accessor("name", {
+      cell: (info) => info.getValue(),
+      header: "Name",
+    }),
     columnHelper.accessor("email", {
       cell: (info) => info.getValue(),
       header: "Email",
@@ -61,6 +65,14 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
     columnHelper.accessor("language", {
       cell: (info) => info.getValue(),
       header: "Language",
+    }),
+    columnHelper.accessor("college", {
+      cell: (info) => info.getValue(),
+      header: "College",
+    }),
+    columnHelper.accessor("academic_year", {
+      cell: (info) => info.getValue(),
+      header: "Academic Year",
     }),
     columnHelper.accessor("", {
       cell: () => {},
@@ -77,7 +89,14 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
     state: {
       sorting,
     },
-    initialState: { columnVisibility: { id: false } },
+    initialState: {
+      columnVisibility: {
+        id: false,
+        gender: false,
+        english_name: false,
+        chinese_name: false,
+      },
+    },
   });
 
   const CellFormater = ({ cell }) => {
@@ -100,6 +119,35 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
           >
             Register
           </Button>
+        );
+      case "Name":
+        return (
+          <>
+            <span
+              className={
+                "bold-text " +
+                (cell.row.original.gender === "Brother"
+                  ? "brother-color"
+                  : "sister-color")
+              }
+            >
+              {cell.row.original.english_name}
+            </span>
+            <br />
+            {cell.row.original.chinese_name}
+          </>
+        );
+      case "Academic Year":
+        return (
+          <Center>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Center>
+        );
+      case "Language":
+        return (
+          <Center>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Center>
         );
       default:
         return flexRender(cell.column.columnDef.cell, cell.getContext());

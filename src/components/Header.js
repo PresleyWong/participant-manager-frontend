@@ -71,7 +71,7 @@ const Header = () => {
         <Menu>
           <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
             {/* <Avatar size={"sm"} /> */}
-            {currentUser.locality}
+            {`${currentUser.name} | ${currentUser.locality}`}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={handleLogout}>
