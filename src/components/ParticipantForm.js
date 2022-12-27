@@ -8,7 +8,6 @@ import * as Yup from "yup";
 import {
   InputControl,
   SelectControl,
-  TextareaControl,
   NumberInputControl,
 } from "formik-chakra-ui";
 import { useSelector } from "react-redux";
@@ -59,7 +58,6 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
     // chinese_name: Yup.string().required("Required"),
     email: Yup.string().email("Invalid email format").required("Required"),
     phone: Yup.number().required("Required"),
-    language: Yup.string().required("Required"),
     locality: Yup.string().required("Required"),
     gender: Yup.string().required("Required"),
     // college: Yup.string().required("Required"),
@@ -77,10 +75,8 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
           locality: values.locality,
           email: values.email,
           phone: values.phone,
-          language: values.language,
           college: values.college,
           academic_year: values.academic_year,
-          remarks: values.remarks,
         },
       });
     } catch (err) {
@@ -90,7 +86,6 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
     }
   };
 
-  const languageOptions = ["English", "Chinese", "Bahasa Malaysia"];
   const genderOptions = ["Brother", "Sister"];
 
   const content = (
@@ -135,21 +130,6 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                   name="phone"
                   inputProps={{ type: "tel" }}
                 />
-
-                <SelectControl
-                  isRequired
-                  label="Language"
-                  name="language"
-                  selectProps={{ placeholder: "Select option" }}
-                >
-                  {languageOptions.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </SelectControl>
                 <InputControl
                   isRequired
                   label="Locality"
@@ -161,7 +141,6 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                   label="Academic Year"
                   name="academic_year"
                 />
-                <TextareaControl label="Remarks" name="remarks" />
               </Stack>
             </ModalBody>
             <ModalFooter>

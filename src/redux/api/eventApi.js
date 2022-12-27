@@ -45,6 +45,9 @@ const extendedIndexApi = indexApi.injectEndpoints({
                   server: users[i].name,
                   register_time: appointments[i].created_at,
                   event_id: event.data.id,
+                  appointment_id: appointments[i].id,
+                  remarks: appointments[i].remarks,
+                  language: appointments[i].language,
                 })),
               },
             }
@@ -79,14 +82,23 @@ const extendedIndexApi = indexApi.injectEndpoints({
     addParticipantToEvent: builder.mutation({
       query: (payload) => ({
         url: `events/${payload.eventId}/register/${payload.participantId}`,
+        body: payload.body,
         method: "POST",
       }),
       invalidatesTags: ["Event"],
     }),
     removeParticipantFromEvent: builder.mutation({
       query: (payload) => ({
-        url: `events/${payload.eventId}/unregister/${payload.participantId}`,
+        url: `appointments/${payload.appointmentId}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["Event"],
+    }),
+    updateParticipantAppointment: builder.mutation({
+      query: (payload) => ({
+        url: `appointments/${payload.appointmentId}`,
+        method: "PUT",
+        body: payload.body,
       }),
       invalidatesTags: ["Event"],
     }),
@@ -104,4 +116,5 @@ export const {
   useAddParticipantToEventMutation,
   useRemoveParticipantFromEventMutation,
   useGetEventsWithLimitQuery,
+  useUpdateParticipantAppointmentMutation,
 } = extendedIndexApi;
