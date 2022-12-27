@@ -24,7 +24,16 @@ const EventDetail = () => {
     });
 
     const exportData = data.participants.map(
-      ({ id, created_at, updated_at, event_id, server, ...item }) => item
+      ({
+        id,
+        created_at,
+        updated_at,
+        event_id,
+        server,
+        appointment_id,
+        register_time,
+        ...item
+      }) => item
     );
 
     mainContent = (
