@@ -16,6 +16,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -30,6 +31,7 @@ import {
 import { useDeleteParticipantMutation } from "../redux/api/participantApi";
 import ParticipantForm from "./ParticipantForm";
 import Pagination from "./Pagination";
+import ConfirmButton from "./ConfirmButton";
 
 const CellFormater = ({ cell }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,20 +42,28 @@ const CellFormater = ({ cell }) => {
       return (
         <>
           <ButtonGroup variant="outline" spacing="1">
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              icon={<FaEdit />}
-              onClick={onOpen}
-            />
+            <Tooltip label="Edit">
+              <IconButton
+                variant="outline"
+                colorScheme="teal"
+                icon={<FaEdit />}
+                onClick={onOpen}
+              />
+            </Tooltip>
 
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              icon={<FaTrashAlt />}
-              isLoading={deleteResponse.isLoading}
-              onClick={() => deleteParticipant(cell.row.original.id)}
-            />
+            <Tooltip label="Delete">
+              <ConfirmButton
+                headerText="Confirm?"
+                bodyText="Are you sure you want to delete?"
+                onSuccessAction={() => {
+                  deleteParticipant(cell.row.original.id);
+                }}
+                buttonText="Delete"
+                buttonIcon={<FaTrashAlt />}
+                isDanger={true}
+                isLoading={deleteResponse.isLoading}
+              />
+            </Tooltip>
           </ButtonGroup>
 
           <Modal isOpen={isOpen} onClose={onClose}>
