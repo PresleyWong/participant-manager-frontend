@@ -1,15 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Spinner,
-  Box,
-  VStack,
-  Stack,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Center,
-} from "@chakra-ui/react";
+import { Spinner, Box, VStack, Stack, Center } from "@chakra-ui/react";
 import { useGetEventDetailWithAppointmentsQuery } from "../redux/api/eventApi";
 import RegistrantTable from "../components/RegistrantTable";
 import ParticipantSearch from "../components/ParticipantSearch";

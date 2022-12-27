@@ -17,6 +17,8 @@ import {
   Spinner,
   VStack,
   Center,
+  Select,
+  Textarea,
 } from "@chakra-ui/react";
 
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
@@ -62,8 +64,7 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
       cell: (info) => info.getValue(),
       header: "Phone",
     }),
-    columnHelper.accessor("language", {
-      cell: (info) => info.getValue(),
+    columnHelper.accessor("", {
       header: "Language",
     }),
     columnHelper.accessor("college", {
@@ -75,10 +76,16 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
       header: "Academic Year",
     }),
     columnHelper.accessor("", {
-      cell: () => {},
+      header: "Remarks",
+    }),
+    columnHelper.accessor("", {
       header: "Actions",
     }),
   ];
+
+  const languageOptions = ["English", "Chinese", "Bahasa Malaysia"];
+  const languageRef = useRef([]);
+  const remarksRef = useRef([]);
 
   const table = useReactTable({
     columns,
@@ -99,9 +106,28 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
     },
   });
 
-  const CellFormater = ({ cell }) => {
-    const [addParticipant, addResponse] = useAddParticipantToEventMutation();
+  const [addParticipant, addResponse] = useAddParticipantToEventMutation();
+  const handleRegister = async (cell) => {
+    try {
+      await addParticipant({
+        eventId: eventId,
+        participantId: cell.row.original.id,
+        body: {
+          language: languageRef.current[cell.row.index].value,
+          remarks: remarksRef.current[cell.row.index].value,
+        },
+      }).unwrap();
+    } catch (err) {
+      let errorMessage = "";
+      Object.entries(err.data).map(([key, value]) => {
+        errorMessage += `${key} ${value.toString()} \n`;
+      });
 
+      alert(errorMessage);
+    }
+  };
+
+  const CellFormater = ({ cell }) => {
     switch (cell.column.columnDef.header) {
       case "Actions":
         return (
@@ -109,12 +135,7 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
             isDisabled={eventParticipants.includes(cell.row.original.id)}
             size="sm"
             className="primary-button"
-            onClick={() =>
-              addParticipant({
-                eventId: eventId,
-                participantId: cell.row.original.id,
-              })
-            }
+            onClick={() => handleRegister(cell)}
             isLoading={addResponse.isLoading}
           >
             Register
@@ -145,9 +166,20 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
         );
       case "Language":
         return (
-          <Center>
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Center>
+          <Select
+            placeholder="Select option"
+            ref={(el) => (languageRef.current[cell.row.index] = el)}
+          >
+            {languageOptions.map((language, index) => (
+              <option key={index} value={language}>
+                {language}
+              </option>
+            ))}
+          </Select>
+        );
+      case "Remarks":
+        return (
+          <Textarea ref={(el) => (remarksRef.current[cell.row.index] = el)} />
         );
       default:
         return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -211,7 +243,7 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   const [filteredSearchTerm, setFilteredSearchTerm] = useState(searchTerm);
   const { data, error, isLoading, isFetching } = useGetParticipantSearchQuery(
     filteredSearchTerm,
-    { skip: filteredSearchTerm == "" }
+    { skip: filteredSearchTerm === "" }
   );
   const results = data ?? [];
 

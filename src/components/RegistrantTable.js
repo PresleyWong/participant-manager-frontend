@@ -16,7 +16,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Center,
+  Tooltip,
+  Text,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -29,7 +30,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
-import ParticipantForm from "./ParticipantForm";
+import AppointmentForm from "./AppointmentForm";
 import Pagination from "./Pagination";
 
 const CellFormater = ({ cell }) => {
@@ -42,33 +43,36 @@ const CellFormater = ({ cell }) => {
       return (
         <>
           <ButtonGroup variant="outline" spacing="1">
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              icon={<FaEdit />}
-              onClick={onOpen}
-            />
+            <Tooltip label="Edit Registration Info">
+              <IconButton
+                variant="outline"
+                colorScheme="teal"
+                icon={<FaEdit />}
+                onClick={onOpen}
+              />
+            </Tooltip>
 
-            <IconButton
-              variant="outline"
-              colorScheme="teal"
-              icon={<FaTrashAlt />}
-              isLoading={removeResponse.isLoading}
-              onClick={() =>
-                removeParticipant({
-                  eventId: cell.row.original.event_id,
-                  participantId: cell.row.original.id,
-                })
-              }
-            />
+            <Tooltip label="Unregister">
+              <IconButton
+                variant="outline"
+                colorScheme="teal"
+                icon={<FaTrashAlt />}
+                isLoading={removeResponse.isLoading}
+                onClick={() =>
+                  removeParticipant({
+                    appointmentId: cell.row.original.appointment_id,
+                  })
+                }
+              />
+            </Tooltip>
           </ButtonGroup>
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Edit</ModalHeader>
+              <ModalHeader>Edit Registration Info</ModalHeader>
               <ModalCloseButton />
-              <ParticipantForm data={cell.row.original} onClose={onClose} />
+              <AppointmentForm data={cell.row.original} onClose={onClose} />
             </ModalContent>
           </Modal>
         </>
@@ -94,21 +98,21 @@ const CellFormater = ({ cell }) => {
       );
     case "Academic Year":
       return (
-        <Center>
+        <Text align="center">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Center>
+        </Text>
       );
     case "Language":
       return (
-        <Center>
+        <Text align="center">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Center>
+        </Text>
       );
     case "Registered By":
       return (
-        <Center>
+        <Text align="center">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Center>
+        </Text>
       );
     case "Registered Time":
       return (

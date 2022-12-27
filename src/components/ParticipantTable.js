@@ -15,7 +15,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Center,
+  Text,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -86,15 +86,9 @@ const CellFormater = ({ cell }) => {
       );
     case "Academic Year":
       return (
-        <Center>
+        <Text align="center">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Center>
-      );
-    case "Language":
-      return (
-        <Center>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Center>
+        </Text>
       );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -133,10 +127,6 @@ const ParticipantTable = ({ data }) => {
       cell: (info) => info.getValue(),
       header: "Phone",
     }),
-    columnHelper.accessor("language", {
-      cell: (info) => info.getValue(),
-      header: "Language",
-    }),
     columnHelper.accessor("locality", {
       cell: (info) => info.getValue(),
       header: "Locality",
@@ -148,10 +138,6 @@ const ParticipantTable = ({ data }) => {
     columnHelper.accessor("academic_year", {
       cell: (info) => info.getValue(),
       header: "Academic Year",
-    }),
-    columnHelper.accessor("remarks", {
-      cell: (info) => info.getValue(),
-      header: "Remarks",
     }),
     columnHelper.accessor("", {
       cell: () => {},
