@@ -32,6 +32,7 @@ import {
 import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
 import AppointmentForm from "./AppointmentForm";
 import Pagination from "./Pagination";
+import ConfirmButton from "./ConfirmButton";
 
 const CellFormater = ({ cell }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,19 +53,19 @@ const CellFormater = ({ cell }) => {
               />
             </Tooltip>
 
-            <Tooltip label="Unregister">
-              <IconButton
-                variant="outline"
-                colorScheme="teal"
-                icon={<FaTrashAlt />}
-                isLoading={removeResponse.isLoading}
-                onClick={() =>
-                  removeParticipant({
-                    appointmentId: cell.row.original.appointment_id,
-                  })
-                }
-              />
-            </Tooltip>
+            <ConfirmButton
+              headerText="Confirm?"
+              bodyText="Are you sure you want to unregister?"
+              onSuccessAction={() => {
+                removeParticipant({
+                  appointmentId: cell.row.original.appointment_id,
+                });
+              }}
+              buttonText="Unregister"
+              buttonIcon={<FaTrashAlt />}
+              isDanger={true}
+              isLoading={removeResponse.isLoading}
+            />
           </ButtonGroup>
 
           <Modal isOpen={isOpen} onClose={onClose}>
