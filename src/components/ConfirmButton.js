@@ -10,6 +10,7 @@ import {
   ModalOverlay,
   useDisclosure,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 
 const ConfirmButton = ({
@@ -20,6 +21,7 @@ const ConfirmButton = ({
   bodyText,
   isDanger,
   isLoading,
+  isDisabled = false,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -28,32 +30,33 @@ const ConfirmButton = ({
     onClose();
   };
 
-  const ActionButton = () => {
-    let customButton;
+  let customButton;
 
-    if (buttonIcon)
-      customButton = (
-        <IconButton
-          variant="outline"
-          colorScheme={isDanger ? "red" : ""}
-          icon={buttonIcon}
-          onClick={onOpen}
-          isLoading={isLoading}
-        />
-      );
-    else
-      customButton = (
-        <Button onClick={onOpen} colorScheme={isDanger ? "red" : ""}>
-          {buttonText}
-        </Button>
-      );
-
-    return customButton;
-  };
+  if (buttonIcon)
+    customButton = (
+      <IconButton
+        variant="outline"
+        colorScheme={isDanger ? "red" : ""}
+        icon={buttonIcon}
+        onClick={onOpen}
+        isLoading={isLoading}
+        isDisabled={isDisabled}
+      />
+    );
+  else
+    customButton = (
+      <Button
+        onClick={onOpen}
+        colorScheme={isDanger ? "red" : ""}
+        isDisabled={isDisabled}
+      >
+        {buttonText}
+      </Button>
+    );
 
   return (
     <>
-      <ActionButton />
+      <Tooltip label={buttonText}>{customButton}</Tooltip>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

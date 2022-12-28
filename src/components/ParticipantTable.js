@@ -51,19 +51,17 @@ const CellFormater = ({ cell }) => {
               />
             </Tooltip>
 
-            <Tooltip label="Delete">
-              <ConfirmButton
-                headerText="Confirm?"
-                bodyText="Are you sure you want to delete?"
-                onSuccessAction={() => {
-                  deleteParticipant(cell.row.original.id);
-                }}
-                buttonText="Delete"
-                buttonIcon={<FaTrashAlt />}
-                isDanger={true}
-                isLoading={deleteResponse.isLoading}
-              />
-            </Tooltip>
+            <ConfirmButton
+              headerText="Confirm?"
+              bodyText="Are you sure you want to delete?"
+              onSuccessAction={() => {
+                deleteParticipant(cell.row.original.id);
+              }}
+              buttonText="Delete"
+              buttonIcon={<FaTrashAlt />}
+              isDanger={true}
+              isLoading={deleteResponse.isLoading}
+            />
           </ButtonGroup>
 
           <Modal isOpen={isOpen} onClose={onClose}>

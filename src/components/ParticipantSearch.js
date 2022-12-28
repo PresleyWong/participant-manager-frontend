@@ -20,7 +20,6 @@ import {
   Select,
   Textarea,
 } from "@chakra-ui/react";
-
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
@@ -31,6 +30,7 @@ import {
 } from "@tanstack/react-table";
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
+import ConfirmButton from "./ConfirmButton";
 
 const SearchTable = ({ data, eventId, eventParticipants }) => {
   const columnHelper = createColumnHelper();
@@ -131,15 +131,27 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
     switch (cell.column.columnDef.header) {
       case "Actions":
         return (
-          <Button
-            isDisabled={eventParticipants.includes(cell.row.original.id)}
-            size="sm"
-            className="primary-button"
-            onClick={() => handleRegister(cell)}
+          // <Button
+          //   isDisabled={eventParticipants.includes(cell.row.original.id)}
+          //   size="sm"
+          //   className="primary-button"
+          //   onClick={() => handleRegister(cell)}
+          //   isLoading={addResponse.isLoading}
+          // >
+          //   Register
+          // </Button>
+
+          <ConfirmButton
+            headerText="Confirm?"
+            bodyText="Are you sure you want to register?"
+            onSuccessAction={() => {
+              handleRegister(cell);
+            }}
+            buttonText="Register"
+            isDanger={true}
             isLoading={addResponse.isLoading}
-          >
-            Register
-          </Button>
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
+          />
         );
       case "Name":
         return (
