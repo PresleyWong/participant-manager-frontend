@@ -36,7 +36,7 @@ const ConfirmButton = ({
     customButton = (
       <IconButton
         variant="outline"
-        colorScheme={isDanger ? "red" : ""}
+        colorScheme={isDanger ? "red" : "teal"}
         icon={buttonIcon}
         onClick={onOpen}
         isLoading={isLoading}
