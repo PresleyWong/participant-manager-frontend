@@ -1,8 +1,4 @@
 import { Link as ReachLink, useNavigate } from "react-router-dom";
-import {
-  selectCurrentUser,
-  clearCredentials,
-} from "../redux/features/auth/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { TbLogout } from "react-icons/tb";
@@ -22,8 +18,14 @@ import {
   Stack,
   useColorMode,
   Icon,
+  Text,
 } from "@chakra-ui/react";
+
 import { indexApi } from "../redux/api/indexApi";
+import {
+  selectCurrentUser,
+  clearCredentials,
+} from "../redux/features/auth/authSlice";
 
 const NavLink = ({ children }) => (
   <Link
@@ -70,10 +72,10 @@ const Header = () => {
       output = (
         <Menu>
           <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
-            {/* <Avatar size={"sm"} /> */}
             {`${currentUser.name} | ${currentUser.locality}`}
           </MenuButton>
-          <MenuList>
+
+          <MenuList maxW={"0"}>
             <MenuItem onClick={handleLogout}>
               <Icon as={TbLogout} />
               <span>Sign out</span>
@@ -102,9 +104,16 @@ const Header = () => {
       <Box px={4} bg={useColorModeValue("#e0e5d7", "gray.700")}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
-            <Button as={ReachLink} to={"/"} colorScheme="teal" variant="ghost">
-              Participant Manager
-            </Button>
+            <Link
+              as={ReachLink}
+              to={"/"}
+              // colorScheme="teal"
+              // variant="ghost"
+              color={"teal"}
+              _hover={{ textDecoration: "none" }}
+            >
+              <Text as="b">Participant Manager</Text>
+            </Link>
           </HStack>
           <Flex alignItems={"center"}>
             <Button onClick={toggleColorMode} rounded={"full"} mr={3}>
