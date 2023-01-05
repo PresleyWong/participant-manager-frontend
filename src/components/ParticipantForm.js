@@ -1,8 +1,4 @@
 import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
-import {
-  useUpdateParticipantMutation,
-  useCreateNewParticipantMutation,
-} from "../redux/api/participantApi";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
@@ -11,7 +7,12 @@ import {
   NumberInputControl,
 } from "formik-chakra-ui";
 import { useSelector } from "react-redux";
+
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import {
+  useUpdateParticipantMutation,
+  useCreateNewParticipantMutation,
+} from "../redux/api/participantApi";
 
 const ParticipantForm = ({ data, onClose, createNew = false }) => {
   const [update, updateResponse] = useUpdateParticipantMutation();
@@ -126,6 +127,7 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                   inputProps={{ type: "email" }}
                 />
                 <InputControl
+                  isRequired
                   label="Phone"
                   name="phone"
                   inputProps={{ type: "tel" }}

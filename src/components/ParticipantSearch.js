@@ -15,6 +15,14 @@ import {
   Center,
   Select,
   Textarea,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
 import { MdOutlineHowToReg } from "react-icons/md";
@@ -28,6 +36,7 @@ import {
 
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
+import ParticipantForm from "../components/ParticipantForm";
 import ConfirmButton from "./ConfirmButton";
 
 const SearchTable = ({ data, eventId, eventParticipants }) => {
@@ -258,6 +267,11 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
     { skip: filteredSearchTerm === "" }
   );
   const results = data ?? [];
+  const {
+    isOpen: isOpenNew,
+    onOpen: onOpenNew,
+    onClose: onCloseNew,
+  } = useDisclosure();
 
   useEffect(() => {
     if (searchTerm.length > 2) {
@@ -282,7 +296,31 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   }
 
   if (results.length === 0 && searchTerm.length > 0) {
-    return <div className="text-hint">No saints found</div>;
+    return (
+      <>
+        <div className="text-hint">No saints found</div>
+
+        <Modal isOpen={isOpenNew} onClose={onCloseNew}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>New</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <ParticipantForm createNew={true} onClose={onCloseNew} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
+        <Button
+          size="sm"
+          className="primary-button"
+          variant="solid"
+          onClick={onOpenNew}
+        >
+          Add New Saint
+        </Button>
+      </>
+    );
   }
 
   if (results.length > 0) {
