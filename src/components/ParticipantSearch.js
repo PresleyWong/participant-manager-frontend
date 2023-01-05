@@ -168,6 +168,8 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
       case "Language":
         return (
           <Select
+            size="xs"
+            fontSize="13"
             placeholder="Select option"
             ref={(el) => (languageRef.current[cell.row.index] = el)}
           >
@@ -180,7 +182,10 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
         );
       case "Remarks":
         return (
-          <Textarea ref={(el) => (remarksRef.current[cell.row.index] = el)} />
+          <Textarea
+            fontSize="13"
+            ref={(el) => (remarksRef.current[cell.row.index] = el)}
+          />
         );
       default:
         return flexRender(cell.column.columnDef.cell, cell.getContext());
