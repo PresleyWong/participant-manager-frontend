@@ -170,6 +170,8 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
           <Select
             size="xs"
             fontSize="13"
+            border="2px solid"
+            borderColor="teal"
             placeholder="Select option"
             ref={(el) => (languageRef.current[cell.row.index] = el)}
           >
@@ -184,6 +186,8 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
         return (
           <Textarea
             fontSize="13"
+            border="2px solid"
+            borderColor="teal"
             ref={(el) => (remarksRef.current[cell.row.index] = el)}
           />
         );
