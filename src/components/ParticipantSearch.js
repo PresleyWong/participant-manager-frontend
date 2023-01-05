@@ -173,6 +173,7 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
             border="2px solid"
             borderColor="teal"
             placeholder="Select option"
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
             ref={(el) => (languageRef.current[cell.row.index] = el)}
           >
             {languageOptions.map((language, index) => (
@@ -188,6 +189,7 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
             fontSize="13"
             border="2px solid"
             borderColor="teal"
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
             ref={(el) => (remarksRef.current[cell.row.index] = el)}
           />
         );
