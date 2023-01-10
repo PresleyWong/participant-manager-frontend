@@ -55,6 +55,7 @@ const Header = () => {
     dispatch(clearCredentials());
     dispatch(indexApi.util.resetApiState());
     navigate("/");
+    window.location.reload(false);
   };
 
   let LinkItems = [
@@ -71,11 +72,11 @@ const Header = () => {
     if (currentUser) {
       output = (
         <Menu>
-          <MenuButton as={Button} rounded={"full"} cursor={"pointer"} minW={0}>
+          <MenuButton as={Button} rounded={"full"} cursor={"pointer"}>
             {`${currentUser.name} | ${currentUser.locality}`}
           </MenuButton>
 
-          <MenuList maxW={"0"}>
+          <MenuList minW={0} ml={"5"} width={"100%"}>
             <MenuItem onClick={handleLogout}>
               <Icon as={TbLogout} />
               <span>Sign out</span>
