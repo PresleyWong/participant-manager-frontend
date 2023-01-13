@@ -61,7 +61,7 @@ const CellFormater = ({ cell }) => {
                   appointmentId: cell.row.original.appointment_id,
                 });
               }}
-              buttonText="Unregister"
+              buttonText="Remove"
               buttonIcon={<FaTrashAlt />}
               isDanger={true}
               isLoading={removeResponse.isLoading}

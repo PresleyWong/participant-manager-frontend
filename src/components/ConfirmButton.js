@@ -36,7 +36,7 @@ const ConfirmButton = ({
     customButton = (
       <IconButton
         variant="outline"
-        colorScheme={isDanger ? "red" : ""}
+        colorScheme={isDanger ? "red" : "teal"}
         icon={buttonIcon}
         onClick={onOpen}
         isLoading={isLoading}
@@ -47,7 +47,7 @@ const ConfirmButton = ({
     customButton = (
       <Button
         onClick={onOpen}
-        colorScheme={isDanger ? "red" : ""}
+        colorScheme={isDanger ? "red" : "teal"}
         isDisabled={isDisabled}
       >
         {buttonText}
@@ -71,7 +71,7 @@ const ConfirmButton = ({
             <Button variant="ghost" onClick={onClose} mr={3}>
               Close
             </Button>
-            <Button colorScheme={isDanger ? "red" : ""} onClick={onSubmit}>
+            <Button className="primary-button" onClick={onSubmit}>
               {buttonText}
             </Button>
           </ModalFooter>

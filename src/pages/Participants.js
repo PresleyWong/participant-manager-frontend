@@ -19,14 +19,37 @@ import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ImportButton from "../components/ImportButton";
 import cloneDeep from "lodash.clonedeep";
 
+export const AddParticipantButton = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>New</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <ParticipantForm createNew={true} onClose={onClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Button
+        size="sm"
+        className="primary-button"
+        variant="solid"
+        onClick={onOpen}
+      >
+        Add New Saint
+      </Button>
+    </>
+  );
+};
+
 const Participants = () => {
   const { data, isLoading, isSuccess, isError, error } =
     useGetAllParticipantsQuery();
-  const {
-    isOpen: isOpenNew,
-    onOpen: onOpenNew,
-    onClose: onCloseNew,
-  } = useDisclosure();
   const currentUser = useSelector(selectCurrentUser);
 
   let content;
@@ -39,27 +62,9 @@ const Participants = () => {
 
     content = (
       <>
-        <Modal isOpen={isOpenNew} onClose={onCloseNew}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>New</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <ParticipantForm createNew={true} onClose={onCloseNew} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
         <ParticipantTable data={customData} />
-
         <Stack direction="row" spacing={4} mt={"1rem"} align="center">
-          <Button
-            size="sm"
-            className="primary-button"
-            variant="solid"
-            onClick={onOpenNew}
-          >
-            Add New Saint
-          </Button>
+          <AddParticipantButton />
           {currentUser.isAdmin && <ImportButton />}
         </Stack>
       </>

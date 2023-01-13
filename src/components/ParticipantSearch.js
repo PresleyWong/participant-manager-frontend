@@ -1,12 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import {
-  Button,
   Input,
   InputGroup,
-  IconButton,
   InputLeftElement,
-  list,
-  Stack,
   Table,
   Thead,
   Tbody,
@@ -21,6 +17,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
+import { MdOutlineHowToReg } from "react-icons/md";
 import {
   useReactTable,
   flexRender,
@@ -28,9 +25,12 @@ import {
   getSortedRowModel,
   createColumnHelper,
 } from "@tanstack/react-table";
+
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
+import ParticipantForm from "../components/ParticipantForm";
 import ConfirmButton from "./ConfirmButton";
+import { AddParticipantButton } from "../pages/Participants";
 
 const SearchTable = ({ data, eventId, eventParticipants }) => {
   const columnHelper = createColumnHelper();
@@ -131,24 +131,15 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
     switch (cell.column.columnDef.header) {
       case "Actions":
         return (
-          // <Button
-          //   isDisabled={eventParticipants.includes(cell.row.original.id)}
-          //   size="sm"
-          //   className="primary-button"
-          //   onClick={() => handleRegister(cell)}
-          //   isLoading={addResponse.isLoading}
-          // >
-          //   Register
-          // </Button>
-
           <ConfirmButton
             headerText="Confirm?"
             bodyText="Are you sure you want to register?"
             onSuccessAction={() => {
               handleRegister(cell);
             }}
+            buttonIcon={<MdOutlineHowToReg />}
             buttonText="Register"
-            isDanger={true}
+            isDanger={false}
             isLoading={addResponse.isLoading}
             isDisabled={eventParticipants.includes(cell.row.original.id)}
           />
@@ -179,7 +170,12 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
       case "Language":
         return (
           <Select
+            size="xs"
+            fontSize="13"
+            border="2px solid"
+            borderColor="teal"
             placeholder="Select option"
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
             ref={(el) => (languageRef.current[cell.row.index] = el)}
           >
             {languageOptions.map((language, index) => (
@@ -191,7 +187,13 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
         );
       case "Remarks":
         return (
-          <Textarea ref={(el) => (remarksRef.current[cell.row.index] = el)} />
+          <Textarea
+            fontSize="13"
+            border="2px solid"
+            borderColor="teal"
+            isDisabled={eventParticipants.includes(cell.row.original.id)}
+            ref={(el) => (remarksRef.current[cell.row.index] = el)}
+          />
         );
       default:
         return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -282,7 +284,12 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   }
 
   if (results.length === 0 && searchTerm.length > 0) {
-    return <div className="text-hint">No saints found</div>;
+    return (
+      <>
+        <div className="text-hint">No saints found</div>
+        <AddParticipantButton />
+      </>
+    );
   }
 
   if (results.length > 0) {

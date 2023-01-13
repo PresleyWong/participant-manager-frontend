@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Spinner, Box, VStack, Stack, Center } from "@chakra-ui/react";
+import { Spinner, Box, VStack, Stack, Center, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import cloneDeep from "lodash.clonedeep";
+
 import { useGetEventDetailWithAppointmentsQuery } from "../redux/api/eventApi";
 import RegistrantTable from "../components/RegistrantTable";
 import ParticipantSearch from "../components/ParticipantSearch";
 import ExportButton from "../components/ExportButton";
-import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
-import cloneDeep from "lodash.clonedeep";
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -50,7 +51,7 @@ const EventDetail = () => {
 
           <VStack>
             <Box className="align-left">
-              <p>Registrants</p>
+              <Text as="b">Registrants</Text>
             </Box>
 
             <RegistrantTable data={customData.participants} />
