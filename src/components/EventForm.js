@@ -138,7 +138,7 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                 <input
                   multiple
                   type="file"
-                  accept=".pdf, .xlsx"
+                  accept=".pdf, .xlsx, .xls"
                   onChange={handleFileChange}
                 />
               </Stack>

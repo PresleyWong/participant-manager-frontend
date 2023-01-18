@@ -61,7 +61,7 @@ const EventDetail = () => {
           <Stack direction="row" spacing={4} mt={"1rem"} align="center">
             <ExportButton
               apiArray={exportData}
-              fileName={"participant_export.xls"}
+              fileName={"participant_export.xlsx"}
               buttonTitle={"Export"}
             />
           </Stack>
