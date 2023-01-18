@@ -79,6 +79,13 @@ const extendedIndexApi = indexApi.injectEndpoints({
       }),
       invalidatesTags: ["Event"],
     }),
+    deleteEventAttachments: builder.mutation({
+      query: (eventId) => ({
+        url: `events/${eventId}/remove_attachments`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Event"],
+    }),
     addParticipantToEvent: builder.mutation({
       query: (payload) => ({
         url: `events/${payload.eventId}/register/${payload.participantId}`,
@@ -113,6 +120,7 @@ export const {
   useCreateNewEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
+  useDeleteEventAttachmentsMutation,
   useAddParticipantToEventMutation,
   useRemoveParticipantFromEventMutation,
   useGetEventsWithLimitQuery,

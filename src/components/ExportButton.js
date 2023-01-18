@@ -25,7 +25,8 @@ const ExportButton = ({
   const [columnsType, setColumnsType] = useState("1");
   const [selectedColumns, setSelectedColumns] = useState([]);
 
-  const totalColumns = apiArray ? Object.keys(apiArray[0]).length : "";
+  const totalColumns =
+    apiArray.length > 0 ? Object.keys(apiArray[0]).length : "";
 
   const updateSelectedColumns = (e, column) => {
     if (e.target.checked) {
@@ -71,6 +72,7 @@ const ExportButton = ({
             leftIcon={<DownloadIcon />}
             colorScheme="teal"
             onClick={() => setShowDownloadModal(true)}
+            disabled={apiArray[0].length < 1}
           >
             {buttonTitle}
           </Button>

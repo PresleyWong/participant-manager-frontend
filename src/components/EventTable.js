@@ -18,6 +18,8 @@ import {
   ModalHeader,
   ModalCloseButton,
   Tooltip,
+  VStack,
+  Text,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
@@ -29,12 +31,14 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
+
 import { useDeleteEventMutation } from "../redux/api/eventApi";
 import EventForm from "./EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
-import { useSelector } from "react-redux";
 import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
+import DateTimeFormatter from "./DateTimeFormatter";
 
 const CellFormater = ({ cell }) => {
   const [deleteEvent, deleleteResponse] = useDeleteEventMutation();
@@ -43,28 +47,6 @@ const CellFormater = ({ cell }) => {
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
-
-  const dateTimeFormating = (timeStamp, type) => {
-    let dateObj = new Date(timeStamp);
-
-    switch (type) {
-      case "date":
-        return dateObj.toLocaleDateString("en-us", {
-          weekday: "long",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      case "time":
-        return dateObj.toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        });
-      default:
-        return null;
-    }
-  };
 
   switch (cell.column.columnDef.header) {
     case "Actions":
@@ -115,27 +97,44 @@ const CellFormater = ({ cell }) => {
         </Button>
       );
     case "Start Date":
-      return dateTimeFormating(cell.row.original.start_date, "date");
+      return (
+        <DateTimeFormatter
+          timeStamp={cell.row.original.start_date}
+          type="date"
+        />
+      );
     case "End Date":
-      return dateTimeFormating(cell.row.original.end_date, "date");
+      return (
+        <DateTimeFormatter timeStamp={cell.row.original.end_date} type="date" />
+      );
     case "Start Time":
-      return dateTimeFormating(
-        `${cell.row.original.start_date}T${cell.row.original.start_time}`,
-        "time"
+      return (
+        <DateTimeFormatter
+          timeStamp={`${cell.row.original.start_date}T${cell.row.original.start_time}`}
+          type="time"
+        />
       );
     case "End Time":
-      return dateTimeFormating(
-        `${cell.row.original.end_date}T${cell.row.original.end_time}`,
-        "time"
+      return (
+        <DateTimeFormatter
+          timeStamp={`${cell.row.original.end_date}T${cell.row.original.end_time}`}
+          type="time"
+        />
       );
-
     case "Created Time":
       return (
         <div className="datetime-break-line">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </div>
       );
-
+    case "Attachments":
+      return (
+        <VStack align={"left"}>
+          {cell.row.original.attachments.map((file, index) => (
+            <Text key={index}>{file.url.split("/").pop()}</Text>
+          ))}
+        </VStack>
+      );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
   }
@@ -170,6 +169,10 @@ const EventTable = ({ data }) => {
     columnHelper.accessor("end_time", {
       cell: (info) => info.getValue(),
       header: "End Time",
+    }),
+    columnHelper.accessor("", {
+      cell: () => {},
+      header: "Attachments",
     }),
     columnHelper.accessor("created_at", {
       cell: (info) => info.getValue(),
