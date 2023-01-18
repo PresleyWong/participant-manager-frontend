@@ -16,6 +16,7 @@ import {
 import EventForm from "../components/EventForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import SimpleEventList from "../components/SimpleEventList";
 
 const Events = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllEventsQuery();
@@ -28,33 +29,37 @@ const Events = () => {
   let content;
 
   if (isSuccess) {
-    content = (
-      <>
-        <Modal isOpen={isOpenNew} onClose={onCloseNew}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>New</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <EventForm createNew={true} onClose={onCloseNew} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-        <EventTable data={data} />
-        <Stack direction="row" spacing={4} mt={"1rem"} align="center">
-          {currentUser.isAdmin && (
-            <Button
-              size="sm"
-              className="primary-button"
-              variant="solid"
-              onClick={onOpenNew}
-            >
-              Create New Event
-            </Button>
-          )}
-        </Stack>
-      </>
-    );
+    if (currentUser.isAdmin) {
+      content = (
+        <>
+          <Modal isOpen={isOpenNew} onClose={onCloseNew}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>New</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <EventForm createNew={true} onClose={onCloseNew} />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+          <EventTable data={data} />
+          <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+            {currentUser.isAdmin && (
+              <Button
+                size="sm"
+                className="primary-button"
+                variant="solid"
+                onClick={onOpenNew}
+              >
+                Create New Event
+              </Button>
+            )}
+          </Stack>
+        </>
+      );
+    } else {
+      content = <SimpleEventList currentUser={currentUser} />;
+    }
   } else if (isLoading) {
     content = (
       <Center>

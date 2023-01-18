@@ -1,15 +1,35 @@
 import {
-  useUpdateEventMutation,
-  useCreateNewEventMutation,
-} from "../redux/api/eventApi";
-import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
+  Stack,
+  Button,
+  ModalBody,
+  ModalFooter,
+  Text,
+  VStack,
+  ButtonGroup,
+} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { InputControl } from "formik-chakra-ui";
+import { useState } from "react";
+
+import ConfirmButton from "./ConfirmButton";
+import {
+  useUpdateEventMutation,
+  useDeleteEventAttachmentsMutation,
+  useCreateNewEventMutation,
+} from "../redux/api/eventApi";
 
 const EventForm = ({ data, onClose, createNew = false }) => {
   const [updateEvent, updateResponse] = useUpdateEventMutation();
   const [createEvent, createResponse] = useCreateNewEventMutation();
+  const [deleteEventAttachments, deleteAttachmentsResponse] =
+    useDeleteEventAttachmentsMutation();
+
+  const [uploadedFiles, setUploadedFiles] = useState(null);
+  const handleFileChange = (e) => {
+    const chosenFiles = Array.prototype.slice.call(e.target.files);
+    setUploadedFiles(chosenFiles);
+  };
 
   let response = createResponse;
   let formAction = createEvent;
@@ -46,15 +66,23 @@ const EventForm = ({ data, onClose, createNew = false }) => {
 
   const onSubmit = async (values) => {
     try {
+      let formData = new FormData();
+
+      if (uploadedFiles) {
+        uploadedFiles.forEach((file, i) => {
+          formData.append(`attachments[]`, file);
+        });
+      }
+
+      formData.append("title", values.title);
+      formData.append("start_date", values.startDate);
+      formData.append("end_date", values.endDate);
+      formData.append("start_time", values.startTime);
+      formData.append("end_time", values.endTime);
+
       await formAction({
         eventId: data?.id,
-        body: {
-          title: values.title,
-          start_date: values.startDate,
-          end_date: values.endDate,
-          start_time: values.startTime,
-          end_time: values.endTime,
-        },
+        body: formData,
       });
     } catch (err) {
       alert(err.data.message);
@@ -99,17 +127,46 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                   name="endTime"
                   inputProps={{ type: "time" }}
                 />
+
+                <label>Attachments</label>
+                <VStack>
+                  {data.attachments.map((file, index) => (
+                    <Text key={index}>{file.url.split("/").pop()}</Text>
+                  ))}
+                </VStack>
+
+                <input
+                  multiple
+                  type="file"
+                  accept=".pdf, .xlsx"
+                  onChange={handleFileChange}
+                />
               </Stack>
             </ModalBody>
             <ModalFooter>
-              <Button
-                type="submit"
-                disabled={!formik.isValid}
-                className="primary-button"
-                isLoading={response.isLoading}
-              >
-                {buttonText}
-              </Button>
+              <ButtonGroup variant="outline" spacing="5">
+                {data.attachments.length > 0 && (
+                  <ConfirmButton
+                    headerText="Confirm?"
+                    bodyText="Are you sure you want to delete?"
+                    onSuccessAction={() => {
+                      deleteEventAttachments(data?.id);
+                    }}
+                    buttonText="Remove Attachment"
+                    isDanger={true}
+                    isLoading={deleteAttachmentsResponse.isLoading}
+                  />
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={!formik.isValid}
+                  className="primary-button"
+                  isLoading={response.isLoading}
+                >
+                  {buttonText}
+                </Button>
+              </ButtonGroup>
             </ModalFooter>
           </Form>
         );

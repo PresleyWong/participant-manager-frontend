@@ -29,6 +29,7 @@ import {
   createColumnHelper,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+
 import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
 import AppointmentForm from "./AppointmentForm";
 import Pagination from "./Pagination";
