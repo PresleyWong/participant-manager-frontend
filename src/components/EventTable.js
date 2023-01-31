@@ -67,8 +67,8 @@ const CellFormater = ({ cell }) => {
             </Tooltip>
 
             <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to delete?"
+              headerText="Delete Event"
+              bodyText="Are you sure you want to delete event?"
               onSuccessAction={() => {
                 deleteEvent(cell.row.original.id);
               }}
