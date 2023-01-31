@@ -55,8 +55,8 @@ const CellFormater = ({ cell }) => {
             </Tooltip>
 
             <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to unregister?"
+              headerText="Remove Participant"
+              bodyText="Are you sure you want to remove participant?"
               onSuccessAction={() => {
                 removeParticipant({
                   appointmentId: cell.row.original.appointment_id,

@@ -145,7 +145,7 @@ const SearchTable = ({
               onSuccessAction={() => {
                 handleRegister(cell);
               }}
-              buttonIcon={<MdHowToReg size={25} />}
+              buttonIcon={<MdHowToReg size={22} />}
               buttonText="Register"
               isDanger={false}
               isLoading={addResponse.isLoading}
