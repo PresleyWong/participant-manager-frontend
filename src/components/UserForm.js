@@ -1,11 +1,12 @@
 import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { InputControl, SwitchControl } from "formik-chakra-ui";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+
 import {
   useUpdateUserMutation,
   useCreateNewUserMutation,
 } from "../redux/api/userApi";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 
 const UserForm = ({ data, onClose, createNew = false }) => {
   const [updateUser, updateResponse] = useUpdateUserMutation();
@@ -19,7 +20,7 @@ const UserForm = ({ data, onClose, createNew = false }) => {
     password: "",
     locality: "",
     name: "",
-    isAdmin: "",
+    isAdmin: false,
   };
 
   if (!createNew) {
@@ -41,7 +42,6 @@ const UserForm = ({ data, onClose, createNew = false }) => {
     password: Yup.string().required("Required"),
     locality: Yup.string().required("Required"),
     name: Yup.string().required("Required"),
-    isAdmin: Yup.boolean().required("Required"),
   });
 
   const onSubmit = async (values) => {
@@ -88,7 +88,7 @@ const UserForm = ({ data, onClose, createNew = false }) => {
                   inputProps={{ type: "password" }}
                 />
                 <InputControl isRequired name="locality" label="Locality" />
-                <InputControl name="name" label="Name" />
+                <InputControl isRequired name="name" label="Name" />
                 <SwitchControl name="isAdmin" label="Is Admin?" />
               </Stack>
             </ModalBody>

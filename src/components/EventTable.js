@@ -20,8 +20,12 @@ import {
   Tooltip,
   VStack,
   Text,
+  Icon,
+  Center,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { IoMdClose } from "react-icons/io";
+import { HiCheck } from "react-icons/hi";
 import {
   useReactTable,
   flexRender,
@@ -131,9 +135,29 @@ const CellFormater = ({ cell }) => {
       return (
         <VStack align={"left"}>
           {cell.row.original.attachments.map((file, index) => (
-            <Text key={index}>{file.url.split("/").pop()}</Text>
+            <Text key={index}>
+              {file.url.split("/").pop().replace(/%20/g, " ")}
+            </Text>
           ))}
         </VStack>
+      );
+    case "Is Closed?":
+      return (
+        <Center>
+          <Icon
+            boxSize={5}
+            as={cell.row.original.is_closed ? HiCheck : IoMdClose}
+          />
+        </Center>
+      );
+    case "Is Archived?":
+      return (
+        <Center>
+          <Icon
+            boxSize={5}
+            as={cell.row.original.is_archived ? HiCheck : IoMdClose}
+          />
+        </Center>
       );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
@@ -173,6 +197,14 @@ const EventTable = ({ data }) => {
     columnHelper.accessor("", {
       cell: () => {},
       header: "Attachments",
+    }),
+    columnHelper.accessor("is_closed", {
+      cell: (info) => info.getValue(),
+      header: "Is Closed?",
+    }),
+    columnHelper.accessor("is_archived", {
+      cell: (info) => info.getValue(),
+      header: "Is Archived?",
     }),
     columnHelper.accessor("created_at", {
       cell: (info) => info.getValue(),

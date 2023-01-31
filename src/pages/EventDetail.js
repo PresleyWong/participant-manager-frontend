@@ -16,11 +16,13 @@ const EventDetail = () => {
   const currentUser = useSelector(selectCurrentUser);
   let mainContent;
   let eventParticipants = [];
+  let eventParticipantsWithAppointments = [];
 
   if (isSuccess) {
     let customData = cloneDeep(data);
     customData.participants.map((p) => {
       eventParticipants.push(p.id);
+      eventParticipantsWithAppointments.push(p);
       p["name"] = `${p.english_name} ${p.chinese_name}`;
     });
 
@@ -47,6 +49,9 @@ const EventDetail = () => {
           <ParticipantSearch
             eventId={data.event.id}
             eventParticipants={eventParticipants}
+            eventParticipantsWithAppointments={
+              eventParticipantsWithAppointments
+            }
           />
 
           <VStack>

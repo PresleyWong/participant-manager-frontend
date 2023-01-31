@@ -106,7 +106,7 @@ const SimpleEventList = ({ currentUser }) => {
                             minW={5}
                             height={5}
                           />
-                          {file.url.split("/").pop()}
+                          {file.url.split("/").pop().replace(/%20/g, " ")}
                         </Link>
                       ))}
                     </VStack>
