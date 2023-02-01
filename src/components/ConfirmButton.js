@@ -71,7 +71,7 @@ const ConfirmButton = ({
             <Button variant="ghost" onClick={onClose} mr={3}>
               Close
             </Button>
-            <Button colorScheme={isDanger ? "red" : ""} onClick={onSubmit}>
+            <Button colorScheme={isDanger ? "red" : "teal"} onClick={onSubmit}>
               {buttonText}
             </Button>
           </ModalFooter>

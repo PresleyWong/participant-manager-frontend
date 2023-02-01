@@ -33,7 +33,7 @@ import { AddParticipantButton } from "../pages/Participants";
 
 const SearchTable = ({
   data,
-  eventId,
+  eventDetail,
   eventParticipants,
   eventParticipantsWithAppointments,
 }) => {
@@ -114,7 +114,7 @@ const SearchTable = ({
   const handleRegister = async (cell) => {
     try {
       await addParticipant({
-        eventId: eventId,
+        eventId: eventDetail.id,
         participantId: cell.row.original.id,
         body: {
           language: languageRef.current[cell.row.index].value,
@@ -149,7 +149,7 @@ const SearchTable = ({
               buttonText="Register"
               isDanger={false}
               isLoading={addResponse.isLoading}
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || eventDetail.is_closed}
             />
           </Center>
         );
@@ -184,7 +184,7 @@ const SearchTable = ({
               fontSize="13"
               border="2px solid"
               borderColor="teal"
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (languageRef.current[cell.row.index] = el)}
             >
               <option
@@ -202,7 +202,7 @@ const SearchTable = ({
               border="2px solid"
               borderColor="teal"
               placeholder="Select option"
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (languageRef.current[cell.row.index] = el)}
             >
               {languageOptions.map((language, index) => (
@@ -220,7 +220,7 @@ const SearchTable = ({
               fontSize="13"
               border="2px solid"
               borderColor="teal"
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (remarksRef.current[cell.row.index] = el)}
               value={eventParticipantsWithAppointments[foundIndex].remarks}
             />
@@ -231,7 +231,7 @@ const SearchTable = ({
               fontSize="13"
               border="2px solid"
               borderColor="teal"
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (remarksRef.current[cell.row.index] = el)}
             />
           );
@@ -297,7 +297,7 @@ const SearchTable = ({
 
 const SearchResults = ({
   searchTerm,
-  eventId,
+  eventDetail,
   eventParticipants,
   eventParticipantsWithAppointments,
 }) => {
@@ -343,7 +343,7 @@ const SearchResults = ({
     return (
       <SearchTable
         data={results}
-        eventId={eventId}
+        eventDetail={eventDetail}
         eventParticipants={eventParticipants}
         eventParticipantsWithAppointments={eventParticipantsWithAppointments}
       />
@@ -368,7 +368,7 @@ const useDebounce = (value, delay) => {
 };
 
 const ParticipantSearch = ({
-  eventId,
+  eventDetail,
   eventParticipants,
   eventParticipantsWithAppointments,
 }) => {
@@ -392,7 +392,7 @@ const ParticipantSearch = ({
 
       <SearchResults
         searchTerm={debouncedSearchTerm}
-        eventId={eventId}
+        eventDetail={eventDetail}
         eventParticipants={eventParticipants}
         eventParticipantsWithAppointments={eventParticipantsWithAppointments}
       ></SearchResults>

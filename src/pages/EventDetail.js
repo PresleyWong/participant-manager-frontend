@@ -20,6 +20,7 @@ const EventDetail = () => {
 
   if (isSuccess) {
     let customData = cloneDeep(data);
+
     customData.participants.map((p) => {
       eventParticipants.push(p.id);
       eventParticipantsWithAppointments.push(p);
@@ -47,7 +48,7 @@ const EventDetail = () => {
           </VStack>
 
           <ParticipantSearch
-            eventId={data.event.id}
+            eventDetail={data.event}
             eventParticipants={eventParticipants}
             eventParticipantsWithAppointments={
               eventParticipantsWithAppointments
@@ -59,7 +60,10 @@ const EventDetail = () => {
               <Text as="b">Registrants</Text>
             </Box>
 
-            <RegistrantTable data={customData.participants} />
+            <RegistrantTable
+              data={customData.participants}
+              eventClosed={customData.event.is_closed}
+            />
           </VStack>
         </Stack>
         {currentUser.isAdmin && (

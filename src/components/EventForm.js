@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { InputControl, SwitchControl } from "formik-chakra-ui";
 import { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 
 import ConfirmButton from "./ConfirmButton";
 import {
@@ -148,7 +149,7 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                       </Text>
 
                       <ConfirmButton
-                        headerText="Confirm?"
+                        headerText="Delete Attachment"
                         bodyText="Are you sure you want to delete?"
                         onSuccessAction={() => {
                           deleteEventAttachments({
@@ -157,7 +158,7 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                           });
                         }}
                         buttonText="Delete"
-                        buttonIcon={<FaTrashAlt />}
+                        buttonIcon={<MdClose />}
                         isDanger={true}
                         isLoading={deleteAttachmentsResponse.isLoading}
                       />

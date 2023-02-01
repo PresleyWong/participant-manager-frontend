@@ -25,6 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { IoMdClose } from "react-icons/io";
+import { MdArchive, MdUnarchive, MdLock, MdLockOpen } from "react-icons/md";
 import { HiCheck } from "react-icons/hi";
 import {
   useReactTable,
@@ -37,7 +38,10 @@ import {
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-import { useDeleteEventMutation } from "../redux/api/eventApi";
+import {
+  useDeleteEventMutation,
+  useUpdateEventMutation,
+} from "../redux/api/eventApi";
 import EventForm from "./EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import Pagination from "./Pagination";
@@ -46,14 +50,80 @@ import DateTimeFormatter from "./DateTimeFormatter";
 
 const CellFormater = ({ cell }) => {
   const [deleteEvent, deleleteResponse] = useDeleteEventMutation();
+  const [updateEvent, updateResponse] = useUpdateEventMutation();
   const {
     isOpen: isOpenEdit,
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
 
+  const onSwitch = async (id, item) => {
+    try {
+      await updateEvent({
+        eventId: id,
+        body: {
+          toggle: item,
+        },
+      });
+    } catch (err) {
+      alert(err.data.message);
+    }
+  };
+
   switch (cell.column.columnDef.header) {
     case "Actions":
+      let lockButton = (
+        <Tooltip label="Close Registration">
+          <IconButton
+            variant="outline"
+            colorScheme="teal"
+            icon={<MdLock size={22} />}
+            onClick={() => onSwitch(cell.row.original.id, "is_closed")}
+            isLoading={updateResponse.isLoading}
+          />
+        </Tooltip>
+      );
+
+      let archiveButton = (
+        <Tooltip label="Archive">
+          <IconButton
+            variant="outline"
+            colorScheme="teal"
+            icon={<MdArchive size={22} />}
+            onClick={() => onSwitch(cell.row.original.id, "is_archived")}
+            isLoading={updateResponse.isLoading}
+          />
+        </Tooltip>
+      );
+
+      if (cell.row.original.is_closed) {
+        lockButton = (
+          <Tooltip label="Open Registration">
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              icon={<MdLockOpen size={22} />}
+              onClick={() => onSwitch(cell.row.original.id, "is_closed")}
+              isLoading={updateResponse.isLoading}
+            />
+          </Tooltip>
+        );
+      }
+
+      if (cell.row.original.is_archived) {
+        archiveButton = (
+          <Tooltip label="Unarchive">
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              icon={<MdUnarchive size={22} />}
+              onClick={() => onSwitch(cell.row.original.id, "is_archived")}
+              isLoading={updateResponse.isLoading}
+            />
+          </Tooltip>
+        );
+      }
+
       return (
         <>
           <ButtonGroup variant="outline" spacing="1">
@@ -65,6 +135,9 @@ const CellFormater = ({ cell }) => {
                 onClick={onOpenEdit}
               />
             </Tooltip>
+
+            {archiveButton}
+            {lockButton}
 
             <ConfirmButton
               headerText="Delete Event"
@@ -141,24 +214,6 @@ const CellFormater = ({ cell }) => {
           ))}
         </VStack>
       );
-    case "Is Closed?":
-      return (
-        <Center>
-          <Icon
-            boxSize={5}
-            as={cell.row.original.is_closed ? HiCheck : IoMdClose}
-          />
-        </Center>
-      );
-    case "Is Archived?":
-      return (
-        <Center>
-          <Icon
-            boxSize={5}
-            as={cell.row.original.is_archived ? HiCheck : IoMdClose}
-          />
-        </Center>
-      );
     default:
       return flexRender(cell.column.columnDef.cell, cell.getContext());
   }
@@ -197,14 +252,6 @@ const EventTable = ({ data }) => {
     columnHelper.accessor("", {
       cell: () => {},
       header: "Attachments",
-    }),
-    columnHelper.accessor("is_closed", {
-      cell: (info) => info.getValue(),
-      header: "Is Closed?",
-    }),
-    columnHelper.accessor("is_archived", {
-      cell: (info) => info.getValue(),
-      header: "Is Archived?",
     }),
     columnHelper.accessor("created_at", {
       cell: (info) => info.getValue(),
