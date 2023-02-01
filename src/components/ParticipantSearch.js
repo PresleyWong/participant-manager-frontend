@@ -17,7 +17,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
-import { MdOutlineHowToReg } from "react-icons/md";
+import { MdHowToReg } from "react-icons/md";
 import {
   useReactTable,
   flexRender,
@@ -28,11 +28,15 @@ import {
 
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
-import ParticipantForm from "../components/ParticipantForm";
 import ConfirmButton from "./ConfirmButton";
 import { AddParticipantButton } from "../pages/Participants";
 
-const SearchTable = ({ data, eventId, eventParticipants }) => {
+const SearchTable = ({
+  data,
+  eventDetail,
+  eventParticipants,
+  eventParticipantsWithAppointments,
+}) => {
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
@@ -110,7 +114,7 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
   const handleRegister = async (cell) => {
     try {
       await addParticipant({
-        eventId: eventId,
+        eventId: eventDetail.id,
         participantId: cell.row.original.id,
         body: {
           language: languageRef.current[cell.row.index].value,
@@ -128,21 +132,26 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
   };
 
   const CellFormater = ({ cell }) => {
+    const foundIndex = eventParticipants.indexOf(cell.row.original.id);
+    const isDisabled = foundIndex >= 0 ? true : false;
+
     switch (cell.column.columnDef.header) {
       case "Actions":
         return (
-          <ConfirmButton
-            headerText="Confirm?"
-            bodyText="Are you sure you want to register?"
-            onSuccessAction={() => {
-              handleRegister(cell);
-            }}
-            buttonIcon={<MdOutlineHowToReg />}
-            buttonText="Register"
-            isDanger={false}
-            isLoading={addResponse.isLoading}
-            isDisabled={eventParticipants.includes(cell.row.original.id)}
-          />
+          <Center>
+            <ConfirmButton
+              headerText="Confirm?"
+              bodyText="Are you sure you want to register?"
+              onSuccessAction={() => {
+                handleRegister(cell);
+              }}
+              buttonIcon={<MdHowToReg size={22} />}
+              buttonText="Register"
+              isDanger={false}
+              isLoading={addResponse.isLoading}
+              isDisabled={isDisabled || eventDetail.is_closed}
+            />
+          </Center>
         );
       case "Name":
         return (
@@ -168,33 +177,66 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
           </Center>
         );
       case "Language":
-        return (
-          <Select
-            size="xs"
-            fontSize="13"
-            border="2px solid"
-            borderColor="teal"
-            placeholder="Select option"
-            isDisabled={eventParticipants.includes(cell.row.original.id)}
-            ref={(el) => (languageRef.current[cell.row.index] = el)}
-          >
-            {languageOptions.map((language, index) => (
-              <option key={index} value={language}>
-                {language}
+        if (isDisabled) {
+          return (
+            <Select
+              size="xs"
+              fontSize="13"
+              border="2px solid"
+              borderColor="teal"
+              isDisabled={isDisabled || eventDetail.is_closed}
+              ref={(el) => (languageRef.current[cell.row.index] = el)}
+            >
+              <option
+                value={eventParticipantsWithAppointments[foundIndex].language}
+              >
+                {eventParticipantsWithAppointments[foundIndex].language}
               </option>
-            ))}
-          </Select>
-        );
+            </Select>
+          );
+        } else {
+          return (
+            <Select
+              size="xs"
+              fontSize="13"
+              border="2px solid"
+              borderColor="teal"
+              placeholder="Select option"
+              isDisabled={isDisabled || eventDetail.is_closed}
+              ref={(el) => (languageRef.current[cell.row.index] = el)}
+            >
+              {languageOptions.map((language, index) => (
+                <option key={index} value={language}>
+                  {language}
+                </option>
+              ))}
+            </Select>
+          );
+        }
       case "Remarks":
-        return (
-          <Textarea
-            fontSize="13"
-            border="2px solid"
-            borderColor="teal"
-            isDisabled={eventParticipants.includes(cell.row.original.id)}
-            ref={(el) => (remarksRef.current[cell.row.index] = el)}
-          />
-        );
+        if (isDisabled) {
+          return (
+            <Textarea
+              fontSize="13"
+              border="2px solid"
+              borderColor="teal"
+              isDisabled={isDisabled || eventDetail.is_closed}
+              ref={(el) => (remarksRef.current[cell.row.index] = el)}
+              value={eventParticipantsWithAppointments[foundIndex].remarks}
+            />
+          );
+        } else {
+          return (
+            <Textarea
+              fontSize="13"
+              border="2px solid"
+              borderColor="teal"
+              isDisabled={isDisabled || eventDetail.is_closed}
+              ref={(el) => (remarksRef.current[cell.row.index] = el)}
+            />
+          );
+        }
+
       default:
         return flexRender(cell.column.columnDef.cell, cell.getContext());
     }
@@ -253,7 +295,12 @@ const SearchTable = ({ data, eventId, eventParticipants }) => {
   return content;
 };
 
-const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
+const SearchResults = ({
+  searchTerm,
+  eventDetail,
+  eventParticipants,
+  eventParticipantsWithAppointments,
+}) => {
   const [filteredSearchTerm, setFilteredSearchTerm] = useState(searchTerm);
   const { data, error, isLoading, isFetching } = useGetParticipantSearchQuery(
     filteredSearchTerm,
@@ -262,7 +309,7 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
   const results = data ?? [];
 
   useEffect(() => {
-    if (searchTerm.length > 2) {
+    if (searchTerm.length >= 3) {
       setFilteredSearchTerm(searchTerm);
     }
   }, [searchTerm]);
@@ -296,8 +343,9 @@ const SearchResults = ({ searchTerm, eventId, eventParticipants }) => {
     return (
       <SearchTable
         data={results}
-        eventId={eventId}
+        eventDetail={eventDetail}
         eventParticipants={eventParticipants}
+        eventParticipantsWithAppointments={eventParticipantsWithAppointments}
       />
     );
   }
@@ -319,7 +367,11 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const ParticipantSearch = ({ eventId, eventParticipants }) => {
+const ParticipantSearch = ({
+  eventDetail,
+  eventParticipants,
+  eventParticipantsWithAppointments,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -340,8 +392,9 @@ const ParticipantSearch = ({ eventId, eventParticipants }) => {
 
       <SearchResults
         searchTerm={debouncedSearchTerm}
-        eventId={eventId}
+        eventDetail={eventDetail}
         eventParticipants={eventParticipants}
+        eventParticipantsWithAppointments={eventParticipantsWithAppointments}
       ></SearchResults>
     </VStack>
   );

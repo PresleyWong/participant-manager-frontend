@@ -20,8 +20,13 @@ import {
   Tooltip,
   VStack,
   Text,
+  Icon,
+  Center,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { IoMdClose } from "react-icons/io";
+import { MdArchive, MdUnarchive, MdLock, MdLockOpen } from "react-icons/md";
+import { HiCheck } from "react-icons/hi";
 import {
   useReactTable,
   flexRender,
@@ -33,7 +38,10 @@ import {
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-import { useDeleteEventMutation } from "../redux/api/eventApi";
+import {
+  useDeleteEventMutation,
+  useUpdateEventMutation,
+} from "../redux/api/eventApi";
 import EventForm from "./EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import Pagination from "./Pagination";
@@ -42,14 +50,80 @@ import DateTimeFormatter from "./DateTimeFormatter";
 
 const CellFormater = ({ cell }) => {
   const [deleteEvent, deleleteResponse] = useDeleteEventMutation();
+  const [updateEvent, updateResponse] = useUpdateEventMutation();
   const {
     isOpen: isOpenEdit,
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
 
+  const onSwitch = async (id, item) => {
+    try {
+      await updateEvent({
+        eventId: id,
+        body: {
+          toggle: item,
+        },
+      });
+    } catch (err) {
+      alert(err.data.message);
+    }
+  };
+
   switch (cell.column.columnDef.header) {
     case "Actions":
+      let lockButton = (
+        <Tooltip label="Close Registration">
+          <IconButton
+            variant="outline"
+            colorScheme="teal"
+            icon={<MdLock size={22} />}
+            onClick={() => onSwitch(cell.row.original.id, "is_closed")}
+            isLoading={updateResponse.isLoading}
+          />
+        </Tooltip>
+      );
+
+      let archiveButton = (
+        <Tooltip label="Archive">
+          <IconButton
+            variant="outline"
+            colorScheme="teal"
+            icon={<MdArchive size={22} />}
+            onClick={() => onSwitch(cell.row.original.id, "is_archived")}
+            isLoading={updateResponse.isLoading}
+          />
+        </Tooltip>
+      );
+
+      if (cell.row.original.is_closed) {
+        lockButton = (
+          <Tooltip label="Open Registration">
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              icon={<MdLockOpen size={22} />}
+              onClick={() => onSwitch(cell.row.original.id, "is_closed")}
+              isLoading={updateResponse.isLoading}
+            />
+          </Tooltip>
+        );
+      }
+
+      if (cell.row.original.is_archived) {
+        archiveButton = (
+          <Tooltip label="Unarchive">
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              icon={<MdUnarchive size={22} />}
+              onClick={() => onSwitch(cell.row.original.id, "is_archived")}
+              isLoading={updateResponse.isLoading}
+            />
+          </Tooltip>
+        );
+      }
+
       return (
         <>
           <ButtonGroup variant="outline" spacing="1">
@@ -62,9 +136,12 @@ const CellFormater = ({ cell }) => {
               />
             </Tooltip>
 
+            {archiveButton}
+            {lockButton}
+
             <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to delete?"
+              headerText="Delete Event"
+              bodyText="Are you sure you want to delete event?"
               onSuccessAction={() => {
                 deleteEvent(cell.row.original.id);
               }}
@@ -131,7 +208,9 @@ const CellFormater = ({ cell }) => {
       return (
         <VStack align={"left"}>
           {cell.row.original.attachments.map((file, index) => (
-            <Text key={index}>{file.url.split("/").pop()}</Text>
+            <Text key={index}>
+              {file.url.split("/").pop().replace(/%20/g, " ")}
+            </Text>
           ))}
         </VStack>
       );

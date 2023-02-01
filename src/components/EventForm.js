@@ -5,12 +5,15 @@ import {
   ModalFooter,
   Text,
   VStack,
+  HStack,
   ButtonGroup,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { InputControl } from "formik-chakra-ui";
+import { InputControl, SwitchControl } from "formik-chakra-ui";
 import { useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 
 import ConfirmButton from "./ConfirmButton";
 import {
@@ -41,6 +44,8 @@ const EventForm = ({ data, onClose, createNew = false }) => {
     endDate: "",
     startTime: "",
     endTime: "",
+    isClosed: false,
+    isArchived: false,
   };
 
   if (!createNew) {
@@ -53,6 +58,8 @@ const EventForm = ({ data, onClose, createNew = false }) => {
       endDate: data?.end_date,
       startTime: data?.start_time,
       endTime: data?.end_time,
+      isClosed: data?.is_closed,
+      isArchived: data?.is_archived,
     };
   }
 
@@ -79,6 +86,8 @@ const EventForm = ({ data, onClose, createNew = false }) => {
       formData.append("end_date", values.endDate);
       formData.append("start_time", values.startTime);
       formData.append("end_time", values.endTime);
+      formData.append("is_closed", values.isClosed);
+      formData.append("is_archived", values.isArchived);
 
       await formAction({
         eventId: data?.id,
@@ -128,10 +137,32 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                   inputProps={{ type: "time" }}
                 />
 
+                <SwitchControl name="isClosed" label="Is Closed?" />
+                <SwitchControl name="isArchived" label="Is Archived?" />
+
                 <label>Attachments</label>
                 <VStack>
-                  {data.attachments.map((file, index) => (
-                    <Text key={index}>{file.url.split("/").pop()}</Text>
+                  {data?.attachments.map((file, index) => (
+                    <HStack justify="space-between" key={index}>
+                      <Text>
+                        {file.url.split("/").pop().replace(/%20/g, " ")}
+                      </Text>
+
+                      <ConfirmButton
+                        headerText="Delete Attachment"
+                        bodyText="Are you sure you want to delete?"
+                        onSuccessAction={() => {
+                          deleteEventAttachments({
+                            eventId: data?.id,
+                            fileIndex: index,
+                          });
+                        }}
+                        buttonText="Delete"
+                        buttonIcon={<MdClose />}
+                        isDanger={true}
+                        isLoading={deleteAttachmentsResponse.isLoading}
+                      />
+                    </HStack>
                   ))}
                 </VStack>
 
@@ -144,29 +175,14 @@ const EventForm = ({ data, onClose, createNew = false }) => {
               </Stack>
             </ModalBody>
             <ModalFooter>
-              <ButtonGroup variant="outline" spacing="5">
-                {data.attachments.length > 0 && (
-                  <ConfirmButton
-                    headerText="Confirm?"
-                    bodyText="Are you sure you want to delete?"
-                    onSuccessAction={() => {
-                      deleteEventAttachments(data?.id);
-                    }}
-                    buttonText="Remove Attachment"
-                    isDanger={true}
-                    isLoading={deleteAttachmentsResponse.isLoading}
-                  />
-                )}
-
-                <Button
-                  type="submit"
-                  disabled={!formik.isValid}
-                  className="primary-button"
-                  isLoading={response.isLoading}
-                >
-                  {buttonText}
-                </Button>
-              </ButtonGroup>
+              <Button
+                type="submit"
+                disabled={!formik.isValid}
+                className="primary-button"
+                isLoading={response.isLoading}
+              >
+                {buttonText}
+              </Button>
             </ModalFooter>
           </Form>
         );

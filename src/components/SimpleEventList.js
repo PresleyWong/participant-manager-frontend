@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { MdOutlineDescription } from "react-icons/md";
 import { Link as ReachLink } from "react-router-dom";
+
 import { useGetEventsWithLimitQuery } from "../redux/api/eventApi";
 import DateTimeFormatter from "../components/DateTimeFormatter";
 
@@ -43,55 +44,37 @@ const SimpleEventList = ({ currentUser }) => {
                   <GridItem
                     style={{ alignSelf: "center" }}
                     colSpan={{
-                      base: currentUser ? 3 : 4,
+                      base: currentUser ? 4 : 6,
                     }}
                   >
-                    <Heading size="xs" textTransform="uppercase">
-                      {item.title}
-                    </Heading>
-                  </GridItem>
+                    <VStack style={{ alignItems: "flex-start" }}>
+                      <Heading size="xs" textTransform="uppercase">
+                        {item.title}
+                      </Heading>
 
-                  <GridItem
-                    style={{ textAlign: "center", alignSelf: "center" }}
-                    colSpan={{
-                      base: currentUser ? 1 : 1,
-                    }}
-                  >
-                    Date:
-                  </GridItem>
-
-                  <GridItem
-                    style={{ alignSelf: "center" }}
-                    colSpan={{
-                      base: currentUser ? 2 : 3,
-                    }}
-                  >
-                    <Text fontSize="sm">
-                      <DateTimeFormatter
-                        timeStamp={item.start_date}
-                        type="date"
-                      />
-                    </Text>
-
-                    <Text fontSize="sm" pl={10}>
-                      to
-                    </Text>
-
-                    <Text fontSize="sm">
-                      <DateTimeFormatter
-                        timeStamp={item.end_date}
-                        type="date"
-                      />
-                    </Text>
+                      <Box>
+                        <Text fontSize="sm">
+                          <DateTimeFormatter
+                            timeStamp={item.end_date}
+                            type="date"
+                          />{" "}
+                          to{" "}
+                          <DateTimeFormatter
+                            timeStamp={item.end_date}
+                            type="date"
+                          />
+                        </Text>
+                      </Box>
+                    </VStack>
                   </GridItem>
 
                   <GridItem
                     style={{ alignSelf: "center" }}
                     colSpan={{
-                      base: currentUser ? 3 : 4,
+                      base: currentUser ? 4 : 6,
                     }}
                   >
-                    <VStack spacing={0}>
+                    <VStack spacing={0} style={{ alignItems: "flex-start" }}>
                       {item.attachments.map((file, index) => (
                         <Link
                           isExternal
@@ -106,7 +89,7 @@ const SimpleEventList = ({ currentUser }) => {
                             minW={5}
                             height={5}
                           />
-                          {file.url.split("/").pop()}
+                          {file.url.split("/").pop().replace(/%20/g, " ")}
                         </Link>
                       ))}
                     </VStack>
@@ -116,17 +99,19 @@ const SimpleEventList = ({ currentUser }) => {
                     <GridItem
                       style={{ alignSelf: "center", textAlign: "center" }}
                       colSpan={{
-                        base: 3,
+                        base: 4,
                       }}
                     >
-                      <Button
-                        size="sm"
-                        className="primary-button"
-                        as={ReachLink}
-                        to={`/events/${item.id}`}
-                      >
-                        Register
-                      </Button>
+                      <VStack style={{ alignItems: "flex-start" }}>
+                        <Button
+                          size="sm"
+                          className="primary-button"
+                          as={ReachLink}
+                          to={`/events/${item.id}`}
+                        >
+                          {item.is_closed ? "View" : "Register"}
+                        </Button>
+                      </VStack>
                     </GridItem>
                   )}
                 </Grid>

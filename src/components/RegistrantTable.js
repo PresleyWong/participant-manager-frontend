@@ -35,7 +35,7 @@ import AppointmentForm from "./AppointmentForm";
 import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
 
-const CellFormater = ({ cell }) => {
+const CellFormater = ({ cell, eventClosed }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [removeParticipant, removeResponse] =
     useRemoveParticipantFromEventMutation();
@@ -51,12 +51,13 @@ const CellFormater = ({ cell }) => {
                 colorScheme="teal"
                 icon={<FaEdit />}
                 onClick={onOpen}
+                isDisabled={eventClosed}
               />
             </Tooltip>
 
             <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to unregister?"
+              headerText="Remove Participant"
+              bodyText="Are you sure you want to remove participant?"
               onSuccessAction={() => {
                 removeParticipant({
                   appointmentId: cell.row.original.appointment_id,
@@ -66,6 +67,7 @@ const CellFormater = ({ cell }) => {
               buttonIcon={<FaTrashAlt />}
               isDanger={true}
               isLoading={removeResponse.isLoading}
+              isDisabled={eventClosed}
             />
           </ButtonGroup>
 
@@ -128,7 +130,7 @@ const CellFormater = ({ cell }) => {
   }
 };
 
-const RegistrantTable = ({ data }) => {
+const RegistrantTable = ({ data, eventClosed }) => {
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
@@ -254,7 +256,7 @@ const RegistrantTable = ({ data }) => {
                 const meta = cell.column.columnDef.meta;
                 return (
                   <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                    <CellFormater cell={cell} />
+                    <CellFormater cell={cell} eventClosed={eventClosed} />
                   </Td>
                 );
               })}
