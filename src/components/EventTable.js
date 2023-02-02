@@ -50,16 +50,17 @@ import DateTimeFormatter from "./DateTimeFormatter";
 
 const CellFormater = ({ cell }) => {
   const [deleteEvent, deleleteResponse] = useDeleteEventMutation();
-  const [updateEvent, updateResponse] = useUpdateEventMutation();
+  const [updateLockEvent, updateLockResponse] = useUpdateEventMutation();
+  const [updateArchiveEvent, updateArchiveResponse] = useUpdateEventMutation();
   const {
     isOpen: isOpenEdit,
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
 
-  const onSwitch = async (id, item) => {
+  const onSwitch = async (id, item, updateAction) => {
     try {
-      await updateEvent({
+      await updateAction({
         eventId: id,
         body: {
           toggle: item,
@@ -78,8 +79,10 @@ const CellFormater = ({ cell }) => {
             variant="outline"
             colorScheme="teal"
             icon={<MdLock size={22} />}
-            onClick={() => onSwitch(cell.row.original.id, "is_closed")}
-            isLoading={updateResponse.isLoading}
+            onClick={() =>
+              onSwitch(cell.row.original.id, "is_closed", updateLockEvent)
+            }
+            isLoading={updateLockResponse.isLoading}
           />
         </Tooltip>
       );
@@ -90,8 +93,10 @@ const CellFormater = ({ cell }) => {
             variant="outline"
             colorScheme="teal"
             icon={<MdArchive size={22} />}
-            onClick={() => onSwitch(cell.row.original.id, "is_archived")}
-            isLoading={updateResponse.isLoading}
+            onClick={() =>
+              onSwitch(cell.row.original.id, "is_archived", updateArchiveEvent)
+            }
+            isLoading={updateArchiveResponse.isLoading}
           />
         </Tooltip>
       );
@@ -103,8 +108,10 @@ const CellFormater = ({ cell }) => {
               variant="outline"
               colorScheme="teal"
               icon={<MdLockOpen size={22} />}
-              onClick={() => onSwitch(cell.row.original.id, "is_closed")}
-              isLoading={updateResponse.isLoading}
+              onClick={() =>
+                onSwitch(cell.row.original.id, "is_closed", updateLockEvent)
+              }
+              isLoading={updateLockResponse.isLoading}
             />
           </Tooltip>
         );
@@ -117,8 +124,14 @@ const CellFormater = ({ cell }) => {
               variant="outline"
               colorScheme="teal"
               icon={<MdUnarchive size={22} />}
-              onClick={() => onSwitch(cell.row.original.id, "is_archived")}
-              isLoading={updateResponse.isLoading}
+              onClick={() =>
+                onSwitch(
+                  cell.row.original.id,
+                  "is_archived",
+                  updateArchiveEvent
+                )
+              }
+              isLoading={updateArchiveResponse.isLoading}
             />
           </Tooltip>
         );
