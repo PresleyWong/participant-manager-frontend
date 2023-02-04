@@ -6,28 +6,21 @@ import {
   Text,
   VStack,
   HStack,
-  ButtonGroup,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { InputControl, SwitchControl } from "formik-chakra-ui";
+import { InputControl } from "formik-chakra-ui";
 import { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
 
-import ConfirmButton from "./ConfirmButton";
+import DeleteAttachment from "./DeleteAttachment";
 import {
   useUpdateEventMutation,
-  useDeleteEventAttachmentsMutation,
   useCreateNewEventMutation,
 } from "../redux/api/eventApi";
 
 const EventForm = ({ data, onClose, createNew = false }) => {
   const [updateEvent, updateResponse] = useUpdateEventMutation();
   const [createEvent, createResponse] = useCreateNewEventMutation();
-  const [deleteEventAttachments, deleteAttachmentsResponse] =
-    useDeleteEventAttachmentsMutation();
-
   const [uploadedFiles, setUploadedFiles] = useState(null);
   const handleFileChange = (e) => {
     const chosenFiles = Array.prototype.slice.call(e.target.files);
@@ -139,20 +132,7 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                         {file.url.split("/").pop().replace(/%20/g, " ")}
                       </Text>
 
-                      <ConfirmButton
-                        headerText="Delete Attachment"
-                        bodyText="Are you sure you want to delete?"
-                        onSuccessAction={() => {
-                          deleteEventAttachments({
-                            eventId: data?.id,
-                            fileIndex: index,
-                          });
-                        }}
-                        buttonText="Delete"
-                        buttonIcon={<MdClose />}
-                        isDanger={true}
-                        isLoading={deleteAttachmentsResponse.isLoading}
-                      />
+                      <DeleteAttachment id={data?.id} index={index} />
                     </HStack>
                   ))}
                 </VStack>
