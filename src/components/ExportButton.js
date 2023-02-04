@@ -68,9 +68,8 @@ const ExportButton = ({
         <>
           <Button
             size="sm"
-            className="primary-button"
+            variant="primary"
             leftIcon={<DownloadIcon />}
-            colorScheme="teal"
             onClick={() => setShowDownloadModal(true)}
             disabled={apiArray[0].length < 1}
           >

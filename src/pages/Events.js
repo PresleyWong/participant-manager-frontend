@@ -26,6 +26,7 @@ const Events = () => {
     onClose: onCloseNew,
   } = useDisclosure();
   const currentUser = useSelector(selectCurrentUser);
+
   let content;
 
   if (isSuccess) {
@@ -45,12 +46,7 @@ const Events = () => {
           <EventTable data={data} />
           <Stack direction="row" spacing={4} mt={"1rem"} align="center">
             {currentUser.isAdmin && (
-              <Button
-                size="sm"
-                className="primary-button"
-                variant="solid"
-                onClick={onOpenNew}
-              >
+              <Button size="sm" variant="primary" onClick={onOpenNew}>
                 Create New Event
               </Button>
             )}

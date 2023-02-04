@@ -1,5 +1,3 @@
-import { useLoginMutation } from "../redux/api/authApi";
-import { useCreateNewUserMutation } from "../redux/api/userApi";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, Link as ReachLink } from "react-router-dom";
 import { setCredentials } from "../redux/features/auth/authSlice";
@@ -7,6 +5,9 @@ import { Box, Stack, useColorModeValue, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { InputControl } from "formik-chakra-ui";
+
+import { useLoginMutation } from "../redux/api/authApi";
+import { useCreateNewUserMutation } from "../redux/api/userApi";
 
 const Signup = () => {
   const dispatch = useDispatch();

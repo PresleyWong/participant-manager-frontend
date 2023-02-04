@@ -1,7 +1,4 @@
 import { read, utils } from "xlsx";
-import { useCreateNewEventMutation } from "../redux/api/eventApi";
-import { useCreateNewParticipantMutation } from "../redux/api/participantApi";
-import { useCreateNewUserMutation } from "../redux/api/userApi";
 import {
   Button,
   useDisclosure,
@@ -15,6 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
+
+import { useCreateNewEventMutation } from "../redux/api/eventApi";
+import { useCreateNewParticipantMutation } from "../redux/api/participantApi";
+import { useCreateNewUserMutation } from "../redux/api/userApi";
 
 const ImportButton = ({ model }) => {
   const [createEvent, responseEvent] = useCreateNewEventMutation();
@@ -57,6 +58,7 @@ const ImportButton = ({ model }) => {
             } finally {
               onClose();
             }
+            return null;
           });
         }
       };
@@ -69,7 +71,7 @@ const ImportButton = ({ model }) => {
       <Button
         size="sm"
         leftIcon={<ArrowUpIcon />}
-        className="primary-button"
+        variant="primary"
         onClick={onOpen}
       >
         Import

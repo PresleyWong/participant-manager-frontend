@@ -32,10 +32,7 @@ const NavLink = ({ children }) => (
     px={2}
     py={1}
     rounded={"md"}
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("teal.600", "teal.300"),
-    }}
+    variant={"custom"}
     as={ReachLink}
     to={children.href}
   >
@@ -49,6 +46,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
+
+  const titleBg = useColorModeValue("neutralVariant.90", "neutralVariant.30");
+  const navbarBg = useColorModeValue("secondary.40", "secondary.80");
+  const navbarColor = useColorModeValue("secondary.100", "secondary.20");
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -69,10 +70,17 @@ const Header = () => {
 
   const UserMenu = () => {
     let output;
+
     if (currentUser) {
       output = (
         <Menu>
-          <MenuButton as={Button} rounded={"full"} cursor={"pointer"}>
+          <MenuButton
+            as={Button}
+            rounded={"full"}
+            cursor={"pointer"}
+            variant={"username"}
+            boxShadow="lg"
+          >
             {`${currentUser.name} | ${currentUser.locality}`}
           </MenuButton>
 
@@ -86,13 +94,7 @@ const Header = () => {
       );
     } else {
       output = (
-        <Button
-          as={ReachLink}
-          to={"/login"}
-          colorScheme="teal"
-          variant="solid"
-          className="primary-button"
-        >
+        <Button as={ReachLink} to={"/login"} variant={"primary"} boxShadow="lg">
           Login
         </Button>
       );
@@ -102,14 +104,12 @@ const Header = () => {
 
   return (
     <>
-      <Box px={4} bg={useColorModeValue("#e0e5d7", "gray.700")}>
+      <Box px={4} bg={titleBg}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
             <Link
               as={ReachLink}
               to={"/"}
-              // colorScheme="teal"
-              // variant="ghost"
               color={"teal"}
               _hover={{ textDecoration: "none" }}
             >
@@ -117,19 +117,21 @@ const Header = () => {
             </Link>
           </HStack>
           <Flex alignItems={"center"}>
-            <Button onClick={toggleColorMode} rounded={"full"} mr={3}>
+            <Button
+              onClick={toggleColorMode}
+              rounded={"full"}
+              mr={3}
+              variant={"username"}
+              boxShadow="lg"
+            >
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
             <UserMenu />
           </Flex>
         </Flex>
       </Box>
-      <Box
-        bg={useColorModeValue("#386a24", "gray.500")}
-        color={useColorModeValue("white", "white")}
-        px={4}
-      >
-        <Flex h={10} alignItems={"center"} justifyContent={"center"}>
+      <Box bg={navbarBg} color={navbarColor} px={4}>
+        <Flex h={10} align={"center"} justify={"center"}>
           <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -139,7 +141,7 @@ const Header = () => {
             bg={useColorModeValue("#386a24", "gray.500")}
             colorScheme="teal"
           />
-          <HStack spacing={8} alignItems={"center"}>
+          <HStack spacing={8} align={"center"}>
             <HStack
               as={"nav"}
               spacing={4}
@@ -153,14 +155,9 @@ const Header = () => {
         </Flex>
 
         {isOpen ? (
-          <HStack spacing={8} alignItems={"center"} justifyContent={"center"}>
+          <HStack spacing={8} align={"center"} justify={"center"}>
             <Box px={4} display={{ md: "none" }}>
-              <Stack
-                as={"nav"}
-                spacing={4}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
+              <Stack as={"nav"} spacing={4} align={"center"} justify={"center"}>
                 {LinkItems.map((link, index) => (
                   <NavLink key={index}>{link}</NavLink>
                 ))}

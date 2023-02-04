@@ -38,86 +38,6 @@ import UserForm from "./UserForm";
 import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
 
-const CellFormater = ({ cell }) => {
-  const [deleteUser, deleleteResponse] = useDeleteUserMutation();
-  const {
-    isOpen: isOpenEdit,
-    onOpen: onOpenEdit,
-    onClose: onCloseEdit,
-  } = useDisclosure();
-
-  switch (cell.column.columnDef.header) {
-    case "Actions":
-      return (
-        <>
-          <ButtonGroup variant="outline" spacing="1">
-            <Tooltip label="Edit">
-              <IconButton
-                variant="outline"
-                colorScheme="teal"
-                icon={<FaEdit />}
-                onClick={onOpenEdit}
-              />
-            </Tooltip>
-
-            <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to delete?"
-              onSuccessAction={() => {
-                deleteUser(cell.row.original.id);
-              }}
-              buttonText="Delete"
-              buttonIcon={<FaTrashAlt />}
-              isDanger={true}
-              isLoading={deleleteResponse.isLoading}
-            />
-          </ButtonGroup>
-
-          <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Edit</ModalHeader>
-              <ModalCloseButton />
-              <UserForm data={cell.row.original} onClose={onCloseEdit} />
-            </ModalContent>
-          </Modal>
-        </>
-      );
-    case "Title":
-      return (
-        <Button
-          size="sm"
-          className="primary-button"
-          as={ReachLink}
-          to={`${cell.row.original.id}`}
-        >
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Button>
-      );
-    case "Created Time":
-      return (
-        <div className="datetime-break-line">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-    case "Last Update":
-      return (
-        <div className="datetime-break-line">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-    case "Is Admin?":
-      return (
-        <Icon
-          boxSize={5}
-          as={cell.row.original.is_admin ? HiCheck : IoMdClose}
-        />
-      );
-    default:
-      return flexRender(cell.column.columnDef.cell, cell.getContext());
-  }
-};
-
 const UserTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
   const columnHelper = createColumnHelper();
@@ -173,9 +93,88 @@ const UserTable = ({ data }) => {
     },
   });
 
+  const CellFormater = ({ cell }) => {
+    const [deleteUser, deleleteResponse] = useDeleteUserMutation();
+    const {
+      isOpen: isOpenEdit,
+      onOpen: onOpenEdit,
+      onClose: onCloseEdit,
+    } = useDisclosure();
+
+    switch (cell.column.columnDef.header) {
+      case "Actions":
+        return (
+          <>
+            <ButtonGroup variant="outline" spacing="1">
+              <Tooltip label="Edit">
+                <IconButton
+                  variant="primaryOutline"
+                  icon={<FaEdit />}
+                  onClick={onOpenEdit}
+                />
+              </Tooltip>
+
+              <ConfirmButton
+                headerText="Confirm?"
+                bodyText="Are you sure you want to delete?"
+                onSuccessAction={() => {
+                  deleteUser(cell.row.original.id);
+                }}
+                buttonText="Delete"
+                buttonIcon={<FaTrashAlt />}
+                isDanger={true}
+                isLoading={deleleteResponse.isLoading}
+              />
+            </ButtonGroup>
+
+            <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Edit</ModalHeader>
+                <ModalCloseButton />
+                <UserForm data={cell.row.original} onClose={onCloseEdit} />
+              </ModalContent>
+            </Modal>
+          </>
+        );
+      case "Title":
+        return (
+          <Button
+            size="sm"
+            className="primary-button"
+            as={ReachLink}
+            to={`${cell.row.original.id}`}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Button>
+        );
+      case "Created Time":
+        return (
+          <div className="datetime-break-line">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </div>
+        );
+      case "Last Update":
+        return (
+          <div className="datetime-break-line">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </div>
+        );
+      case "Is Admin?":
+        return (
+          <Icon
+            boxSize={5}
+            as={cell.row.original.is_admin ? HiCheck : IoMdClose}
+          />
+        );
+      default:
+        return flexRender(cell.column.columnDef.cell, cell.getContext());
+    }
+  };
+
   return (
     <>
-      <Table variant="striped" size="small" boxShadow={"lg"}>
+      <Table variant="simple" size="small" boxShadow={"lg"}>
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>

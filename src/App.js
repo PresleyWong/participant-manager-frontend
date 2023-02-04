@@ -1,5 +1,7 @@
 import "./App.css";
 import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Layout from "./components/Layout";
 import Homepage from "./pages/Homepage";
 import Events from "./pages/Events";
@@ -11,7 +13,6 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import EventDetail from "./pages/EventDetail";
 import Signup from "./pages/Signup";
-import { useSelector } from "react-redux";
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);

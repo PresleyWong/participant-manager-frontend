@@ -35,8 +35,7 @@ const ConfirmButton = ({
   if (buttonIcon)
     customButton = (
       <IconButton
-        variant="outline"
-        colorScheme={isDanger ? "red" : "teal"}
+        variant={isDanger ? "errorOutline" : "primaryOutline"}
         icon={buttonIcon}
         onClick={onOpen}
         isLoading={isLoading}
@@ -71,7 +70,10 @@ const ConfirmButton = ({
             <Button variant="ghost" onClick={onClose} mr={3}>
               Close
             </Button>
-            <Button colorScheme={isDanger ? "red" : "teal"} onClick={onSubmit}>
+            <Button
+              variant={isDanger ? "errorOutline" : "primary"}
+              onClick={onSubmit}
+            >
               {buttonText}
             </Button>
           </ModalFooter>
