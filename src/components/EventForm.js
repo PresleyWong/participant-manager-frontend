@@ -44,8 +44,6 @@ const EventForm = ({ data, onClose, createNew = false }) => {
     endDate: "",
     startTime: "",
     endTime: "",
-    isClosed: false,
-    isArchived: false,
   };
 
   if (!createNew) {
@@ -58,8 +56,6 @@ const EventForm = ({ data, onClose, createNew = false }) => {
       endDate: data?.end_date,
       startTime: data?.start_time,
       endTime: data?.end_time,
-      isClosed: data?.is_closed,
-      isArchived: data?.is_archived,
     };
   }
 
@@ -86,8 +82,6 @@ const EventForm = ({ data, onClose, createNew = false }) => {
       formData.append("end_date", values.endDate);
       formData.append("start_time", values.startTime);
       formData.append("end_time", values.endTime);
-      formData.append("is_closed", values.isClosed);
-      formData.append("is_archived", values.isArchived);
 
       await formAction({
         eventId: data?.id,
@@ -136,9 +130,6 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                   name="endTime"
                   inputProps={{ type: "time" }}
                 />
-
-                <SwitchControl name="isClosed" label="Is Closed?" />
-                <SwitchControl name="isArchived" label="Is Archived?" />
 
                 <label>Attachments</label>
                 <VStack>
