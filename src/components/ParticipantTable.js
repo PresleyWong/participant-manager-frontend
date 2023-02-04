@@ -33,76 +33,7 @@ import { useDeleteParticipantMutation } from "../redux/api/participantApi";
 import ParticipantForm from "./ParticipantForm";
 import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
-
-const CellFormater = ({ cell }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [deleteParticipant, deleteResponse] = useDeleteParticipantMutation();
-
-  switch (cell.column.columnDef.header) {
-    case "Actions":
-      return (
-        <>
-          <ButtonGroup variant="outline" spacing="1">
-            <Tooltip label="Edit">
-              <IconButton
-                variant="outline"
-                colorScheme="teal"
-                icon={<FaEdit />}
-                onClick={onOpen}
-              />
-            </Tooltip>
-
-            <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to delete?"
-              onSuccessAction={() => {
-                deleteParticipant(cell.row.original.id);
-              }}
-              buttonText="Delete"
-              buttonIcon={<FaTrashAlt />}
-              isDanger={true}
-              isLoading={deleteResponse.isLoading}
-            />
-          </ButtonGroup>
-
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Edit</ModalHeader>
-              <ModalCloseButton />
-              <ParticipantForm data={cell.row.original} onClose={onClose} />
-            </ModalContent>
-          </Modal>
-        </>
-      );
-    case "Name":
-      let nameArray = cell.row.original.name.split(" ");
-      return (
-        <>
-          <span
-            className={
-              "bold-text " +
-              (cell.row.original.gender === "Brother"
-                ? "brother-color"
-                : "sister-color")
-            }
-          >
-            {nameArray[0]}
-          </span>
-          <br />
-          {nameArray.length > 1 && nameArray[1]}
-        </>
-      );
-    case "Academic Year":
-      return (
-        <Text align="center">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Text>
-      );
-    default:
-      return flexRender(cell.column.columnDef.cell, cell.getContext());
-  }
-};
+import { GenderColoredText } from "../themeConfig";
 
 const ParticipantTable = ({ data }) => {
   const columnHelper = createColumnHelper();
@@ -175,11 +106,74 @@ const ParticipantTable = ({ data }) => {
     },
   });
 
+  const CellFormater = ({ cell }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [deleteParticipant, deleteResponse] = useDeleteParticipantMutation();
+
+    switch (cell.column.columnDef.header) {
+      case "Actions":
+        return (
+          <>
+            <ButtonGroup variant="outline" spacing="1">
+              <Tooltip label="Edit">
+                <IconButton
+                  variant="primaryOutline"
+                  icon={<FaEdit />}
+                  onClick={onOpen}
+                />
+              </Tooltip>
+
+              <ConfirmButton
+                headerText="Confirm?"
+                bodyText="Are you sure you want to delete?"
+                onSuccessAction={() => {
+                  deleteParticipant(cell.row.original.id);
+                }}
+                buttonText="Delete"
+                buttonIcon={<FaTrashAlt />}
+                isDanger={true}
+                isLoading={deleteResponse.isLoading}
+              />
+            </ButtonGroup>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Edit</ModalHeader>
+                <ModalCloseButton />
+                <ParticipantForm data={cell.row.original} onClose={onClose} />
+              </ModalContent>
+            </Modal>
+          </>
+        );
+      case "Name":
+        let nameArray = cell.row.original.name.split(" ");
+        return (
+          <>
+            <GenderColoredText
+              gender={cell.row.original.gender}
+              text={nameArray[0]}
+            />
+            <br />
+            {nameArray.length > 1 && nameArray[1]}
+          </>
+        );
+      case "Academic Year":
+        return (
+          <Text align="center">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Text>
+        );
+      default:
+        return flexRender(cell.column.columnDef.cell, cell.getContext());
+    }
+  };
+
   let content;
 
   content = (
     <>
-      <Table variant="striped" size="small" boxShadow={"lg"}>
+      <Table variant="simple" size="small" boxShadow={"lg"}>
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>

@@ -21,7 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
   const { state } = useLocation();
-  const backgroundColor = useColorModeValue("white", "gray.700");
+  const backgroundColor = useColorModeValue("neutral.99", "neutral.20");
 
   const initialValues = {
     email: "",
@@ -77,8 +77,8 @@ const Login = () => {
                   <Button
                     type="submit"
                     disabled={!formik.isValid}
-                    className="primary-button"
                     isLoading={isLoading}
+                    variant="primary"
                   >
                     Sign in
                   </Button>

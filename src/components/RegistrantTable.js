@@ -7,7 +7,6 @@ import {
   Th,
   Td,
   chakra,
-  Spinner,
   IconButton,
   ButtonGroup,
   useDisclosure,
@@ -34,101 +33,7 @@ import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
 import AppointmentForm from "./AppointmentForm";
 import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
-
-const CellFormater = ({ cell, eventClosed }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [removeParticipant, removeResponse] =
-    useRemoveParticipantFromEventMutation();
-
-  switch (cell.column.columnDef.header) {
-    case "Actions":
-      return (
-        <>
-          <ButtonGroup variant="outline" spacing="1">
-            <Tooltip label="Edit Registration Info">
-              <IconButton
-                variant="outline"
-                colorScheme="teal"
-                icon={<FaEdit />}
-                onClick={onOpen}
-                isDisabled={eventClosed}
-              />
-            </Tooltip>
-
-            <ConfirmButton
-              headerText="Remove Participant"
-              bodyText="Are you sure you want to remove participant?"
-              onSuccessAction={() => {
-                removeParticipant({
-                  appointmentId: cell.row.original.appointment_id,
-                });
-              }}
-              buttonText="Remove"
-              buttonIcon={<FaTrashAlt />}
-              isDanger={true}
-              isLoading={removeResponse.isLoading}
-              isDisabled={eventClosed}
-            />
-          </ButtonGroup>
-
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Edit Registration Info</ModalHeader>
-              <ModalCloseButton />
-              <AppointmentForm data={cell.row.original} onClose={onClose} />
-            </ModalContent>
-          </Modal>
-        </>
-      );
-
-    case "Name":
-      let nameArray = cell.row.original.name.split(" ");
-      return (
-        <>
-          <span
-            className={
-              "bold-text " +
-              (cell.row.original.gender === "Brother"
-                ? "brother-color"
-                : "sister-color")
-            }
-          >
-            {nameArray[0]}
-          </span>
-          <br />
-          {nameArray.length > 1 && nameArray[1]}
-        </>
-      );
-    case "Academic Year":
-      return (
-        <Text align="center">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Text>
-      );
-    case "Language":
-      return (
-        <Text align="center">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Text>
-      );
-    case "Registered By":
-      return (
-        <Text align="center">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </Text>
-      );
-    case "Registered Time":
-      return (
-        <div className="datetime-break-line">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </div>
-      );
-
-    default:
-      return flexRender(cell.column.columnDef.cell, cell.getContext());
-  }
-};
+import { GenderColoredText } from "../themeConfig";
 
 const RegistrantTable = ({ data, eventClosed }) => {
   const columnHelper = createColumnHelper();
@@ -213,11 +118,99 @@ const RegistrantTable = ({ data, eventClosed }) => {
     },
   });
 
+  const CellFormater = ({ cell, eventClosed }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [removeParticipant, removeResponse] =
+      useRemoveParticipantFromEventMutation();
+
+    switch (cell.column.columnDef.header) {
+      case "Actions":
+        return (
+          <>
+            <ButtonGroup variant="outline" spacing="1">
+              <Tooltip label="Edit Registration Info">
+                <IconButton
+                  variant="primaryOutline"
+                  icon={<FaEdit />}
+                  onClick={onOpen}
+                  isDisabled={eventClosed}
+                />
+              </Tooltip>
+
+              <ConfirmButton
+                headerText="Remove Participant"
+                bodyText="Are you sure you want to remove participant?"
+                onSuccessAction={() => {
+                  removeParticipant({
+                    appointmentId: cell.row.original.appointment_id,
+                  });
+                }}
+                buttonText="Remove"
+                buttonIcon={<FaTrashAlt />}
+                isDanger={true}
+                isLoading={removeResponse.isLoading}
+                isDisabled={eventClosed}
+              />
+            </ButtonGroup>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Edit Registration Info</ModalHeader>
+                <ModalCloseButton />
+                <AppointmentForm data={cell.row.original} onClose={onClose} />
+              </ModalContent>
+            </Modal>
+          </>
+        );
+
+      case "Name":
+        let nameArray = cell.row.original.name.split(" ");
+        return (
+          <>
+            <GenderColoredText
+              gender={cell.row.original.gender}
+              text={nameArray[0]}
+            />
+            <br />
+            {nameArray.length > 1 && nameArray[1]}
+          </>
+        );
+      case "Academic Year":
+        return (
+          <Text align="center">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Text>
+        );
+      case "Language":
+        return (
+          <Text align="center">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Text>
+        );
+      case "Registered By":
+        return (
+          <Text align="center">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </Text>
+        );
+      case "Registered Time":
+        return (
+          <div className="datetime-break-line">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </div>
+        );
+
+      default:
+        return flexRender(cell.column.columnDef.cell, cell.getContext());
+    }
+  };
+
   let content;
 
   content = (
     <>
-      <Table variant="striped" size="small" boxShadow={"lg"}>
+      <Table variant="simple" size="small" boxShadow={"lg"}>
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>

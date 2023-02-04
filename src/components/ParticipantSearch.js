@@ -30,6 +30,7 @@ import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
 import ConfirmButton from "./ConfirmButton";
 import { AddParticipantButton } from "../pages/Participants";
+import { GenderColoredText } from "../themeConfig";
 
 const SearchTable = ({
   data,
@@ -125,6 +126,7 @@ const SearchTable = ({
       let errorMessage = "";
       Object.entries(err.data).map(([key, value]) => {
         errorMessage += `${key} ${value.toString()} \n`;
+        return null;
       });
 
       alert(errorMessage);
@@ -156,16 +158,10 @@ const SearchTable = ({
       case "Name":
         return (
           <>
-            <span
-              className={
-                "bold-text " +
-                (cell.row.original.gender === "Brother"
-                  ? "brother-color"
-                  : "sister-color")
-              }
-            >
-              {cell.row.original.english_name}
-            </span>
+            <GenderColoredText
+              gender={cell.row.original.gender}
+              text={cell.row.original.english_name}
+            />
             <br />
             {cell.row.original.chinese_name}
           </>
@@ -180,10 +176,8 @@ const SearchTable = ({
         if (isDisabled) {
           return (
             <Select
+              variant={"custom"}
               size="xs"
-              fontSize="13"
-              border="2px solid"
-              borderColor="teal"
               isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (languageRef.current[cell.row.index] = el)}
             >
@@ -197,10 +191,8 @@ const SearchTable = ({
         } else {
           return (
             <Select
+              variant={"custom"}
               size="xs"
-              fontSize="13"
-              border="2px solid"
-              borderColor="teal"
               placeholder="Select option"
               isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (languageRef.current[cell.row.index] = el)}
@@ -217,9 +209,7 @@ const SearchTable = ({
         if (isDisabled) {
           return (
             <Textarea
-              fontSize="13"
-              border="2px solid"
-              borderColor="teal"
+              variant={"custom"}
               isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (remarksRef.current[cell.row.index] = el)}
               value={eventParticipantsWithAppointments[foundIndex].remarks}
@@ -228,9 +218,7 @@ const SearchTable = ({
         } else {
           return (
             <Textarea
-              fontSize="13"
-              border="2px solid"
-              borderColor="teal"
+              variant={"custom"}
               isDisabled={isDisabled || eventDetail.is_closed}
               ref={(el) => (remarksRef.current[cell.row.index] = el)}
             />
@@ -243,7 +231,7 @@ const SearchTable = ({
   };
 
   let content = (
-    <Table variant="striped" size="small" boxShadow={"lg"}>
+    <Table variant="simple" size="small" boxShadow={"lg"}>
       <Thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <Tr key={headerGroup.id}>

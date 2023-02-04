@@ -26,7 +26,11 @@ import DateTimeFormatter from "../components/DateTimeFormatter";
 const SimpleEventList = ({ currentUser }) => {
   const { data, isLoading, isSuccess, isError, error } =
     useGetEventsWithLimitQuery(12);
+
   const backgroundColor = useColorModeValue("white", "gray.700");
+  const announceHeaderBg = useColorModeValue("neutral.40", "neutral.70");
+  const announceHeaderColor = useColorModeValue("neutral.100", "neutral.10");
+
   let content;
 
   if (isSuccess) {
@@ -105,9 +109,9 @@ const SimpleEventList = ({ currentUser }) => {
                       <VStack style={{ alignItems: "flex-start" }}>
                         <Button
                           size="sm"
-                          className="primary-button"
                           as={ReachLink}
                           to={`/events/${item.id}`}
+                          variant={"primary"}
                         >
                           {item.is_closed ? "View" : "Register"}
                         </Button>
@@ -132,11 +136,8 @@ const SimpleEventList = ({ currentUser }) => {
   }
 
   return (
-    <Card bg={backgroundColor} boxShadow={"lg"}>
-      <CardHeader
-        bg={useColorModeValue("#55624d", "gray.500")}
-        color={useColorModeValue("white", "white")}
-      >
+    <Card bg={backgroundColor} boxShadow="lg">
+      <CardHeader bg={announceHeaderBg} color={announceHeaderColor}>
         <Heading size="md">Upcoming Events</Heading>
       </CardHeader>
 

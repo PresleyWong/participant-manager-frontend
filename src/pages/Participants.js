@@ -1,5 +1,3 @@
-import { useGetAllParticipantsQuery } from "../redux/api/participantApi";
-import ParticipantTable from "../components/ParticipantTable";
 import {
   Spinner,
   Button,
@@ -13,11 +11,14 @@ import {
   ModalBody,
   Center,
 } from "@chakra-ui/react";
+import cloneDeep from "lodash.clonedeep";
+
+import { useGetAllParticipantsQuery } from "../redux/api/participantApi";
+import ParticipantTable from "../components/ParticipantTable";
 import ParticipantForm from "../components/ParticipantForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ImportButton from "../components/ImportButton";
-import cloneDeep from "lodash.clonedeep";
 
 export const AddParticipantButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,12 +36,7 @@ export const AddParticipantButton = () => {
         </ModalContent>
       </Modal>
 
-      <Button
-        size="sm"
-        className="primary-button"
-        variant="solid"
-        onClick={onOpen}
-      >
+      <Button size="sm" variant="primary" onClick={onOpen}>
         Add New Saint
       </Button>
     </>
@@ -58,6 +54,7 @@ const Participants = () => {
     let customData = cloneDeep(data);
     customData.map((p) => {
       p["name"] = `${p.english_name} ${p.chinese_name}`;
+      return null;
     });
 
     content = (
