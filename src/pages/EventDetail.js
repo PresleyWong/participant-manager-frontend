@@ -25,6 +25,7 @@ const EventDetail = () => {
       eventParticipants.push(p.id);
       eventParticipantsWithAppointments.push(p);
       p["name"] = `${p.english_name} ${p.chinese_name}`;
+      return null;
     });
 
     const exportData = data.participants.map(
