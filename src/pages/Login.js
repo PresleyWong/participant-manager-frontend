@@ -4,13 +4,12 @@ import { useLocation, useNavigate, Link as ReachLink } from "react-router-dom";
 import { setCredentials } from "../redux/features/auth/authSlice";
 import {
   Box,
-  Checkbox,
   Stack,
   Button,
   useColorModeValue,
   Text,
   Link,
-  Flex,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -61,16 +60,21 @@ const Login = () => {
             <Stack spacing={4}>
               <Form>
                 <Stack spacing={4}>
-                  <InputControl
-                    name="email"
-                    label="Email"
-                    inputProps={{ type: "email" }}
-                  />
-                  <InputControl
-                    name="password"
-                    label="Password"
-                    inputProps={{ type: "password" }}
-                  />
+                  <Tooltip label="Hint: test1@gmail.com">
+                    <InputControl
+                      name="email"
+                      label="Email"
+                      inputProps={{ type: "email" }}
+                    />
+                  </Tooltip>
+
+                  <Tooltip label="Hint: 123456">
+                    <InputControl
+                      name="password"
+                      label="Password"
+                      inputProps={{ type: "password" }}
+                    />
+                  </Tooltip>
 
                   <Box id="error-message"></Box>
 
