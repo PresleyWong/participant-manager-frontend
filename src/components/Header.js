@@ -35,6 +35,7 @@ const NavLink = ({ children }) => (
     variant={"custom"}
     as={ReachLink}
     to={children.href}
+    _hover={{ bg: "none" }}
   >
     {children.linkTitle}
   </Link>
@@ -47,9 +48,9 @@ const Header = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
 
-  const titleBg = useColorModeValue("neutralVariant.90", "neutralVariant.30");
-  const navbarBg = useColorModeValue("secondary.40", "secondary.80");
-  const navbarColor = useColorModeValue("secondary.100", "secondary.20");
+  const titleBg = useColorModeValue("neutralVariant.90", "neutralVariant.20");
+  const navbarBg = useColorModeValue("primary.60", "primary.40");
+  const navbarColor = useColorModeValue("secondary.100", "primary.90");
 
   const handleLogout = (e) => {
     e.preventDefault();

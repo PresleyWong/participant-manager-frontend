@@ -17,6 +17,7 @@ import {
   useUpdateEventMutation,
   useCreateNewEventMutation,
 } from "../redux/api/eventApi";
+import { UploadFileButton } from "../themeConfig";
 
 const EventForm = ({ data, onClose, createNew = false }) => {
   const [updateEvent, updateResponse] = useUpdateEventMutation();
@@ -137,20 +138,15 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                   ))}
                 </VStack>
 
-                <input
-                  multiple
-                  type="file"
-                  accept=".pdf, .xlsx, .xls"
-                  onChange={handleFileChange}
-                />
+                <UploadFileButton onChange={handleFileChange} />
               </Stack>
             </ModalBody>
             <ModalFooter>
               <Button
                 type="submit"
                 disabled={!formik.isValid}
-                className="primary-button"
                 isLoading={response.isLoading}
+                variant="primary"
               >
                 {buttonText}
               </Button>

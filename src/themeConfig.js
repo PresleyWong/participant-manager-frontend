@@ -3,6 +3,7 @@ import {
   defineStyle,
   defineStyleConfig,
   useColorModeValue,
+  Input,
 } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
@@ -22,18 +23,44 @@ export const GenderColoredText = ({ gender, text }) => {
   );
 };
 
+export const UploadFileButton = ({ onChange }) => {
+  const bgColor = useColorModeValue("#98D682", "#80BA69");
+  const textColor = useColorModeValue("#000000", "#0E3903");
+
+  return (
+    <Input
+      sx={{
+        "::file-selector-button": {
+          border: "none",
+          bg: bgColor,
+          color: textColor,
+          fontWeight: "600",
+          padding: "5px 10px",
+          borderRadius: "0.375rem",
+        },
+      }}
+      variant="unstyled"
+      multiple
+      type="file"
+      accept=".pdf, .xlsx, .xls"
+      onChange={onChange}
+    />
+  );
+};
+
 export const customTheme = extendTheme({
   components: {
     Button: {
       variants: {
         primary: (props) => ({
-          bg: props.colorMode === "dark" ? "primary.80" : "primary.40",
-          color: props.colorMode === "dark" ? "primary.20" : "primary.100",
+          bg: props.colorMode === "dark" ? "primary.70" : "primary.80",
+          color: props.colorMode === "dark" ? "primary.20" : "primary.0",
         }),
         primaryOutline: (props) => ({
           border: "1px",
-          borderColor: props.colorMode === "dark" ? "primary.80" : "primary.40",
-          color: props.colorMode === "dark" ? "primary.80" : "primary.40",
+          borderColor:
+            props.colorMode === "dark" ? "primary.70" : "secondary.50",
+          color: props.colorMode === "dark" ? "primary.70" : "secondary.50",
         }),
         error: (props) => ({
           bg: props.colorMode === "dark" ? "error.80" : "error.40",
@@ -41,12 +68,12 @@ export const customTheme = extendTheme({
         }),
         errorOutline: (props) => ({
           border: "1px",
-          borderColor: props.colorMode === "dark" ? "error.80" : "error.40",
-          color: props.colorMode === "dark" ? "error.80" : "error.40",
+          borderColor: props.colorMode === "dark" ? "error.70" : "error.50",
+          color: props.colorMode === "dark" ? "error.70" : "error.50",
         }),
         username: (props) => ({
-          bg: props.colorMode === "dark" ? "secondary.30" : "secondary.95",
-          color: props.colorMode === "dark" ? "secondary.90" : "secondary.10",
+          bg: props.colorMode === "dark" ? "secondary.60" : "secondary.70",
+          color: props.colorMode === "dark" ? "secondary.10" : "secondary.10",
         }),
       },
     },
@@ -55,7 +82,7 @@ export const customTheme = extendTheme({
         custom: (props) => ({
           fontSize: "13",
           border: "2px solid",
-          borderColor: props.colorMode === "dark" ? "primary.80" : "primary.40",
+          borderColor: props.colorMode === "dark" ? "primary.80" : "primary.70",
         }),
       },
     },
@@ -66,7 +93,7 @@ export const customTheme = extendTheme({
             fontSize: "13",
             border: "2px solid",
             borderColor:
-              props.colorMode === "dark" ? "primary.80" : "primary.40",
+              props.colorMode === "dark" ? "primary.80" : "primary.70",
           },
         }),
       },
@@ -81,6 +108,13 @@ export const customTheme = extendTheme({
         }),
       },
     },
+    Modal: {
+      baseStyle: (props) => ({
+        dialog: {
+          bg: props.colorMode === "dark" ? "neutralVariant.20" : "neutral.100",
+        },
+      }),
+    },
   },
   fonts: {
     heading: `'Open Sans', sans-serif`,
@@ -91,9 +125,6 @@ export const customTheme = extendTheme({
       body: {
         fontSize: "1rem",
       },
-      // table: {
-      //   bg: mode("#fdfdf5", "#212121")(props),
-      // },
       thead: {
         bg: mode("neutral.40", "neutral.70")(props),
         color: mode("neutral.100", "neutral.10")(props),
@@ -109,7 +140,7 @@ export const customTheme = extendTheme({
             bg: mode("neutral.95", "neutral.20")(props),
           },
           _even: {
-            bg: mode("neutral.99", "neutral.10")(props),
+            bg: mode("neutral.100", "neutral.10")(props),
           },
         },
       },
