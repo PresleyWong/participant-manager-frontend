@@ -1,7 +1,5 @@
-import { useLoginMutation } from "../redux/api/authApi";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, Link as ReachLink } from "react-router-dom";
-import { setCredentials } from "../redux/features/auth/authSlice";
 import {
   Box,
   Stack,
@@ -15,12 +13,15 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { InputControl } from "formik-chakra-ui";
 
+import { useLoginMutation } from "../redux/api/authApi";
+import { setCredentials } from "../redux/features/auth/authSlice";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
   const { state } = useLocation();
-  const backgroundColor = useColorModeValue("neutral.99", "neutral.20");
+  const backgroundColor = useColorModeValue("neutral.100", "neutral.20");
 
   const initialValues = {
     email: "",
@@ -65,6 +66,7 @@ const Login = () => {
                       name="email"
                       label="Email"
                       inputProps={{ type: "email" }}
+                      variant={"custom"}
                     />
                   </Tooltip>
 
@@ -89,12 +91,12 @@ const Login = () => {
                 </Stack>
               </Form>
 
-              <Text fontWeight="medium">
+              {/* <Text fontWeight="medium">
                 Don't have an account?
                 <Link as={ReachLink} ms="5px" fontWeight="bold" to="/signup">
                   Sign Up
                 </Link>
-              </Text>
+              </Text> */}
             </Stack>
           </Box>
         );

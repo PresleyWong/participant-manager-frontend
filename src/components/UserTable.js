@@ -141,7 +141,7 @@ const UserTable = ({ data }) => {
         return (
           <Button
             size="sm"
-            className="primary-button"
+            variant="primary"
             as={ReachLink}
             to={`${cell.row.original.id}`}
           >

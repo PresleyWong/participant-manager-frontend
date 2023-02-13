@@ -67,7 +67,7 @@ const ConfirmButton = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" onClick={onClose} mr={3}>
+            <Button variant="primary" onClick={onClose} mr={3}>
               Close
             </Button>
             <Button

@@ -96,7 +96,7 @@ const UserForm = ({ data, onClose, createNew = false }) => {
               <Button
                 type="submit"
                 disabled={!formik.isValid}
-                className="primary-button"
+                variant="primary"
                 isLoading={response.isLoading}
               >
                 {buttonText}

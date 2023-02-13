@@ -91,14 +91,14 @@ const AppointmentForm = ({ data, onClose }) => {
                 </Stack>
               </ModalBody>
               <ModalFooter>
-                <Button mr="4" onClick={onOpenParticipant}>
+                <Button mr="4" onClick={onOpenParticipant} variant="primary">
                   Edit Saints Details
                 </Button>
 
                 <Button
                   type="submit"
                   disabled={!formik.isValid}
-                  className="primary-button"
+                  variant="primary"
                   isLoading={response.isLoading}
                 >
                   Save

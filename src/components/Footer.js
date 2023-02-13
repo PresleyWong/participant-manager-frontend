@@ -9,15 +9,18 @@ import {
 } from "@chakra-ui/react";
 
 const Footer = () => {
+  const d = new Date();
+  let year = d.getFullYear();
+
   return (
     <footer className="footer-bottom">
       <Box
-        bg={useColorModeValue("secondary.95", "secondary.30")}
-        color={useColorModeValue("secondary.10", "secondary.90")}
+        bg={useColorModeValue("primary.30", "primary.20")}
+        color={useColorModeValue("primary.100", "primary.80")}
       >
         <Container as={Stack} maxW={"6xl"} py={4}>
           <Center>
-            <Text>© 2023 All rights reserved</Text>
+            <Text>© {year} All rights reserved</Text>
           </Center>
         </Container>
       </Box>
