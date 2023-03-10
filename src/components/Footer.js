@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Flex,
   Box,
   Container,
   Stack,
@@ -14,7 +15,7 @@ const Footer = () => {
 
   return (
     <footer className="footer-bottom">
-      <Box
+      <Flex
         bg={useColorModeValue("primary.30", "primary.20")}
         color={useColorModeValue("primary.100", "primary.80")}
       >
@@ -23,7 +24,7 @@ const Footer = () => {
             <Text>© {year} All rights reserved</Text>
           </Center>
         </Container>
-      </Box>
+      </Flex>
     </footer>
   );
 };

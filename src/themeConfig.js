@@ -7,36 +7,23 @@ import {
 } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
-export const GenderColoredText = ({ gender, text }) => {
-  const brotherColor = useColorModeValue("#366A25", "#98D682");
-  const sisterColor = useColorModeValue("#B92123", "#FEB5AD");
-
-  return (
-    <span
-      style={{
-        color: gender === "Brother" ? brotherColor : sisterColor,
-        fontWeight: "bold",
-      }}
-    >
-      {text}
-    </span>
-  );
-};
-
 export const UploadFileButton = ({ onChange }) => {
-  const bgColor = useColorModeValue("#98D682", "#80BA69");
-  const textColor = useColorModeValue("#000000", "#0E3903");
+  const bgColor = useColorModeValue("transparent", "transparent");
+  const textColor = useColorModeValue("#4E843B", "#80BA69");
+  const borderColor = useColorModeValue("#4E843B", "#80BA69");
 
   return (
     <Input
       sx={{
         "::file-selector-button": {
-          border: "none",
+          border: "1px",
+          borderColor: borderColor,
           bg: bgColor,
           color: textColor,
           fontWeight: "600",
           padding: "5px 10px",
           borderRadius: "0.375rem",
+          cursor: "pointer",
         },
       }}
       variant="unstyled"
@@ -54,13 +41,16 @@ export const customTheme = extendTheme({
       variants: {
         primary: (props) => ({
           bg: props.colorMode === "dark" ? "primary.70" : "primary.80",
-          color: props.colorMode === "dark" ? "primary.20" : "primary.0",
+          color: props.colorMode === "dark" ? "primary.20" : "primary.10",
         }),
         primaryOutline: (props) => ({
           border: "1px",
-          borderColor:
-            props.colorMode === "dark" ? "primary.70" : "secondary.50",
-          color: props.colorMode === "dark" ? "primary.70" : "secondary.50",
+          borderColor: props.colorMode === "dark" ? "primary.70" : "primary.50",
+          color: props.colorMode === "dark" ? "primary.70" : "primary.50",
+        }),
+        secondary: (props) => ({
+          bg: props.colorMode === "dark" ? "neutral.30" : "neutral.90",
+          color: props.colorMode === "dark" ? "neutral.80" : "neutral.10",
         }),
         error: (props) => ({
           bg: props.colorMode === "dark" ? "error.80" : "error.40",
@@ -115,6 +105,17 @@ export const customTheme = extendTheme({
         },
       }),
     },
+    Switch: {
+      variants: {
+        custom: (props) => ({
+          track: {
+            _checked: {
+              bg: props.colorMode === "dark" ? "secondary.70" : "secondary.60",
+            },
+          },
+        }),
+      },
+    },
   },
   fonts: {
     heading: `'Open Sans', sans-serif`,
@@ -126,8 +127,8 @@ export const customTheme = extendTheme({
         fontSize: "1rem",
       },
       thead: {
-        bg: mode("neutral.40", "neutral.70")(props),
-        color: mode("neutral.100", "neutral.10")(props),
+        bg: mode("neutral.40", "neutral.0")(props),
+        color: mode("neutral.100", "neutral.80")(props),
       },
       th: {
         color: "#ffffff !important",
@@ -239,18 +240,4 @@ export const customTheme = extendTheme({
       5: "#2C3627",
     },
   },
-});
-
-const themePrimary = defineStyle({
-  background: "primary.40",
-  color: "primary.100",
-
-  _dark: {
-    background: "primary.80",
-    color: "primary.20",
-  },
-});
-
-export const buttonTheme = defineStyleConfig({
-  variants: { themePrimary },
 });

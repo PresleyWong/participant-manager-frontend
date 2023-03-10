@@ -9,27 +9,25 @@ import {
   Text,
   Spinner,
   Center,
-  IconButton,
   VStack,
   Button,
-  Link,
   Card,
   CardHeader,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { MdOutlineDescription } from "react-icons/md";
 import { Link as ReachLink } from "react-router-dom";
 
 import { useGetEventsWithLimitQuery } from "../redux/api/eventApi";
-import DateTimeFormatter from "../components/DateTimeFormatter";
+import { AttachmentsList, CustomDateTimeFormat } from "../utils/Formatter";
 
 const SimpleEventList = ({ currentUser }) => {
   const { data, isLoading, isSuccess, isError, error } =
     useGetEventsWithLimitQuery(12);
 
-  const backgroundColor = useColorModeValue("white", "gray.700");
-  const announceHeaderBg = useColorModeValue("neutral.40", "neutral.70");
-  const announceHeaderColor = useColorModeValue("neutral.100", "neutral.10");
+  const bodyBg = useColorModeValue("white", "neutral.20");
+  const bodyTextColor = useColorModeValue("black", "neutral.80");
+  const announceHeaderBg = useColorModeValue("neutral.40", "neutral.0");
+  const announceHeaderColor = useColorModeValue("neutral.100", "neutral.80");
 
   let content;
 
@@ -58,12 +56,12 @@ const SimpleEventList = ({ currentUser }) => {
 
                       <Box>
                         <Text fontSize="sm">
-                          <DateTimeFormatter
+                          <CustomDateTimeFormat
                             timeStamp={item.end_date}
                             type="date"
                           />{" "}
                           to{" "}
-                          <DateTimeFormatter
+                          <CustomDateTimeFormat
                             timeStamp={item.end_date}
                             type="date"
                           />
@@ -78,25 +76,10 @@ const SimpleEventList = ({ currentUser }) => {
                       base: currentUser ? 4 : 6,
                     }}
                   >
-                    <VStack spacing={0} style={{ alignItems: "flex-start" }}>
-                      {item.attachments.map((file, index) => (
-                        <Link
-                          isExternal
-                          key={index}
-                          href={`${process.env.REACT_APP_ROOT_ENDPOINT}${file.url}`}
-                        >
-                          <IconButton
-                            variant="unstyled"
-                            colorScheme="teal"
-                            size="lg"
-                            icon={<MdOutlineDescription />}
-                            minW={5}
-                            height={5}
-                          />
-                          {file.url.split("/").pop().replace(/%20/g, " ")}
-                        </Link>
-                      ))}
-                    </VStack>
+                    <AttachmentsList
+                      filesArray={item.attachments}
+                      isLink={true}
+                    />
                   </GridItem>
 
                   {currentUser && (
@@ -106,7 +89,7 @@ const SimpleEventList = ({ currentUser }) => {
                         base: 4,
                       }}
                     >
-                      <VStack style={{ alignItems: "flex-start" }}>
+                      <VStack style={{ alignItems: "center" }}>
                         <Button
                           size="sm"
                           as={ReachLink}
@@ -136,7 +119,7 @@ const SimpleEventList = ({ currentUser }) => {
   }
 
   return (
-    <Card bg={backgroundColor} boxShadow="lg">
+    <Card bg={bodyBg} color={bodyTextColor} boxShadow="lg" width="100%">
       <CardHeader bg={announceHeaderBg} color={announceHeaderColor}>
         <Heading size="md">Upcoming Events</Heading>
       </CardHeader>

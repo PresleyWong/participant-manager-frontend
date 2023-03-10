@@ -1,17 +1,22 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Container, Box, useColorModeValue } from "@chakra-ui/react";
+import { Container, Box, Flex, useColorModeValue } from "@chakra-ui/react";
 
 const Layout = (props) => {
   return (
-    <Box bg={useColorModeValue("neutral.99", "neutral.10")} minH={"100vh"}>
+    <Flex
+      direction="column"
+      justify="space-between"
+      bg={useColorModeValue("neutral.99", "neutral.10")}
+      minH={"100vh"}
+    >
       <Header />
-      <Container maxW={"1200px"} my={5} centerContent display={"grid"}>
+      <Container maxW={"1200px"} my={5} marginInline="auto" centerContent>
         {props.children}
       </Container>
       <Footer />
-    </Box>
+    </Flex>
   );
 };
 

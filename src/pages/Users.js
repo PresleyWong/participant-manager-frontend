@@ -34,7 +34,7 @@ const Users = () => {
         <Modal isOpen={isOpenNew} onClose={onCloseNew}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>New</ModalHeader>
+            <ModalHeader>New Serving One</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
               <UserForm createNew={true} onClose={onCloseNew} />
@@ -42,7 +42,7 @@ const Users = () => {
           </ModalContent>
         </Modal>
         <UserTable data={data} />
-        <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+        <Stack direction="row" mt={"1rem"} justify={"flex-start"} width="100%">
           {currentUser.isAdmin && (
             <Button size="sm" variant="primary" onClick={onOpenNew}>
               Add New Serving One

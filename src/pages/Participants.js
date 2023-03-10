@@ -1,5 +1,6 @@
 import {
   Spinner,
+  ButtonGroup,
   Button,
   Stack,
   useDisclosure,
@@ -10,8 +11,10 @@ import {
   ModalCloseButton,
   ModalBody,
   Center,
+  Link,
 } from "@chakra-ui/react";
 import cloneDeep from "lodash.clonedeep";
+import { MdOutlineFileDownload } from "react-icons/md";
 
 import { useGetAllParticipantsQuery } from "../redux/api/participantApi";
 import ParticipantTable from "../components/ParticipantTable";
@@ -19,6 +22,7 @@ import ParticipantForm from "../components/ParticipantForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ImportButton from "../components/ImportButton";
+import sampleCSV from "../assets/Sample.csv";
 
 export const AddParticipantButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,7 +32,7 @@ export const AddParticipantButton = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>New</ModalHeader>
+          <ModalHeader>New Saint</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <ParticipantForm createNew={true} onClose={onClose} />
@@ -60,9 +64,33 @@ const Participants = () => {
     content = (
       <>
         <ParticipantTable data={customData} />
-        <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+        <Stack
+          direction="row"
+          spacing={4}
+          mt={"1rem"}
+          justify="space-between"
+          width={"100%"}
+        >
           <AddParticipantButton />
-          {currentUser.isAdmin && <ImportButton />}
+
+          <Stack direction="row" spacing={4}>
+            <Link
+              isExternal
+              href={sampleCSV}
+              _hover={{
+                textDecorationLine: "none",
+              }}
+            >
+              <Button
+                leftIcon={<MdOutlineFileDownload size={22} />}
+                variant="primary"
+                size="sm"
+              >
+                Sample.csv
+              </Button>
+            </Link>
+            {currentUser.isAdmin && <ImportButton />}
+          </Stack>
         </Stack>
       </>
     );

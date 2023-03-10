@@ -1,9 +1,6 @@
-/* .footer-bottom {
-  position:absolute;
-  left:0;
-  bottom:0;
-  right:0;
-} */
+.footer-bottom {
+  margin-top: auto;
+}
 
 /* table */
 table th,
@@ -12,6 +9,11 @@ table td {
   font-size: 13px;
 }
 
+table th { text-align: center !important;}
+
+.action-group {
+  text-align: center !important;
+}
 
 /* .event-title {
     font-size: 1.2em;
@@ -24,10 +26,10 @@ table td {
 }
 
 
-.datetime-break-line {
-  max-width: 10ch !important;  /*10 characters width*/
+/* .datetime-break-line {
+  max-width: 10ch !important;  
   text-align: center;
-}
+} */
 
 #error-message {
   color: #B22B26;

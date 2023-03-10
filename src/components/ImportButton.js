@@ -1,7 +1,9 @@
 import { read, utils } from "xlsx";
 import {
+  Input,
   Button,
   useDisclosure,
+  useColorModeValue,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -12,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
+import { MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
 
 import { useCreateNewEventMutation } from "../redux/api/eventApi";
 import { useCreateNewParticipantMutation } from "../redux/api/participantApi";
@@ -24,6 +27,10 @@ const ImportButton = ({ model }) => {
   const [createUser, responseUser] = useCreateNewUserMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fileRef = useRef(null);
+
+  const bgColor = useColorModeValue("transparent", "transparent");
+  const textColor = useColorModeValue("#4E843B", "#80BA69");
+  const borderColor = useColorModeValue("#4E843B", "#80BA69");
 
   let createAction;
   switch (model) {
@@ -66,11 +73,11 @@ const ImportButton = ({ model }) => {
     }
   };
 
-  let content = (
+  return (
     <>
       <Button
         size="sm"
-        leftIcon={<ArrowUpIcon />}
+        leftIcon={<MdOutlineFileUpload size={22} />}
         variant="primary"
         onClick={onOpen}
       >
@@ -83,9 +90,21 @@ const ImportButton = ({ model }) => {
           <ModalHeader>Import File</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <input
+            <Input
+              sx={{
+                "::file-selector-button": {
+                  border: "1px",
+                  borderColor: borderColor,
+                  bg: bgColor,
+                  color: textColor,
+                  fontWeight: "600",
+                  padding: "5px 10px",
+                  borderRadius: "0.375rem",
+                  cursor: "pointer",
+                },
+              }}
+              variant="unstyled"
               type="file"
-              name="file"
               id="inputGroupFile"
               required
               ref={fileRef}
@@ -93,18 +112,17 @@ const ImportButton = ({ model }) => {
             />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="teal" onClick={handleImport}>
-              ok
-            </Button>
-            <Button variant="ghost" ml={3} onClick={onClose}>
+            <Button variant="secondary" onClick={onClose}>
               Close
+            </Button>
+            <Button variant="primary" ml={3} onClick={handleImport}>
+              Import
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
   );
-  return content;
 };
 
 export default ImportButton;

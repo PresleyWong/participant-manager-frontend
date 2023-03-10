@@ -1,12 +1,5 @@
 import { useState } from "react";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  chakra,
   IconButton,
   ButtonGroup,
   useDisclosure,
@@ -17,32 +10,31 @@ import {
   ModalCloseButton,
   Tooltip,
   Text,
+  Center,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import {
   useReactTable,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+import { useSelector } from "react-redux";
 
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
 import AppointmentForm from "./AppointmentForm";
-import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
-import { GenderColoredText } from "../themeConfig";
+import Table from "./Table";
+import { GenderColoredName, VStackDateTime } from "../utils/Formatter";
 
 const RegistrantTable = ({ data, eventClosed }) => {
+  const currentUser = useSelector(selectCurrentUser);
+
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
-      header: "ID",
-    }),
     columnHelper.accessor("gender", {
       cell: (info) => info.getValue(),
       header: "Gender",
@@ -56,43 +48,50 @@ const RegistrantTable = ({ data, eventClosed }) => {
       header: "Chinese Name",
     }),
     columnHelper.accessor("name", {
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <span align="center">
+          <GenderColoredName
+            name={info.cell.row.original.name}
+            gender={info.cell.row.original.gender}
+          />
+        </span>
+      ),
       header: "Name",
     }),
     columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Email",
     }),
     columnHelper.accessor("phone", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Phone",
     }),
     columnHelper.accessor("language", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Language",
     }),
     columnHelper.accessor("college", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "College",
     }),
     columnHelper.accessor("academic_year", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Academic Year",
     }),
     columnHelper.accessor("server", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Registered By",
     }),
     columnHelper.accessor("remarks", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Remarks",
     }),
     columnHelper.accessor("register_time", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <VStackDateTime timestamp={info.getValue()} />,
       header: "Registered Time",
     }),
     columnHelper.accessor("", {
-      cell: () => {},
+      cell: (info) => <ActionButtonGroup cell={info.cell} />,
       header: "Actions",
     }),
   ];
@@ -109,7 +108,6 @@ const RegistrantTable = ({ data, eventClosed }) => {
     },
     initialState: {
       columnVisibility: {
-        id: false,
         gender: false,
         english_name: false,
         chinese_name: false,
@@ -118,150 +116,53 @@ const RegistrantTable = ({ data, eventClosed }) => {
     },
   });
 
-  const CellFormater = ({ cell, eventClosed }) => {
+  const ActionButtonGroup = ({ cell }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [removeParticipant, removeResponse] =
       useRemoveParticipantFromEventMutation();
+    const originalRowData = cell.row.original;
 
-    switch (cell.column.columnDef.header) {
-      case "Actions":
-        return (
-          <>
-            <ButtonGroup variant="outline" spacing="1">
-              <Tooltip label="Edit Registration Info">
-                <IconButton
-                  variant="primaryOutline"
-                  icon={<FaEdit />}
-                  onClick={onOpen}
-                  isDisabled={eventClosed}
-                />
-              </Tooltip>
-
-              <ConfirmButton
-                headerText="Remove Participant"
-                bodyText="Are you sure you want to remove participant?"
-                onSuccessAction={() => {
-                  removeParticipant({
-                    appointmentId: cell.row.original.appointment_id,
-                  });
-                }}
-                buttonText="Remove"
-                buttonIcon={<FaTrashAlt />}
-                isDanger={true}
-                isLoading={removeResponse.isLoading}
-                isDisabled={eventClosed}
-              />
-            </ButtonGroup>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Edit Registration Info</ModalHeader>
-                <ModalCloseButton />
-                <AppointmentForm data={cell.row.original} onClose={onClose} />
-              </ModalContent>
-            </Modal>
-          </>
-        );
-
-      case "Name":
-        let nameArray = cell.row.original.name.split(" ");
-        return (
-          <>
-            <GenderColoredText
-              gender={cell.row.original.gender}
-              text={nameArray[0]}
+    return (
+      <Center>
+        <ButtonGroup variant="outline" spacing="1">
+          <Tooltip label="Edit Registration Info">
+            <IconButton
+              variant="primaryOutline"
+              icon={<FaEdit />}
+              onClick={onOpen}
+              isDisabled={eventClosed && !currentUser.isAdmin}
             />
-            <br />
-            {nameArray.length > 1 && nameArray[1]}
-          </>
-        );
-      case "Academic Year":
-        return (
-          <Text align="center">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Text>
-        );
-      case "Language":
-        return (
-          <Text align="center">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Text>
-        );
-      case "Registered By":
-        return (
-          <Text align="center">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Text>
-        );
-      case "Registered Time":
-        return (
-          <div className="datetime-break-line">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </div>
-        );
+          </Tooltip>
 
-      default:
-        return flexRender(cell.column.columnDef.cell, cell.getContext());
-    }
+          <ConfirmButton
+            headerText="Remove Participant"
+            bodyText="Are you sure you want to remove participant?"
+            onSuccessAction={() => {
+              removeParticipant({
+                appointmentId: originalRowData.appointment_id,
+              });
+            }}
+            buttonText="Remove"
+            buttonIcon={<FaTrashAlt />}
+            isDanger={true}
+            isLoading={removeResponse.isLoading}
+            isDisabled={eventClosed && !currentUser.isAdmin}
+          />
+        </ButtonGroup>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Registration Info</ModalHeader>
+            <ModalCloseButton />
+            <AppointmentForm data={originalRowData} onClose={onClose} />
+          </ModalContent>
+        </Modal>
+      </Center>
+    );
   };
 
-  let content;
-
-  content = (
-    <>
-      <Table variant="simple" size="small" boxShadow={"lg"}>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta;
-                return (
-                  <Th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    isNumeric={meta?.isNumeric}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-
-                    <chakra.span pl="4">
-                      {header.column.getIsSorted() ? (
-                        header.column.getIsSorted() === "desc" ? (
-                          <TriangleDownIcon aria-label="sorted descending" />
-                        ) : (
-                          <TriangleUpIcon aria-label="sorted ascending" />
-                        )
-                      ) : null}
-                    </chakra.span>
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <Tr key={index}>
-              {row.getVisibleCells().map((cell) => {
-                const meta = cell.column.columnDef.meta;
-                return (
-                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                    <CellFormater cell={cell} eventClosed={eventClosed} />
-                  </Td>
-                );
-              })}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <Pagination table={table} />
-    </>
-  );
-
-  return content;
+  return <Table table={table} />;
 };
 
 export default RegistrantTable;

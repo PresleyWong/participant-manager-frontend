@@ -1,15 +1,6 @@
 import { useState } from "react";
-import { Link as ReachLink } from "react-router-dom";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Icon,
-  chakra,
-  Button,
   IconButton,
   ButtonGroup,
   useDisclosure,
@@ -19,11 +10,10 @@ import {
   ModalHeader,
   ModalCloseButton,
   Tooltip,
+  Center,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
@@ -35,44 +25,49 @@ import { HiCheck } from "react-icons/hi";
 
 import { useDeleteUserMutation } from "../redux/api/userApi";
 import UserForm from "./UserForm";
-import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
+import { VStackDateTime } from "../utils/Formatter";
+import Table from "./Table";
 
 const UserTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
   const columnHelper = createColumnHelper();
 
   let columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
-      header: "ID",
-    }),
     columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Center>{info.getValue()}</Center>,
       header: "Email",
     }),
     columnHelper.accessor("locality", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Center>{info.getValue()}</Center>,
       header: "Locality",
     }),
     columnHelper.accessor("name", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Center>{info.getValue()}</Center>,
       header: "Name",
     }),
     columnHelper.accessor("is_admin", {
-      cell: (info) => info?.getValue()?.toString(),
+      cell: (info) => (
+        <Center>
+          <Icon
+            boxSize={5}
+            as={info.cell.row.original.is_admin ? HiCheck : IoMdClose}
+          />
+        </Center>
+      ),
+
       header: "Is Admin?",
     }),
     columnHelper.accessor("created_at", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <VStackDateTime timestamp={info.getValue()} />,
       header: "Created Time",
     }),
     columnHelper.accessor("updated_at", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <VStackDateTime timestamp={info.getValue()} />,
       header: "Last Update",
     }),
     columnHelper.accessor("actions", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <ActionButtonGroup cell={info.cell} />,
       header: "Actions",
     }),
   ];
@@ -88,12 +83,11 @@ const UserTable = ({ data }) => {
       sorting,
     },
     initialState: {
-      columnVisibility: { id: false },
       pagination: { pageSize: 15 },
     },
   });
 
-  const CellFormater = ({ cell }) => {
+  const ActionButtonGroup = ({ cell }) => {
     const [deleteUser, deleleteResponse] = useDeleteUserMutation();
     const {
       isOpen: isOpenEdit,
@@ -101,130 +95,45 @@ const UserTable = ({ data }) => {
       onClose: onCloseEdit,
     } = useDisclosure();
 
-    switch (cell.column.columnDef.header) {
-      case "Actions":
-        return (
-          <>
-            <ButtonGroup variant="outline" spacing="1">
-              <Tooltip label="Edit">
-                <IconButton
-                  variant="primaryOutline"
-                  icon={<FaEdit />}
-                  onClick={onOpenEdit}
-                />
-              </Tooltip>
+    const originalRowData = cell.row.original;
 
-              <ConfirmButton
-                headerText="Confirm?"
-                bodyText="Are you sure you want to delete?"
-                onSuccessAction={() => {
-                  deleteUser(cell.row.original.id);
-                }}
-                buttonText="Delete"
-                buttonIcon={<FaTrashAlt />}
-                isDanger={true}
-                isLoading={deleleteResponse.isLoading}
-              />
-            </ButtonGroup>
+    return (
+      <Center>
+        <ButtonGroup variant="outline" spacing="1">
+          <Tooltip label="Edit">
+            <IconButton
+              variant="primaryOutline"
+              icon={<FaEdit />}
+              onClick={onOpenEdit}
+            />
+          </Tooltip>
 
-            <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Edit</ModalHeader>
-                <ModalCloseButton />
-                <UserForm data={cell.row.original} onClose={onCloseEdit} />
-              </ModalContent>
-            </Modal>
-          </>
-        );
-      case "Title":
-        return (
-          <Button
-            size="sm"
-            variant="primary"
-            as={ReachLink}
-            to={`${cell.row.original.id}`}
-          >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Button>
-        );
-      case "Created Time":
-        return (
-          <div className="datetime-break-line">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </div>
-        );
-      case "Last Update":
-        return (
-          <div className="datetime-break-line">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </div>
-        );
-      case "Is Admin?":
-        return (
-          <Icon
-            boxSize={5}
-            as={cell.row.original.is_admin ? HiCheck : IoMdClose}
+          <ConfirmButton
+            headerText="Confirm?"
+            bodyText="Are you sure you want to delete?"
+            onSuccessAction={() => {
+              deleteUser(originalRowData.id);
+            }}
+            buttonText="Delete"
+            buttonIcon={<FaTrashAlt />}
+            isDanger={true}
+            isLoading={deleleteResponse.isLoading}
           />
-        );
-      default:
-        return flexRender(cell.column.columnDef.cell, cell.getContext());
-    }
+        </ButtonGroup>
+
+        <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Serving One’s Details</ModalHeader>
+            <ModalCloseButton />
+            <UserForm data={originalRowData} onClose={onCloseEdit} />
+          </ModalContent>
+        </Modal>
+      </Center>
+    );
   };
 
-  return (
-    <>
-      <Table variant="simple" size="small" boxShadow={"lg"}>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta;
-                return (
-                  <Th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    isNumeric={meta?.isNumeric}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-
-                    <chakra.span pl="4">
-                      {header.column.getIsSorted() ? (
-                        header.column.getIsSorted() === "desc" ? (
-                          <TriangleDownIcon aria-label="sorted descending" />
-                        ) : (
-                          <TriangleUpIcon aria-label="sorted ascending" />
-                        )
-                      ) : null}
-                    </chakra.span>
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <Tr key={index}>
-              {row.getVisibleCells().map((cell) => {
-                const meta = cell.column.columnDef.meta;
-                return (
-                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                    <CellFormater cell={cell} />
-                  </Td>
-                );
-              })}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-
-      <Pagination table={table} />
-    </>
-  );
+  return <Table table={table} />;
 };
 
 export default UserTable;
