@@ -11,7 +11,7 @@ import {
   Select,
   Checkbox,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
+import { MdOutlineFileDownload } from "react-icons/md";
 import cloneDeep from "lodash.clonedeep";
 import { utils, writeFile } from "xlsx";
 
@@ -69,7 +69,7 @@ const ExportButton = ({
           <Button
             size="sm"
             variant="primary"
-            leftIcon={<DownloadIcon />}
+            leftIcon={<MdOutlineFileDownload size={22} />}
             onClick={() => setShowDownloadModal(true)}
             disabled={apiArray[0].length < 1}
           >
@@ -122,15 +122,18 @@ const ExportButton = ({
                   )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button colorScheme="teal" onClick={() => handleExport()}>
-                    Download
-                  </Button>
                   <Button
-                    variant="ghost"
-                    ml={3}
+                    variant="secondary"
                     onClick={() => setShowDownloadModal(false)}
                   >
                     Close
+                  </Button>
+                  <Button
+                    ml={3}
+                    variant="primary"
+                    onClick={() => handleExport()}
+                  >
+                    Download
                   </Button>
                 </ModalFooter>
               </ModalContent>

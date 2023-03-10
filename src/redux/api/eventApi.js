@@ -7,16 +7,16 @@ const extendedIndexApi = indexApi.injectEndpoints({
       query: () => "events",
       providesTags: ["Event"],
     }),
+    getArchivedEvents: builder.query({
+      query: () => "events/archive",
+      providesTags: ["Event"],
+    }),
     getEventsWithLimit: builder.query({
       query: (limit) => `events?limit=${limit}`,
       providesTags: ["Event"],
     }),
     getEventDetails: builder.query({
       query: (eventId) => `events/${eventId}`,
-      providesTags: ["Event"],
-    }),
-    getEventSearch: builder.query({
-      query: (keyword) => `events/search?query=${keyword}`,
       providesTags: ["Event"],
     }),
     getEventDetailWithAppointments: builder.query({
@@ -114,8 +114,8 @@ const extendedIndexApi = indexApi.injectEndpoints({
 
 export const {
   useGetAllEventsQuery,
+  useGetArchivedEventsQuery,
   useGetEventDetailsQuery,
-  useGetEventSearchQuery,
   useGetEventDetailWithAppointmentsQuery,
   useCreateNewEventMutation,
   useUpdateEventMutation,

@@ -1,5 +1,3 @@
-import { useGetAllEventsQuery } from "../redux/api/eventApi";
-import EventTable from "../components/EventTable";
 import {
   Spinner,
   Button,
@@ -12,11 +10,17 @@ import {
   ModalCloseButton,
   ModalBody,
   Center,
+  VStack,
+  Box,
+  Text,
 } from "@chakra-ui/react";
-import EventForm from "../components/EventForm";
 import { useSelector } from "react-redux";
+import EventForm from "../components/EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import SimpleEventList from "../components/SimpleEventList";
+import { useGetAllEventsQuery } from "../redux/api/eventApi";
+import EventTable from "../components/EventTable";
+import ArchiveEventTable from "../components/ArchiveEventTable";
 
 const Events = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllEventsQuery();
@@ -36,7 +40,7 @@ const Events = () => {
           <Modal isOpen={isOpenNew} onClose={onCloseNew}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>New</ModalHeader>
+              <ModalHeader>New Event</ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
                 <EventForm createNew={true} onClose={onCloseNew} />
@@ -44,13 +48,28 @@ const Events = () => {
             </ModalContent>
           </Modal>
           <EventTable data={data} />
-          <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+          <Stack
+            direction="row"
+            mt={"1rem"}
+            justify={"flex-start"}
+            width="100%"
+          >
             {currentUser.isAdmin && (
               <Button size="sm" variant="primary" onClick={onOpenNew}>
                 Create New Event
               </Button>
             )}
           </Stack>
+
+          {currentUser.isAdmin && (
+            <VStack width="100%" mt="10">
+              <Box className="align-left">
+                <Text as="b">Archive</Text>
+              </Box>
+
+              <ArchiveEventTable />
+            </VStack>
+          )}
         </>
       );
     } else {

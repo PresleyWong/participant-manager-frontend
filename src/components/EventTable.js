@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { Link as ReachLink } from "react-router-dom";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  chakra,
   Button,
   IconButton,
   ButtonGroup,
@@ -18,14 +11,11 @@ import {
   ModalHeader,
   ModalCloseButton,
   Tooltip,
-  VStack,
-  Text,
+  Center,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { MdArchive, MdUnarchive, MdLock, MdLockOpen } from "react-icons/md";
 import {
   useReactTable,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
@@ -40,70 +30,112 @@ import {
 } from "../redux/api/eventApi";
 import EventForm from "./EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
-import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
-import DateTimeFormatter from "./DateTimeFormatter";
+import { date } from "yup";
+import {
+  VStackDateTime,
+  AttachmentsList,
+  CustomDateTimeFormat,
+} from "../utils/Formatter";
+import Table from "./Table";
 
 const EventTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
   const columnHelper = createColumnHelper();
   const currentUser = useSelector(selectCurrentUser);
 
-  let columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
-      header: "ID",
-    }),
-    columnHelper.accessor("title", {
-      cell: (info) => info.getValue(),
-      header: "Title",
-    }),
-    columnHelper.accessor("start_date", {
-      cell: (info) => info.getValue(),
-      header: "Start Date",
-    }),
-    columnHelper.accessor("end_date", {
-      cell: (info) => info.getValue(),
-      header: "End Date",
-    }),
-    columnHelper.accessor("start_time", {
-      cell: (info) => info.getValue(),
-      header: "Start Time",
-    }),
-    columnHelper.accessor("end_time", {
-      cell: (info) => info.getValue(),
-      header: "End Time",
-    }),
-    columnHelper.accessor("", {
-      cell: () => {},
-      header: "Attachments",
-    }),
-    columnHelper.accessor("created_at", {
-      cell: (info) => info.getValue(),
-      header: "Created Time",
-    }),
-    columnHelper.accessor("actions", {
-      cell: (info) => info.getValue(),
-      header: "Actions",
-    }),
-  ];
-
-  if (!currentUser.isAdmin) {
+  let columns;
+  if (currentUser.isAdmin) {
     columns = [
-      columnHelper.accessor("id", {
-        cell: (info) => info.getValue(),
-        header: "ID",
-      }),
       columnHelper.accessor("title", {
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <Button
+            size="sm"
+            variant="primary"
+            as={ReachLink}
+            to={`${info.cell.row.original.id}`}
+          >
+            {info.getValue()}
+          </Button>
+        ),
         header: "Title",
       }),
       columnHelper.accessor("start_date", {
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <Center>
+            <CustomDateTimeFormat timeStamp={info.getValue()} type="date" />
+          </Center>
+        ),
         header: "Start Date",
       }),
       columnHelper.accessor("end_date", {
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <Center>
+            <CustomDateTimeFormat timeStamp={info.getValue()} type="date" />
+          </Center>
+        ),
+        header: "End Date",
+      }),
+      columnHelper.accessor("start_time", {
+        cell: (info) => (
+          <Center>
+            <CustomDateTimeFormat
+              timeStamp={`${info.cell.row.original.start_date}T${info.cell.row.original.start_time}`}
+              type="time"
+            />
+          </Center>
+        ),
+        header: "Start Time",
+      }),
+      columnHelper.accessor("end_time", {
+        cell: (info) => (
+          <Center>
+            <CustomDateTimeFormat
+              timeStamp={`${info.cell.row.original.end_date}T${info.cell.row.original.end_time}`}
+              type="time"
+            />
+          </Center>
+        ),
+        header: "End Time",
+      }),
+      columnHelper.accessor("attachments", {
+        cell: (info) => <AttachmentsList filesArray={info.getValue()} />,
+        header: "Attachments",
+      }),
+      columnHelper.accessor("created_at", {
+        cell: (info) => <VStackDateTime timestamp={info.getValue()} />,
+        header: "Created Time",
+      }),
+      columnHelper.accessor("", {
+        cell: (info) => <ActionButtonGroup cell={info.cell} />,
+        header: "Actions",
+      }),
+    ];
+  } else {
+    columns = [
+      columnHelper.accessor("title", {
+        cell: (info) => (
+          <Button
+            size="sm"
+            variant="primary"
+            as={ReachLink}
+            to={`${info.cell.row.original.id}`}
+          >
+            {info.getValue()}
+          </Button>
+        ),
+        header: "Title",
+      }),
+      columnHelper.accessor("start_date", {
+        cell: (info) => (
+          <CustomDateTimeFormat timeStamp={info.getValue()} type="date" />
+        ),
+        header: "Start Date",
+      }),
+      columnHelper.accessor("end_date", {
+        cell: (info) => (
+          <CustomDateTimeFormat timeStamp={info.getValue()} type="date" />
+        ),
         header: "End Date",
       }),
     ];
@@ -120,12 +152,11 @@ const EventTable = ({ data }) => {
       sorting,
     },
     initialState: {
-      columnVisibility: { id: false },
       pagination: { pageSize: 15 },
     },
   });
 
-  const CellFormater = ({ cell }) => {
+  const ActionButtonGroup = ({ cell }) => {
     const [deleteEvent, deleleteResponse] = useDeleteEventMutation();
     const [updateLockEvent, updateLockResponse] = useUpdateEventMutation();
     const [updateArchiveEvent, updateArchiveResponse] =
@@ -135,7 +166,6 @@ const EventTable = ({ data }) => {
       onOpen: onOpenEdit,
       onClose: onCloseEdit,
     } = useDisclosure();
-
     const onSwitch = async (id, item, updateAction) => {
       try {
         await updateAction({
@@ -149,221 +179,81 @@ const EventTable = ({ data }) => {
       }
     };
 
-    switch (cell.column.columnDef.header) {
-      case "Actions":
-        let lockButton = (
-          <Tooltip label="Close Registration">
+    const originalRowData = cell.row.original;
+    const closeRegistration = originalRowData.is_closed;
+    const isArchived = originalRowData.is_archived;
+
+    return (
+      <Center>
+        <ButtonGroup variant="outline" spacing="1">
+          <Tooltip label="Edit">
             <IconButton
               variant="primaryOutline"
-              icon={<MdLock size={22} />}
-              onClick={() =>
-                onSwitch(cell.row.original.id, "is_closed", updateLockEvent)
-              }
-              isLoading={updateLockResponse.isLoading}
+              icon={<FaEdit />}
+              onClick={onOpenEdit}
             />
           </Tooltip>
-        );
 
-        let archiveButton = (
-          <Tooltip label="Archive">
+          <Tooltip label={isArchived ? "Unarchive" : "Archive"}>
             <IconButton
               variant="primaryOutline"
-              icon={<MdArchive size={22} />}
+              icon={
+                isArchived ? <MdUnarchive size={22} /> : <MdArchive size={22} />
+              }
               onClick={() =>
-                onSwitch(
-                  cell.row.original.id,
-                  "is_archived",
-                  updateArchiveEvent
-                )
+                onSwitch(originalRowData.id, "is_archived", updateArchiveEvent)
               }
               isLoading={updateArchiveResponse.isLoading}
             />
           </Tooltip>
-        );
 
-        if (cell.row.original.is_closed) {
-          lockButton = (
-            <Tooltip label="Open Registration">
-              <IconButton
-                variant="primaryOutline"
-                icon={<MdLockOpen size={22} />}
-                onClick={() =>
-                  onSwitch(cell.row.original.id, "is_closed", updateLockEvent)
-                }
-                isLoading={updateLockResponse.isLoading}
-              />
-            </Tooltip>
-          );
-        }
-
-        if (cell.row.original.is_archived) {
-          archiveButton = (
-            <Tooltip label="Unarchive">
-              <IconButton
-                variant="primaryOutline"
-                icon={<MdUnarchive size={22} />}
-                onClick={() =>
-                  onSwitch(
-                    cell.row.original.id,
-                    "is_archived",
-                    updateArchiveEvent
-                  )
-                }
-                isLoading={updateArchiveResponse.isLoading}
-              />
-            </Tooltip>
-          );
-        }
-
-        return (
-          <>
-            <ButtonGroup variant="outline" spacing="1">
-              <Tooltip label="Edit">
-                <IconButton
-                  variant="primaryOutline"
-                  icon={<FaEdit />}
-                  onClick={onOpenEdit}
-                />
-              </Tooltip>
-
-              {archiveButton}
-              {lockButton}
-
-              <ConfirmButton
-                headerText="Delete Event"
-                bodyText="Are you sure you want to delete event?"
-                onSuccessAction={() => {
-                  deleteEvent(cell.row.original.id);
-                }}
-                buttonText="Delete"
-                buttonIcon={<FaTrashAlt />}
-                isDanger={true}
-                isLoading={deleleteResponse.isLoading}
-              />
-            </ButtonGroup>
-
-            <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Edit</ModalHeader>
-                <ModalCloseButton />
-                <EventForm data={cell.row.original} onClose={onCloseEdit} />
-              </ModalContent>
-            </Modal>
-          </>
-        );
-      case "Title":
-        return (
-          <Button
-            size="sm"
-            variant="primary"
-            as={ReachLink}
-            to={`${cell.row.original.id}`}
+          <Tooltip
+            label={
+              closeRegistration ? "Open Registration" : "Close Registration"
+            }
           >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Button>
-        );
-      case "Start Date":
-        return (
-          <DateTimeFormatter
-            timeStamp={cell.row.original.start_date}
-            type="date"
+            <IconButton
+              variant="primaryOutline"
+              icon={
+                closeRegistration ? (
+                  <MdLockOpen size={22} />
+                ) : (
+                  <MdLock size={22} />
+                )
+              }
+              onClick={() =>
+                onSwitch(originalRowData.id, "is_closed", updateLockEvent)
+              }
+              isLoading={updateLockResponse.isLoading}
+            />
+          </Tooltip>
+
+          <ConfirmButton
+            headerText="Delete Event"
+            bodyText="Are you sure you want to delete event?"
+            onSuccessAction={() => {
+              deleteEvent(originalRowData.id);
+            }}
+            buttonText="Delete"
+            buttonIcon={<FaTrashAlt />}
+            isDanger={true}
+            isLoading={deleleteResponse.isLoading}
           />
-        );
-      case "End Date":
-        return (
-          <DateTimeFormatter
-            timeStamp={cell.row.original.end_date}
-            type="date"
-          />
-        );
-      case "Start Time":
-        return (
-          <DateTimeFormatter
-            timeStamp={`${cell.row.original.start_date}T${cell.row.original.start_time}`}
-            type="time"
-          />
-        );
-      case "End Time":
-        return (
-          <DateTimeFormatter
-            timeStamp={`${cell.row.original.end_date}T${cell.row.original.end_time}`}
-            type="time"
-          />
-        );
-      case "Created Time":
-        return (
-          <div className="datetime-break-line">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </div>
-        );
-      case "Attachments":
-        return (
-          <VStack align={"left"}>
-            {cell.row.original.attachments.map((file, index) => (
-              <Text key={index}>
-                {file.url.split("/").pop().replace(/%20/g, " ")}
-              </Text>
-            ))}
-          </VStack>
-        );
-      default:
-        return flexRender(cell.column.columnDef.cell, cell.getContext());
-    }
+        </ButtonGroup>
+
+        <Modal isOpen={isOpenEdit} onClose={onCloseEdit}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Event</ModalHeader>
+            <ModalCloseButton />
+            <EventForm data={originalRowData} onClose={onCloseEdit} />
+          </ModalContent>
+        </Modal>
+      </Center>
+    );
   };
 
-  return (
-    <>
-      <Table variant="simple" size="small" boxShadow={"lg"}>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta;
-                return (
-                  <Th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    isNumeric={meta?.isNumeric}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-
-                    <chakra.span pl="4">
-                      {header.column.getIsSorted() ? (
-                        header.column.getIsSorted() === "desc" ? (
-                          <TriangleDownIcon aria-label="sorted descending" />
-                        ) : (
-                          <TriangleUpIcon aria-label="sorted ascending" />
-                        )
-                      ) : null}
-                    </chakra.span>
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <Tr key={index}>
-              {row.getVisibleCells().map((cell) => {
-                const meta = cell.column.columnDef.meta;
-                return (
-                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                    <CellFormater cell={cell} />
-                  </Td>
-                );
-              })}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <Pagination table={table} />
-    </>
-  );
+  return <Table table={table} />;
 };
 
 export default EventTable;

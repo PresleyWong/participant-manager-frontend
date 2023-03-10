@@ -57,7 +57,13 @@ const Login = () => {
     >
       {(formik) => {
         return (
-          <Box rounded={"lg"} bg={backgroundColor} boxShadow={"lg"} p={8}>
+          <Box
+            rounded={"lg"}
+            bg={backgroundColor}
+            boxShadow={"lg"}
+            p={8}
+            minW="376px"
+          >
             <Stack spacing={4}>
               <Form>
                 <Stack spacing={4}>

@@ -1,5 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Spinner, Box, VStack, Stack, Center, Text } from "@chakra-ui/react";
+import {
+  Spinner,
+  Box,
+  VStack,
+  Stack,
+  Center,
+  Text,
+  Heading,
+} from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 
@@ -45,7 +53,9 @@ const EventDetail = () => {
       <>
         <Stack spacing="24px">
           <VStack>
-            <p className="event-title">{data.event.title}</p>
+            <Heading size="md" textTransform="uppercase">
+              {data.event.title}
+            </Heading>
           </VStack>
 
           <ParticipantSearch
@@ -68,7 +78,13 @@ const EventDetail = () => {
           </VStack>
         </Stack>
         {currentUser.isAdmin && (
-          <Stack direction="row" spacing={4} mt={"1rem"} align="center">
+          <Stack
+            direction="row"
+            spacing={4}
+            mt={"1rem"}
+            justify="flex-end"
+            width={"100%"}
+          >
             <ExportButton
               apiArray={exportData}
               fileName={"participant_export.xlsx"}

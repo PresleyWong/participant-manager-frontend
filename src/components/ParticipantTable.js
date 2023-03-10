@@ -1,12 +1,5 @@
 import { useState } from "react";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  chakra,
   IconButton,
   ButtonGroup,
   useDisclosure,
@@ -15,14 +8,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Text,
   Tooltip,
+  Center,
+  Text,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import {
   useReactTable,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
@@ -31,18 +23,14 @@ import {
 
 import { useDeleteParticipantMutation } from "../redux/api/participantApi";
 import ParticipantForm from "./ParticipantForm";
-import Pagination from "./Pagination";
 import ConfirmButton from "./ConfirmButton";
-import { GenderColoredText } from "../themeConfig";
+import Table from "./Table";
+import { GenderColoredName } from "../utils/Formatter";
 
 const ParticipantTable = ({ data }) => {
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
-      header: "ID",
-    }),
     columnHelper.accessor("gender", {
       cell: (info) => info.getValue(),
       header: "Gender",
@@ -56,31 +44,38 @@ const ParticipantTable = ({ data }) => {
       header: "Chinese Name",
     }),
     columnHelper.accessor("name", {
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <span align="center">
+          <GenderColoredName
+            name={info.cell.row.original.name}
+            gender={info.cell.row.original.gender}
+          />
+        </span>
+      ),
       header: "Name",
     }),
     columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Email",
     }),
     columnHelper.accessor("phone", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Phone",
     }),
     columnHelper.accessor("locality", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Locality",
     }),
     columnHelper.accessor("college", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "College",
     }),
     columnHelper.accessor("academic_year", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Academic Year",
     }),
     columnHelper.accessor("", {
-      cell: () => {},
+      cell: (info) => <ActionButtonGroup cell={info.cell} />,
       header: "Actions",
     }),
   ];
@@ -97,7 +92,6 @@ const ParticipantTable = ({ data }) => {
     },
     initialState: {
       columnVisibility: {
-        id: false,
         gender: false,
         english_name: false,
         chinese_name: false,
@@ -106,125 +100,48 @@ const ParticipantTable = ({ data }) => {
     },
   });
 
-  const CellFormater = ({ cell }) => {
+  const ActionButtonGroup = ({ cell }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [deleteParticipant, deleteResponse] = useDeleteParticipantMutation();
+    const originalRowData = cell.row.original;
 
-    switch (cell.column.columnDef.header) {
-      case "Actions":
-        return (
-          <>
-            <ButtonGroup variant="outline" spacing="1">
-              <Tooltip label="Edit">
-                <IconButton
-                  variant="primaryOutline"
-                  icon={<FaEdit />}
-                  onClick={onOpen}
-                />
-              </Tooltip>
-
-              <ConfirmButton
-                headerText="Confirm?"
-                bodyText="Are you sure you want to delete?"
-                onSuccessAction={() => {
-                  deleteParticipant(cell.row.original.id);
-                }}
-                buttonText="Delete"
-                buttonIcon={<FaTrashAlt />}
-                isDanger={true}
-                isLoading={deleteResponse.isLoading}
-              />
-            </ButtonGroup>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Edit</ModalHeader>
-                <ModalCloseButton />
-                <ParticipantForm data={cell.row.original} onClose={onClose} />
-              </ModalContent>
-            </Modal>
-          </>
-        );
-      case "Name":
-        let nameArray = cell.row.original.name.split(" ");
-        return (
-          <>
-            <GenderColoredText
-              gender={cell.row.original.gender}
-              text={nameArray[0]}
+    return (
+      <Center>
+        <ButtonGroup variant="outline" spacing="1">
+          <Tooltip label="Edit">
+            <IconButton
+              variant="primaryOutline"
+              icon={<FaEdit />}
+              onClick={onOpen}
             />
-            <br />
-            {nameArray.length > 1 && nameArray[1]}
-          </>
-        );
-      case "Academic Year":
-        return (
-          <Text align="center">
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Text>
-        );
-      default:
-        return flexRender(cell.column.columnDef.cell, cell.getContext());
-    }
+          </Tooltip>
+
+          <ConfirmButton
+            headerText="Confirm?"
+            bodyText="Are you sure you want to delete?"
+            onSuccessAction={() => {
+              deleteParticipant(originalRowData.id);
+            }}
+            buttonText="Delete"
+            buttonIcon={<FaTrashAlt />}
+            isDanger={true}
+            isLoading={deleteResponse.isLoading}
+          />
+        </ButtonGroup>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Saint's Details</ModalHeader>
+            <ModalCloseButton />
+            <ParticipantForm data={originalRowData} onClose={onClose} />
+          </ModalContent>
+        </Modal>
+      </Center>
+    );
   };
 
-  let content;
-
-  content = (
-    <>
-      <Table variant="simple" size="small" boxShadow={"lg"}>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta;
-                return (
-                  <Th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    isNumeric={meta?.isNumeric}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-
-                    <chakra.span pl="4">
-                      {header.column.getIsSorted() ? (
-                        header.column.getIsSorted() === "desc" ? (
-                          <TriangleDownIcon aria-label="sorted descending" />
-                        ) : (
-                          <TriangleUpIcon aria-label="sorted ascending" />
-                        )
-                      ) : null}
-                    </chakra.span>
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row, index) => (
-            <Tr key={index}>
-              {row.getVisibleCells().map((cell) => {
-                const meta = cell.column.columnDef.meta;
-                return (
-                  <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                    <CellFormater cell={cell} />
-                  </Td>
-                );
-              })}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-      <Pagination table={table} />
-    </>
-  );
-
-  return content;
+  return <Table table={table} />;
 };
 
 export default ParticipantTable;

@@ -12,7 +12,8 @@ const Homepage = () => {
     <Grid
       templateColumns={{ md: "repeat(12, 1fr)", base: "repeat(1, 1fr)" }}
       columnGap={{ md: 5 }}
-      rowGap={{ base: 5 }}
+      rowGap={{ base: 5, md: 0 }}
+      width="100%"
     >
       <GridItem colSpan={{ lg: currentUser ? 0 : 4, md: currentUser ? 0 : 5 }}>
         {!currentUser && <Login />}

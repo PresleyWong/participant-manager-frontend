@@ -1,4 +1,12 @@
-import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
+import {
+  Stack,
+  Button,
+  ModalBody,
+  ModalFooter,
+  Switch,
+  FormLabel,
+  FormControl,
+} from "@chakra-ui/react";
 import { InputControl, SwitchControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -39,7 +47,7 @@ const UserForm = ({ data, onClose, createNew = false }) => {
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email format").required("Required"),
-    password: Yup.string().required("Required"),
+    // password: Yup.string().required("Required"),
     locality: Yup.string().required("Required"),
     name: Yup.string().required("Required"),
   });
@@ -89,7 +97,17 @@ const UserForm = ({ data, onClose, createNew = false }) => {
                 />
                 <InputControl isRequired name="locality" label="Locality" />
                 <InputControl isRequired name="name" label="Name" />
-                <SwitchControl name="isAdmin" label="Is Admin?" />
+
+                <FormControl display="flex">
+                  <FormLabel>Is Admin?</FormLabel>
+                  <Switch
+                    id="isAdmin"
+                    isChecked={formik.values.isAdmin}
+                    onChange={formik.handleChange}
+                    variant="custom"
+                  />
+                  {/* <SwitchControl name="isAdmin" label="Is Admin?" colorScheme={"red"} /> */}
+                </FormControl>
               </Stack>
             </ModalBody>
             <ModalFooter>

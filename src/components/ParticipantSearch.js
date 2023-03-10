@@ -3,34 +3,30 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  chakra,
   Spinner,
   VStack,
   Center,
   Select,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon, SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 import { MdHowToReg } from "react-icons/md";
 import {
   useReactTable,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
 } from "@tanstack/react-table";
+import { useSelector } from "react-redux";
 
+import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
 import ConfirmButton from "./ConfirmButton";
 import { AddParticipantButton } from "../pages/Participants";
-import { GenderColoredText } from "../themeConfig";
+import Table from "./Table";
+import { GenderColoredName } from "../utils/Formatter";
 
 const SearchTable = ({
   data,
@@ -38,13 +34,11 @@ const SearchTable = ({
   eventParticipants,
   eventParticipantsWithAppointments,
 }) => {
+  const currentUser = useSelector(selectCurrentUser);
+
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
-      header: "ID",
-    }),
     columnHelper.accessor("gender", {
       cell: (info) => info.getValue(),
       header: "Gender",
@@ -58,32 +52,42 @@ const SearchTable = ({
       header: "Chinese Name",
     }),
     columnHelper.accessor("name", {
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <span align="center">
+          <GenderColoredName
+            name={`${info.cell.row.original.english_name} ${info.cell.row.original.chinese_name}`}
+            gender={info.cell.row.original.gender}
+          />
+        </span>
+      ),
       header: "Name",
     }),
     columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Email",
     }),
     columnHelper.accessor("phone", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Phone",
     }),
     columnHelper.accessor("", {
+      cell: (info) => <LanguageSelector cell={info.cell} />,
       header: "Language",
     }),
     columnHelper.accessor("college", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "College",
     }),
     columnHelper.accessor("academic_year", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Text align="center">{info.getValue()}</Text>,
       header: "Academic Year",
     }),
     columnHelper.accessor("", {
+      cell: (info) => <RemarksTextBox cell={info.cell} />,
       header: "Remarks",
     }),
     columnHelper.accessor("", {
+      cell: (info) => <ActionButtonGroup cell={info.cell} />,
       header: "Actions",
     }),
   ];
@@ -103,7 +107,6 @@ const SearchTable = ({
     },
     initialState: {
       columnVisibility: {
-        id: false,
         gender: false,
         english_name: false,
         chinese_name: false,
@@ -133,154 +136,92 @@ const SearchTable = ({
     }
   };
 
-  const CellFormater = ({ cell }) => {
+  const ActionButtonGroup = ({ cell }) => {
+    const foundIndex = eventParticipants.indexOf(cell.row.original.id);
+    const isDisabled = foundIndex >= 0 ? true : false;
+    return (
+      <Center>
+        <ConfirmButton
+          headerText="Confirm?"
+          bodyText="Are you sure you want to register?"
+          onSuccessAction={() => {
+            handleRegister(cell);
+          }}
+          buttonIcon={<MdHowToReg size={22} />}
+          buttonText="Register"
+          isDanger={false}
+          isLoading={addResponse.isLoading}
+          isDisabled={
+            isDisabled || (eventDetail.is_closed && !currentUser.isAdmin)
+          }
+        />
+      </Center>
+    );
+  };
+
+  const LanguageSelector = ({ cell }) => {
     const foundIndex = eventParticipants.indexOf(cell.row.original.id);
     const isDisabled = foundIndex >= 0 ? true : false;
 
-    switch (cell.column.columnDef.header) {
-      case "Actions":
-        return (
-          <Center>
-            <ConfirmButton
-              headerText="Confirm?"
-              bodyText="Are you sure you want to register?"
-              onSuccessAction={() => {
-                handleRegister(cell);
-              }}
-              buttonIcon={<MdHowToReg size={22} />}
-              buttonText="Register"
-              isDanger={false}
-              isLoading={addResponse.isLoading}
-              isDisabled={isDisabled || eventDetail.is_closed}
-            />
-          </Center>
-        );
-      case "Name":
-        return (
-          <>
-            <GenderColoredText
-              gender={cell.row.original.gender}
-              text={cell.row.original.english_name}
-            />
-            <br />
-            {cell.row.original.chinese_name}
-          </>
-        );
-      case "Academic Year":
-        return (
-          <Center>
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </Center>
-        );
-      case "Language":
-        if (isDisabled) {
-          return (
-            <Select
-              variant={"custom"}
-              size="xs"
-              isDisabled={isDisabled || eventDetail.is_closed}
-              ref={(el) => (languageRef.current[cell.row.index] = el)}
-            >
-              <option
-                value={eventParticipantsWithAppointments[foundIndex].language}
-              >
-                {eventParticipantsWithAppointments[foundIndex].language}
-              </option>
-            </Select>
-          );
-        } else {
-          return (
-            <Select
-              variant={"custom"}
-              size="xs"
-              placeholder="Select option"
-              isDisabled={isDisabled || eventDetail.is_closed}
-              ref={(el) => (languageRef.current[cell.row.index] = el)}
-            >
-              {languageOptions.map((language, index) => (
-                <option key={index} value={language}>
-                  {language}
-                </option>
-              ))}
-            </Select>
-          );
-        }
-      case "Remarks":
-        if (isDisabled) {
-          return (
-            <Textarea
-              variant={"custom"}
-              isDisabled={isDisabled || eventDetail.is_closed}
-              ref={(el) => (remarksRef.current[cell.row.index] = el)}
-              value={eventParticipantsWithAppointments[foundIndex].remarks}
-            />
-          );
-        } else {
-          return (
-            <Textarea
-              variant={"custom"}
-              isDisabled={isDisabled || eventDetail.is_closed}
-              ref={(el) => (remarksRef.current[cell.row.index] = el)}
-            />
-          );
-        }
-
-      default:
-        return flexRender(cell.column.columnDef.cell, cell.getContext());
+    if (isDisabled) {
+      return (
+        <Select
+          variant={"custom"}
+          size="xs"
+          isDisabled={
+            isDisabled || (eventDetail.is_closed && !currentUser.isAdmin)
+          }
+          ref={(el) => (languageRef.current[cell.row.index] = el)}
+        >
+          <option
+            value={eventParticipantsWithAppointments[foundIndex].language}
+          >
+            {eventParticipantsWithAppointments[foundIndex].language}
+          </option>
+        </Select>
+      );
+    } else {
+      return (
+        <Select
+          variant={"custom"}
+          size="xs"
+          placeholder="Select option"
+          isDisabled={
+            isDisabled || (eventDetail.is_closed && !currentUser.isAdmin)
+          }
+          ref={(el) => (languageRef.current[cell.row.index] = el)}
+        >
+          {languageOptions.map((language, index) => (
+            <option key={index} value={language}>
+              {language}
+            </option>
+          ))}
+        </Select>
+      );
     }
   };
 
-  let content = (
-    <Table variant="simple" size="small" boxShadow={"lg"}>
-      <Thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              const meta = header.column.columnDef.meta;
-              return (
-                <Th
-                  key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
-                  isNumeric={meta?.isNumeric}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
+  const RemarksTextBox = ({ cell }) => {
+    const foundIndex = eventParticipants.indexOf(cell.row.original.id);
+    const isDisabled = foundIndex >= 0 ? true : false;
 
-                  <chakra.span pl="4">
-                    {header.column.getIsSorted() ? (
-                      header.column.getIsSorted() === "desc" ? (
-                        <TriangleDownIcon aria-label="sorted descending" />
-                      ) : (
-                        <TriangleUpIcon aria-label="sorted ascending" />
-                      )
-                    ) : null}
-                  </chakra.span>
-                </Th>
-              );
-            })}
-          </Tr>
-        ))}
-      </Thead>
-      <Tbody>
-        {table.getRowModel()?.rows.map((row, index) => (
-          <Tr key={index}>
-            {row.getVisibleCells().map((cell) => {
-              const meta = cell.column.columnDef.meta;
-              return (
-                <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                  <CellFormater cell={cell} />
-                </Td>
-              );
-            })}
-          </Tr>
-        ))}
-      </Tbody>
-    </Table>
-  );
+    return (
+      <Textarea
+        variant={"custom"}
+        isDisabled={
+          isDisabled || (eventDetail.is_closed && !currentUser.isAdmin)
+        }
+        ref={(el) => (remarksRef.current[cell.row.index] = el)}
+        defaultValue={
+          isDisabled
+            ? eventParticipantsWithAppointments[foundIndex].remarks
+            : ""
+        }
+      />
+    );
+  };
 
-  return content;
+  return <Table table={table} />;
 };
 
 const SearchResults = ({
