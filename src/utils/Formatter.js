@@ -64,7 +64,9 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
     ));
   } else {
     content = filesArray.map((file, index) => (
-      <Text key={index}>{file.url.split("/").pop().replace(/%20/g, " ")}</Text>
+      <Text align="center" key={index}>
+        {file.url.split("/").pop().replace(/%20/g, " ")}
+      </Text>
     ));
   }
 
