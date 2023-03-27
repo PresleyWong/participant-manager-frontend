@@ -1,6 +1,7 @@
-import { Center, Spinner } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useGetArchivedEventsQuery } from "../redux/api/eventApi";
 import EventTable from "./EventTable";
+import Spinner from "./Spinner";
 
 const ArchiveEventTable = () => {
   const { data, isLoading, isSuccess, isError, error } =
@@ -10,9 +11,9 @@ const ArchiveEventTable = () => {
     return <EventTable data={data} />;
   } else if (isLoading) {
     return (
-      <Center>
+      <Box position="relative">
         <Spinner />
-      </Center>
+      </Box>
     );
   } else if (isError) {
     return <div>{error.toString()}</div>;

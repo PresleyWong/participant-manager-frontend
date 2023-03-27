@@ -1,13 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Spinner,
-  Box,
-  VStack,
-  Stack,
-  Center,
-  Text,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, VStack, Stack, Text, Heading } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import cloneDeep from "lodash.clonedeep";
 
@@ -16,6 +8,7 @@ import RegistrantTable from "../components/RegistrantTable";
 import ParticipantSearch from "../components/ParticipantSearch";
 import ExportButton from "../components/ExportButton";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 const EventDetail = () => {
   const { eventId } = useParams();
@@ -95,11 +88,7 @@ const EventDetail = () => {
       </>
     );
   } else if (isLoading) {
-    mainContent = (
-      <Center>
-        <Spinner />
-      </Center>
-    );
+    mainContent = <Spinner />;
   } else if (isError) {
     mainContent = <div>{error.toString()}</div>;
   }

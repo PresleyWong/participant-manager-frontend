@@ -1,12 +1,10 @@
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate, Link as ReachLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Stack,
   Button,
   useColorModeValue,
-  Text,
-  Link,
   Tooltip,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
