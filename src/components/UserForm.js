@@ -13,7 +13,7 @@ import {
   FormControl,
   useDisclosure,
 } from "@chakra-ui/react";
-import { InputControl, SwitchControl } from "formik-chakra-ui";
+import { InputControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 

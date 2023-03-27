@@ -1,5 +1,4 @@
 import {
-  Spinner,
   Button,
   Stack,
   useDisclosure,
@@ -9,7 +8,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Center,
   VStack,
   Box,
   Text,
@@ -21,6 +19,7 @@ import SimpleEventList from "../components/SimpleEventList";
 import { useGetAllEventsQuery } from "../redux/api/eventApi";
 import EventTable from "../components/EventTable";
 import ArchiveEventTable from "../components/ArchiveEventTable";
+import Spinner from "../components/Spinner";
 
 const Events = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllEventsQuery();
@@ -76,11 +75,7 @@ const Events = () => {
       content = <SimpleEventList currentUser={currentUser} />;
     }
   } else if (isLoading) {
-    content = (
-      <Center>
-        <Spinner />
-      </Center>
-    );
+    content = <Spinner />;
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   }

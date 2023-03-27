@@ -1,6 +1,4 @@
 import {
-  Spinner,
-  ButtonGroup,
   Button,
   Stack,
   useDisclosure,
@@ -10,7 +8,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Center,
   Link,
 } from "@chakra-ui/react";
 import cloneDeep from "lodash.clonedeep";
@@ -23,6 +20,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ImportButton from "../components/ImportButton";
 import sampleCSV from "../assets/Sample.csv";
+import Spinner from "../components/Spinner";
 
 export const AddParticipantButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -95,11 +93,7 @@ const Participants = () => {
       </>
     );
   } else if (isLoading) {
-    content = (
-      <Center>
-        <Spinner />
-      </Center>
-    );
+    content = <Spinner />;
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   }

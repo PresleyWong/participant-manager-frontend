@@ -1,7 +1,6 @@
 import { useGetAllUsersQuery } from "../redux/api/userApi";
 import UserTable from "../components/UserTable";
 import {
-  Spinner,
   Button,
   Stack,
   useDisclosure,
@@ -11,11 +10,11 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Center,
 } from "@chakra-ui/react";
 import UserForm from "../components/UserForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 const Users = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllUsersQuery();
@@ -52,11 +51,7 @@ const Users = () => {
       </>
     );
   } else if (isLoading) {
-    content = (
-      <Center>
-        <Spinner />
-      </Center>
-    );
+    content = <Spinner />;
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   }
