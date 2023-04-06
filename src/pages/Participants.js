@@ -1,10 +1,9 @@
 import {
-  Button,
   Stack,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -20,7 +19,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ImportButton from "../components/ImportButton";
 import sampleCSV from "../assets/Sample.csv";
-import Spinner from "../components/Spinner";
+import { ModalContent, Button, Spinner } from "../components/custom-component";
 
 export const AddParticipantButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,9 +37,12 @@ export const AddParticipantButton = () => {
         </ModalContent>
       </Modal>
 
-      <Button size="sm" variant="primary" onClick={onOpen}>
-        Add New Saint
-      </Button>
+      <Button
+        size="sm"
+        variant="primary"
+        onClick={onOpen}
+        label="Add New Saint"
+      />
     </>
   );
 };
@@ -83,9 +85,8 @@ const Participants = () => {
                 leftIcon={<MdOutlineFileDownload size={22} />}
                 variant="primary"
                 size="sm"
-              >
-                Sample.csv
-              </Button>
+                label="Sample.csv"
+              />
             </Link>
             {currentUser.isAdmin && <ImportButton />}
           </Stack>

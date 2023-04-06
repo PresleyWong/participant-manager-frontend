@@ -1,24 +1,23 @@
 import { read, utils } from "xlsx";
 import {
   Input,
-  Button,
   useDisclosure,
   useColorModeValue,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { ArrowUpIcon } from "@chakra-ui/icons";
-import { MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
+import { MdOutlineFileUpload } from "react-icons/md";
 
 import { useCreateNewEventMutation } from "../redux/api/eventApi";
 import { useCreateNewParticipantMutation } from "../redux/api/participantApi";
 import { useCreateNewUserMutation } from "../redux/api/userApi";
+import { Button, ModalContent } from "./custom-component";
 
 const ImportButton = ({ model }) => {
   const [createEvent, responseEvent] = useCreateNewEventMutation();
@@ -36,8 +35,10 @@ const ImportButton = ({ model }) => {
   switch (model) {
     case "event":
       createAction = createEvent;
+      break;
     case "user":
       createAction = createUser;
+      break;
     default:
       createAction = createParticipant;
   }
@@ -80,9 +81,8 @@ const ImportButton = ({ model }) => {
         leftIcon={<MdOutlineFileUpload size={22} />}
         variant="primary"
         onClick={onOpen}
-      >
-        Import
-      </Button>
+        label="Import"
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -112,12 +112,14 @@ const ImportButton = ({ model }) => {
             />
           </ModalBody>
           <ModalFooter>
-            <Button variant="secondary" onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="primary" ml={3} onClick={handleImport}>
-              Import
-            </Button>
+            <Button variant="info" onClick={onClose} label="Close" />
+
+            <Button
+              variant="primary"
+              ml={3}
+              onClick={handleImport}
+              label="Import"
+            />
           </ModalFooter>
         </ModalContent>
       </Modal>

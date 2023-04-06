@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { useGetArchivedEventsQuery } from "../redux/api/eventApi";
 import EventTable from "./EventTable";
-import Spinner from "./Spinner";
+import { Spinner } from "./custom-component";
 
 const ArchiveEventTable = () => {
   const { data, isLoading, isSuccess, isError, error } =

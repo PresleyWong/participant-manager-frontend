@@ -1,18 +1,19 @@
 import {
   Stack,
-  Button,
   ModalBody,
   ModalFooter,
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalCloseButton,
   Switch,
   FormLabel,
   FormControl,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
+
+import { useGetSettingQuery } from "../redux/api/settingApi";
 import { InputControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -22,8 +23,14 @@ import {
   useCreateNewUserMutation,
 } from "../redux/api/userApi";
 import UpdatePasswordForm from "./UpdatePasswordForm";
+import { ModalContent, Button } from "./custom-component";
 
 const UserForm = ({ data, onClose, createNew = false }) => {
+  const { data: dataColor } = useGetSettingQuery();
+  const switchTrackBg = useColorModeValue(
+    dataColor?.secondary_button_bg_light_color,
+    dataColor?.secondary_button_bg_dark_color
+  );
   const [updateUser, updateResponse] = useUpdateUserMutation();
   const [createUser, createResponse] = useCreateNewUserMutation();
   const {
@@ -136,7 +143,11 @@ const UserForm = ({ data, onClose, createNew = false }) => {
                       id="isAdmin"
                       isChecked={formik.values.isAdmin}
                       onChange={formik.handleChange}
-                      variant="custom"
+                      sx={{
+                        "span.chakra-switch__track:is([data-checked])": {
+                          backgroundColor: switchTrackBg,
+                        },
+                      }}
                     />
                     {/* <SwitchControl name="isAdmin" label="Is Admin?" colorScheme={"red"} /> */}
                   </FormControl>
@@ -144,9 +155,12 @@ const UserForm = ({ data, onClose, createNew = false }) => {
               </ModalBody>
               <ModalFooter>
                 {formAction === updateUser && (
-                  <Button mr="4" onClick={onOpenPassword} variant="secondary">
-                    Change Password
-                  </Button>
+                  <Button
+                    mr="4"
+                    onClick={onOpenPassword}
+                    variant="info"
+                    label="Change Password"
+                  />
                 )}
 
                 <Button
@@ -154,9 +168,8 @@ const UserForm = ({ data, onClose, createNew = false }) => {
                   disabled={!formik.isValid}
                   variant="primary"
                   isLoading={response.isLoading}
-                >
-                  {buttonText}
-                </Button>
+                  label={buttonText}
+                />
               </ModalFooter>
             </Form>
           );

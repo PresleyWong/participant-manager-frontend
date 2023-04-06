@@ -4,30 +4,24 @@ import {
   Heading,
   CardBody,
   Stack,
-  StackDivider,
   Box,
   Text,
   Spinner,
   Center,
   VStack,
-  Button,
-  Card,
-  CardHeader,
-  useColorModeValue,
+  StackDivider,
+  // Card,
+  // CardHeader,
 } from "@chakra-ui/react";
 import { Link as ReachLink } from "react-router-dom";
 
 import { useGetEventsWithLimitQuery } from "../redux/api/eventApi";
 import { AttachmentsList, CustomDateTimeFormat } from "../utils/Formatter";
+import { Button, Card, CardHeader } from "./custom-component";
 
 const SimpleEventList = ({ currentUser }) => {
   const { data, isLoading, isSuccess, isError, error } =
     useGetEventsWithLimitQuery(12);
-
-  const bodyBg = useColorModeValue("white", "neutral.20");
-  const bodyTextColor = useColorModeValue("black", "neutral.80");
-  const announceHeaderBg = useColorModeValue("neutral.40", "neutral.0");
-  const announceHeaderColor = useColorModeValue("neutral.100", "neutral.80");
 
   let content;
 
@@ -94,10 +88,9 @@ const SimpleEventList = ({ currentUser }) => {
                           size="sm"
                           as={ReachLink}
                           to={`/events/${item.id}`}
-                          variant={"primary"}
-                        >
-                          {item.is_closed ? "View" : "Register"}
-                        </Button>
+                          variant="primary"
+                          label={item.is_closed ? "View" : "Register"}
+                        />
                       </VStack>
                     </GridItem>
                   )}
@@ -119,8 +112,8 @@ const SimpleEventList = ({ currentUser }) => {
   }
 
   return (
-    <Card bg={bodyBg} color={bodyTextColor} boxShadow="lg" width="100%">
-      <CardHeader bg={announceHeaderBg} color={announceHeaderColor}>
+    <Card>
+      <CardHeader>
         <Heading size="md">Upcoming Events</Heading>
       </CardHeader>
 

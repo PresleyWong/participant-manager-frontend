@@ -6,11 +6,20 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { MdOutlineDescription } from "react-icons/md";
+import { useGetSettingQuery } from "../redux/api/settingApi";
 
 export const GenderColoredName = ({ name, gender }) => {
+  const { data } = useGetSettingQuery();
+
+  const brotherColor = useColorModeValue(
+    data?.brother_text_light_color,
+    data?.brother_text_dark_color
+  );
+  const sisterColor = useColorModeValue(
+    data?.sister_text_light_color,
+    data?.sister_text_dark_color
+  );
   let nameArray = name.split(" ");
-  const brotherColor = useColorModeValue("#366A25", "#98D682");
-  const sisterColor = useColorModeValue("#B92123", "#FEB5AD");
 
   return (
     <div>

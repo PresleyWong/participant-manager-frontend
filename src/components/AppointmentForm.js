@@ -1,11 +1,9 @@
 import {
   Stack,
-  Button,
   ModalBody,
   ModalFooter,
   Modal,
   ModalOverlay,
-  ModalContent,
   useDisclosure,
   ModalHeader,
   ModalCloseButton,
@@ -15,6 +13,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { SelectControl, TextareaControl } from "formik-chakra-ui";
 import ParticipantForm from "./ParticipantForm";
+import { Button, ModalContent } from "./custom-component";
 
 const AppointmentForm = ({ data, onClose }) => {
   const [update, response] = useUpdateParticipantAppointmentMutation();
@@ -91,18 +90,19 @@ const AppointmentForm = ({ data, onClose }) => {
                 </Stack>
               </ModalBody>
               <ModalFooter>
-                <Button mr="4" onClick={onOpenParticipant} variant="secondary">
-                  Edit Saint's Details
-                </Button>
-
+                <Button
+                  mr="4"
+                  onClick={onOpenParticipant}
+                  variant="info"
+                  label="Edit Saint's Details"
+                />
                 <Button
                   type="submit"
                   disabled={!formik.isValid}
                   variant="primary"
                   isLoading={response.isLoading}
-                >
-                  Save
-                </Button>
+                  label="Save"
+                />
               </ModalFooter>
             </Form>
           );

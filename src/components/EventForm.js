@@ -1,6 +1,5 @@
 import {
   Stack,
-  Button,
   ModalBody,
   ModalFooter,
   Text,
@@ -17,7 +16,8 @@ import {
   useUpdateEventMutation,
   useCreateNewEventMutation,
 } from "../redux/api/eventApi";
-import { UploadFileButton } from "../themeConfig";
+import UploadFileButton from "./UploadFileButton";
+import { Button } from "./custom-component";
 
 const EventForm = ({ data, onClose, createNew = false }) => {
   const [updateEvent, updateResponse] = useUpdateEventMutation();
@@ -147,9 +147,8 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                 disabled={!formik.isValid}
                 isLoading={response.isLoading}
                 variant="primary"
-              >
-                {buttonText}
-              </Button>
+                label={buttonText}
+              />
             </ModalFooter>
           </Form>
         );

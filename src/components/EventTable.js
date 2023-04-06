@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { Link as ReachLink } from "react-router-dom";
 import {
-  Button,
-  IconButton,
   ButtonGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Tooltip,
   Center,
 } from "@chakra-ui/react";
 import { MdArchive, MdUnarchive, MdLock, MdLockOpen } from "react-icons/md";
@@ -31,13 +28,12 @@ import {
 import EventForm from "./EventForm";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import ConfirmButton from "./ConfirmButton";
-import { date } from "yup";
 import {
   VStackDateTime,
   AttachmentsList,
   CustomDateTimeFormat,
 } from "../utils/Formatter";
-import Table from "./Table";
+import { Table, Button, IconButton, ModalContent } from "./custom-component";
 
 const EventTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
@@ -54,9 +50,8 @@ const EventTable = ({ data }) => {
             variant="primary"
             as={ReachLink}
             to={`${info.cell.row.original.id}`}
-          >
-            {info.getValue()}
-          </Button>
+            label={info.getValue()}
+          />
         ),
         header: "Title",
       }),
@@ -120,9 +115,8 @@ const EventTable = ({ data }) => {
             variant="primary"
             as={ReachLink}
             to={`${info.cell.row.original.id}`}
-          >
-            {info.getValue()}
-          </Button>
+            label={info.getValue()}
+          />
         ),
         header: "Title",
       }),
@@ -186,47 +180,42 @@ const EventTable = ({ data }) => {
     return (
       <Center>
         <ButtonGroup variant="outline" spacing="1">
-          <Tooltip label="Edit">
-            <IconButton
-              variant="primaryOutline"
-              icon={<FaEdit />}
-              onClick={onOpenEdit}
-            />
-          </Tooltip>
+          <IconButton
+            variant="primaryOutline"
+            icon={<FaEdit />}
+            onClick={onOpenEdit}
+            tooltipLabel="Edit"
+          />
 
-          <Tooltip label={isArchived ? "Unarchive" : "Archive"}>
-            <IconButton
-              variant="primaryOutline"
-              icon={
-                isArchived ? <MdUnarchive size={22} /> : <MdArchive size={22} />
-              }
-              onClick={() =>
-                onSwitch(originalRowData.id, "is_archived", updateArchiveEvent)
-              }
-              isLoading={updateArchiveResponse.isLoading}
-            />
-          </Tooltip>
+          <IconButton
+            variant="primaryOutline"
+            icon={
+              isArchived ? <MdUnarchive size={22} /> : <MdArchive size={22} />
+            }
+            onClick={() =>
+              onSwitch(originalRowData.id, "is_archived", updateArchiveEvent)
+            }
+            isLoading={updateArchiveResponse.isLoading}
+            tooltipLabel={isArchived ? "Unarchive" : "Archive"}
+          />
 
-          <Tooltip
-            label={
+          <IconButton
+            variant="primaryOutline"
+            icon={
+              closeRegistration ? (
+                <MdLockOpen size={22} />
+              ) : (
+                <MdLock size={22} />
+              )
+            }
+            onClick={() =>
+              onSwitch(originalRowData.id, "is_closed", updateLockEvent)
+            }
+            isLoading={updateLockResponse.isLoading}
+            tooltipLabel={
               closeRegistration ? "Open Registration" : "Close Registration"
             }
-          >
-            <IconButton
-              variant="primaryOutline"
-              icon={
-                closeRegistration ? (
-                  <MdLockOpen size={22} />
-                ) : (
-                  <MdLock size={22} />
-                )
-              }
-              onClick={() =>
-                onSwitch(originalRowData.id, "is_closed", updateLockEvent)
-              }
-              isLoading={updateLockResponse.isLoading}
-            />
-          </Tooltip>
+          />
 
           <ConfirmButton
             headerText="Delete Event"

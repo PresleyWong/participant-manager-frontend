@@ -1,12 +1,10 @@
 import { useGetAllUsersQuery } from "../redux/api/userApi";
 import UserTable from "../components/UserTable";
 import {
-  Button,
   Stack,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -14,7 +12,7 @@ import {
 import UserForm from "../components/UserForm";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
-import Spinner from "../components/Spinner";
+import { ModalContent, Button, Spinner } from "../components/custom-component";
 
 const Users = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllUsersQuery();
@@ -43,9 +41,12 @@ const Users = () => {
         <UserTable data={data} />
         <Stack direction="row" mt={"1rem"} justify={"flex-start"} width="100%">
           {currentUser.isAdmin && (
-            <Button size="sm" variant="primary" onClick={onOpenNew}>
-              Add New Serving One
-            </Button>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={onOpenNew}
+              label="Add New Serving One"
+            />
           )}
         </Stack>
       </>

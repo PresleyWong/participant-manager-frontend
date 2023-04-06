@@ -1,14 +1,12 @@
 import { useState } from "react";
 import {
-  IconButton,
   ButtonGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Tooltip,
   Center,
   Text,
 } from "@chakra-ui/react";
@@ -24,8 +22,8 @@ import {
 import { useDeleteParticipantMutation } from "../redux/api/participantApi";
 import ParticipantForm from "./ParticipantForm";
 import ConfirmButton from "./ConfirmButton";
-import Table from "./Table";
 import { GenderColoredName } from "../utils/Formatter";
+import { ModalContent, IconButton, Table } from "./custom-component";
 
 const ParticipantTable = ({ data }) => {
   const columnHelper = createColumnHelper();
@@ -108,13 +106,12 @@ const ParticipantTable = ({ data }) => {
     return (
       <Center>
         <ButtonGroup variant="outline" spacing="1">
-          <Tooltip label="Edit">
-            <IconButton
-              variant="primaryOutline"
-              icon={<FaEdit />}
-              onClick={onOpen}
-            />
-          </Tooltip>
+          <IconButton
+            variant="primaryOutline"
+            icon={<FaEdit />}
+            onClick={onOpen}
+            tooltipLabel="Edit"
+          />
 
           <ConfirmButton
             headerText="Confirm?"

@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import EventDetail from "./pages/EventDetail";
 import Signup from "./pages/Signup";
+import Settings from "./pages/Settings";
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
@@ -65,6 +66,15 @@ const App = () => {
             element={
               <PrivateRoute isAllowed={!!user && user.isAdmin}>
                 <Users />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute isAllowed={!!user && user.isAdmin}>
+                <Settings />
               </PrivateRoute>
             }
           />

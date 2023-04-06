@@ -1,25 +1,29 @@
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Stack,
-  Button,
-  useColorModeValue,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Stack, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { InputControl } from "formik-chakra-ui";
 
+import { useGetSettingQuery } from "../redux/api/settingApi";
 import { useLoginMutation } from "../redux/api/authApi";
 import { setCredentials } from "../redux/features/auth/authSlice";
+import { Button } from "../components/custom-component";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { data } = useGetSettingQuery();
   const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
   const { state } = useLocation();
-  const backgroundColor = useColorModeValue("neutral.100", "neutral.20");
+  const backgroundColor = useColorModeValue(
+    data?.card_bg_light_color,
+    data?.card_bg_dark_color
+  );
+  const textColor = useColorModeValue(
+    data?.card_text_light_color,
+    data?.card_text_dark_color
+  );
 
   const initialValues = {
     email: "",
@@ -58,6 +62,7 @@ const Login = () => {
           <Box
             rounded={"lg"}
             bg={backgroundColor}
+            color={textColor}
             boxShadow={"lg"}
             p={8}
             minW="376px"
@@ -89,18 +94,10 @@ const Login = () => {
                     disabled={!formik.isValid}
                     isLoading={isLoading}
                     variant="primary"
-                  >
-                    Sign in
-                  </Button>
+                    label="Sign in"
+                  />
                 </Stack>
               </Form>
-
-              {/* <Text fontWeight="medium">
-                Don't have an account?
-                <Link as={ReachLink} ms="5px" fontWeight="bold" to="/signup">
-                  Sign Up
-                </Link>
-              </Text> */}
             </Stack>
           </Box>
         );
