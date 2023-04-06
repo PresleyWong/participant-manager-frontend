@@ -1,4 +1,4 @@
-import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { Stack, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
@@ -13,6 +13,7 @@ import {
   useUpdateParticipantMutation,
   useCreateNewParticipantMutation,
 } from "../redux/api/participantApi";
+import { Button } from "./custom-component";
 
 const ParticipantForm = ({ data, onClose, createNew = false }) => {
   const [update, updateResponse] = useUpdateParticipantMutation();
@@ -151,9 +152,8 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                 disabled={!formik.isValid}
                 variant="primary"
                 isLoading={response.isLoading}
-              >
-                {buttonText}
-              </Button>
+                label={buttonText}
+              />
             </ModalFooter>
           </Form>
         );

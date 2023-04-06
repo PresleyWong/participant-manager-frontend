@@ -1,15 +1,13 @@
 import { useState } from "react";
 import {
   Icon,
-  IconButton,
   ButtonGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Tooltip,
   Center,
 } from "@chakra-ui/react";
 import {
@@ -27,7 +25,7 @@ import { useDeleteUserMutation } from "../redux/api/userApi";
 import UserForm from "./UserForm";
 import ConfirmButton from "./ConfirmButton";
 import { VStackDateTime } from "../utils/Formatter";
-import Table from "./Table";
+import { ModalContent, IconButton, Table } from "./custom-component";
 
 const UserTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
@@ -100,13 +98,12 @@ const UserTable = ({ data }) => {
     return (
       <Center>
         <ButtonGroup variant="outline" spacing="1">
-          <Tooltip label="Edit">
-            <IconButton
-              variant="primaryOutline"
-              icon={<FaEdit />}
-              onClick={onOpenEdit}
-            />
-          </Tooltip>
+          <IconButton
+            variant="primaryOutline"
+            icon={<FaEdit />}
+            onClick={onOpenEdit}
+            tooltipLabel="Edit"
+          />
 
           <ConfirmButton
             headerText="Confirm?"

@@ -9,6 +9,7 @@ import {
   Select,
   Text,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { MdHowToReg } from "react-icons/md";
@@ -25,8 +26,9 @@ import { useGetParticipantSearchQuery } from "../redux/api/participantApi";
 import { useAddParticipantToEventMutation } from "../redux/api/eventApi";
 import ConfirmButton from "./ConfirmButton";
 import { AddParticipantButton } from "../pages/Participants";
-import Table from "./Table";
 import { GenderColoredName } from "../utils/Formatter";
+import { useGetSettingQuery } from "../redux/api/settingApi";
+import { Table } from "./custom-component";
 
 const SearchTable = ({
   data,
@@ -35,6 +37,12 @@ const SearchTable = ({
   eventParticipantsWithAppointments,
 }) => {
   const currentUser = useSelector(selectCurrentUser);
+  const { data: dataColor } = useGetSettingQuery();
+
+  const borderColor = useColorModeValue(
+    dataColor?.primary_button_bg_light_color,
+    dataColor?.primary_button_bg_dark_color
+  );
 
   const columnHelper = createColumnHelper();
   const [sorting, setSorting] = useState([]);
@@ -166,6 +174,7 @@ const SearchTable = ({
     if (isDisabled) {
       return (
         <Select
+          borderColor={borderColor}
           variant={"custom"}
           size="xs"
           isDisabled={
@@ -183,6 +192,7 @@ const SearchTable = ({
     } else {
       return (
         <Select
+          borderColor={borderColor}
           variant={"custom"}
           size="xs"
           placeholder="Select option"
@@ -207,6 +217,7 @@ const SearchTable = ({
 
     return (
       <Textarea
+        borderColor={borderColor}
         variant={"custom"}
         isDisabled={
           isDisabled || (eventDetail.is_closed && !currentUser.isAdmin)

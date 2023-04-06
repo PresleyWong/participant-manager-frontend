@@ -7,18 +7,17 @@ import {
   Flex,
   HStack,
   Link,
-  IconButton,
-  Button,
+  Button as ChakraButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   useDisclosure,
-  useColorModeValue,
   Stack,
-  useColorMode,
   Icon,
   Text,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import { indexApi } from "../redux/api/indexApi";
@@ -26,6 +25,9 @@ import {
   selectCurrentUser,
   clearCredentials,
 } from "../redux/features/auth/authSlice";
+import { toggleColorMode } from "../redux/features/colorMode/colorModeSlice";
+import { useGetSettingQuery } from "../redux/api/settingApi";
+import { Button, IconButton } from "./custom-component";
 
 const NavLink = ({ children }) => (
   <Link
@@ -42,15 +44,46 @@ const NavLink = ({ children }) => (
 );
 
 const Header = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { data } = useGetSettingQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
 
-  const titleBg = useColorModeValue("neutralVariant.90", "neutralVariant.20");
-  const navbarBg = useColorModeValue("primary.60", "primary.40");
-  const navbarColor = useColorModeValue("secondary.100", "primary.90");
+  const {
+    colorMode: chakraUIColorMode,
+    toggleColorMode: toggleChakraUIColorMode,
+  } = useColorMode();
+
+  const titleBg = useColorModeValue(
+    data?.header_bg_light_color,
+    data?.header_bg_dark_color
+  );
+
+  const titleTxt = useColorModeValue(
+    data?.header_text_light_color,
+    data?.header_text_dark_color
+  );
+
+  const navbarBg = useColorModeValue(
+    data?.navbar_bg_light_color,
+    data?.navbar_bg_dark_color
+  );
+
+  const navbarColor = useColorModeValue(
+    data?.navbar_text_light_color,
+    data?.navbar_text_dark_color
+  );
+
+  const menuBgColor = useColorModeValue(
+    data?.secondary_button_bg_light_color,
+    data?.secondary_button_bg_dark_color
+  );
+
+  const menuTxtColor = useColorModeValue(
+    data?.secondary_button_text_light_color,
+    data?.secondary_button_text_dark_color
+  );
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -60,13 +93,22 @@ const Header = () => {
     window.location.reload(false);
   };
 
+  const handleToggleColorMode = () => {
+    toggleChakraUIColorMode();
+    dispatch(toggleColorMode());
+  };
+
   let LinkItems = [
     { linkTitle: "Events", href: "/events" },
     { linkTitle: "Saints", href: "/participants" },
   ];
 
   if (currentUser?.isAdmin) {
-    LinkItems = [...LinkItems, { linkTitle: "Serving One", href: "/users" }];
+    LinkItems = [
+      ...LinkItems,
+      { linkTitle: "Serving One", href: "/users" },
+      { linkTitle: "Settings", href: "/settings" },
+    ];
   }
 
   const UserMenu = () => {
@@ -76,11 +118,14 @@ const Header = () => {
       output = (
         <Menu>
           <MenuButton
-            as={Button}
-            rounded={"full"}
-            cursor={"pointer"}
-            variant={"username"}
+            as={ChakraButton}
+            rounded="full"
+            cursor="pointer"
             boxShadow="lg"
+            bg={menuBgColor}
+            color={menuTxtColor}
+            _active={{ bg: menuBgColor, color: menuTxtColor }}
+            _hover={{ bg: menuBgColor, color: menuTxtColor }}
           >
             {`${currentUser.name} | ${currentUser.locality}`}
           </MenuButton>
@@ -95,9 +140,13 @@ const Header = () => {
       );
     } else {
       output = (
-        <Button as={ReachLink} to={"/login"} variant={"primary"} boxShadow="lg">
-          Login
-        </Button>
+        <Button
+          as={ReachLink}
+          to={"/login"}
+          variant={"primary"}
+          boxShadow="lg"
+          label="Login"
+        />
       );
     }
     return output;
@@ -114,19 +163,20 @@ const Header = () => {
               color={"teal"}
               _hover={{ textDecoration: "none" }}
             >
-              <Text as="b">Participant Manager</Text>
+              <Text as="b" color={titleTxt}>
+                Participant Manager
+              </Text>
             </Link>
           </HStack>
           <Flex alignItems={"center"}>
             <Button
-              onClick={toggleColorMode}
+              onClick={handleToggleColorMode}
               rounded={"full"}
               mr={3}
-              variant={"username"}
+              variant="secondary"
               boxShadow="lg"
-            >
-              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button>
+              label={useColorModeValue(<MoonIcon />, <SunIcon />)}
+            />
             <UserMenu />
           </Flex>
         </Flex>

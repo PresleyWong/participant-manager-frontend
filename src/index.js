@@ -13,11 +13,11 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={customTheme}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ChakraProvider theme={customTheme}>
         <App />
-      </Provider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </Provider>
   </React.StrictMode>
 );
 

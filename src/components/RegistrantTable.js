@@ -1,14 +1,12 @@
 import { useState } from "react";
 import {
-  IconButton,
   ButtonGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
+  // ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Tooltip,
   Text,
   Center,
 } from "@chakra-ui/react";
@@ -26,8 +24,8 @@ import { selectCurrentUser } from "../redux/features/auth/authSlice";
 import { useRemoveParticipantFromEventMutation } from "../redux/api/eventApi";
 import AppointmentForm from "./AppointmentForm";
 import ConfirmButton from "./ConfirmButton";
-import Table from "./Table";
 import { GenderColoredName, VStackDateTime } from "../utils/Formatter";
+import { Table, ModalContent, IconButton } from "./custom-component";
 
 const RegistrantTable = ({ data, eventClosed }) => {
   const currentUser = useSelector(selectCurrentUser);
@@ -125,14 +123,13 @@ const RegistrantTable = ({ data, eventClosed }) => {
     return (
       <Center>
         <ButtonGroup variant="outline" spacing="1">
-          <Tooltip label="Edit Registration Info">
-            <IconButton
-              variant="primaryOutline"
-              icon={<FaEdit />}
-              onClick={onOpen}
-              isDisabled={eventClosed && !currentUser.isAdmin}
-            />
-          </Tooltip>
+          <IconButton
+            variant="primaryOutline"
+            icon={<FaEdit />}
+            onClick={onOpen}
+            isDisabled={eventClosed && !currentUser.isAdmin}
+            tooltipLabel="Edit Registration Info"
+          />
 
           <ConfirmButton
             headerText="Remove Participant"

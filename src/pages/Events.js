@@ -1,10 +1,8 @@
 import {
-  Button,
   Stack,
   useDisclosure,
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -19,7 +17,7 @@ import SimpleEventList from "../components/SimpleEventList";
 import { useGetAllEventsQuery } from "../redux/api/eventApi";
 import EventTable from "../components/EventTable";
 import ArchiveEventTable from "../components/ArchiveEventTable";
-import Spinner from "../components/Spinner";
+import { ModalContent, Button, Spinner } from "../components/custom-component";
 
 const Events = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAllEventsQuery();
@@ -54,9 +52,12 @@ const Events = () => {
             width="100%"
           >
             {currentUser.isAdmin && (
-              <Button size="sm" variant="primary" onClick={onOpenNew}>
-                Create New Event
-              </Button>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={onOpenNew}
+                label=" Create New Event"
+              />
             )}
           </Stack>
 

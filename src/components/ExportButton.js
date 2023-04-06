@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
-  Button,
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -14,6 +12,7 @@ import {
 import { MdOutlineFileDownload } from "react-icons/md";
 import cloneDeep from "lodash.clonedeep";
 import { utils, writeFile } from "xlsx";
+import { Button, ModalContent } from "./custom-component";
 
 const ExportButton = ({
   apiArray,
@@ -72,9 +71,9 @@ const ExportButton = ({
             leftIcon={<MdOutlineFileDownload size={22} />}
             onClick={() => setShowDownloadModal(true)}
             disabled={apiArray[0].length < 1}
-          >
-            {buttonTitle}
-          </Button>
+            label={buttonTitle}
+          />
+
           {showDownloadModal && (
             <Modal
               isOpen={showDownloadModal}
@@ -123,18 +122,16 @@ const ExportButton = ({
                 </ModalBody>
                 <ModalFooter>
                   <Button
-                    variant="secondary"
+                    variant="info"
                     onClick={() => setShowDownloadModal(false)}
-                  >
-                    Close
-                  </Button>
+                    label="Close"
+                  />
                   <Button
                     ml={3}
                     variant="primary"
                     onClick={() => handleExport()}
-                  >
-                    Download
-                  </Button>
+                    label="Download"
+                  />
                 </ModalFooter>
               </ModalContent>
             </Modal>

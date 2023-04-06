@@ -8,7 +8,7 @@ import RegistrantTable from "../components/RegistrantTable";
 import ParticipantSearch from "../components/ParticipantSearch";
 import ExportButton from "../components/ExportButton";
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
-import Spinner from "../components/Spinner";
+import { Spinner } from "../components/custom-component";
 
 const EventDetail = () => {
   const { eventId } = useParams();

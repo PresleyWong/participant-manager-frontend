@@ -1,17 +1,14 @@
 import { Box } from "@chakra-ui/layout";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
-  ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
-  IconButton,
-  Tooltip,
 } from "@chakra-ui/react";
+import { Button, IconButton, ModalContent } from "./custom-component";
 
 const ConfirmButton = ({
   onSuccessAction,
@@ -40,22 +37,22 @@ const ConfirmButton = ({
         onClick={onOpen}
         isLoading={isLoading}
         isDisabled={isDisabled}
-      />
+        tooltipLabel={buttonText}
+      ></IconButton>
     );
   else
     customButton = (
       <Button
         onClick={onOpen}
-        colorScheme={isDanger ? "red" : "teal"}
+        variant={isDanger ? "errorOutline" : "primaryOutline"}
         isDisabled={isDisabled}
-      >
-        {buttonText}
-      </Button>
+        label={buttonText}
+      />
     );
 
   return (
     <>
-      <Tooltip label={buttonText}>{customButton}</Tooltip>
+      {customButton}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -67,15 +64,14 @@ const ConfirmButton = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="primary" onClick={onClose} mr={3}>
-              Close
-            </Button>
+            <Button variant="primary" onClick={onClose} mr={3} label="Close" />
+
             <Button
+              border="1px"
               variant={isDanger ? "errorOutline" : "primary"}
               onClick={onSubmit}
-            >
-              {buttonText}
-            </Button>
+              label={buttonText}
+            />
           </ModalFooter>
         </ModalContent>
       </Modal>
