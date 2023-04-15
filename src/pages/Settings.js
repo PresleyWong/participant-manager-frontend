@@ -83,6 +83,8 @@ const Settings = () => {
     tableTxtDarkColor: Yup.string().required("Required"),
     brotherTxtDarkColor: Yup.string().required("Required"),
     sisterTxtDarkColor: Yup.string().required("Required"),
+    inputBoderLightColor: Yup.string().required("Required"),
+    inputBoderDarkColor: Yup.string().required("Required"),
   });
 
   let content;
@@ -147,6 +149,8 @@ const Settings = () => {
       tableTxtDarkColor: data.table_text_dark_color,
       brotherTxtDarkColor: data.brother_text_dark_color,
       sisterTxtDarkColor: data.sister_text_dark_color,
+      inputBoderLightColor: data.input_border_light_color,
+      inputBoderDarkColor: data.input_border_dark_color,
     };
 
     const onSubmit = async (values) => {
@@ -197,7 +201,7 @@ const Settings = () => {
             secondary_button_text_dark_color: values.secondaryBtnTxtDarkColor,
             info_button_bg_dark_color: values.infoBtnBgDarkColor,
             info_button_text_dark_color: values.infoBtnTxtDarkColor,
-            primary_outline_button_bg_dark_colo:
+            primary_outline_button_bg_dark_color:
               values.primaryOutlineBtnBgDarkColor,
             primary_outline_button_text_dark_color:
               values.primaryOutlineBtnTxtDarkColor,
@@ -217,6 +221,8 @@ const Settings = () => {
             table_text_dark_color: values.tableTxtDarkColor,
             brother_text_dark_color: values.brotherTxtDarkColor,
             sister_text_dark_color: values.sisterTxtDarkColor,
+            input_border_light_color: values.inputBoderLightColor,
+            input_border_dark_color: values.inputBoderDarkColor,
           },
         });
       } catch (err) {
@@ -581,6 +587,25 @@ const Settings = () => {
                         <ColorPicker
                           label="Dark"
                           id="tableTxtDarkColor"
+                          values={formik.values}
+                        />
+                      </Flex>
+                    </Box>
+
+                    <Box>
+                      <Heading size="xs" mb={2}>
+                        Form Input Focus Border Color
+                      </Heading>
+
+                      <Flex direction="row" gap="6">
+                        <ColorPicker
+                          label="Light"
+                          id="inputBoderLightColor"
+                          values={formik.values}
+                        />
+                        <ColorPicker
+                          label="Dark"
+                          id="inputBoderDarkColor"
                           values={formik.values}
                         />
                       </Flex>

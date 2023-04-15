@@ -1,6 +1,7 @@
 import {
   IconButton,
   VStack,
+  HStack,
   Text,
   Link,
   useColorModeValue,
@@ -55,28 +56,36 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
 
   if (isLink) {
     content = filesArray.map((file, index) => (
-      <Link isExternal key={index} href={file.url}>
-        <IconButton
-          variant="unstyled"
-          colorScheme="teal"
-          size="lg"
-          icon={<MdOutlineDescription />}
-          minW={5}
-          height={5}
-        />
-        {file.url.split("/").pop().replace(/%20/g, " ")}
+
+      <Link
+        isExternal
+        key={index}
+        href={file.url}
+      >
+        <HStack>
+          <IconButton
+            variant="unstyled"
+            colorScheme="teal"
+            size="lg"
+            icon={<MdOutlineDescription />}
+            minW={5}
+            height={5}
+          />
+          <Text fontSize="sm">
+            {file.url.split("/").pop().replace(/%20/g, " ")}
+          </Text>
+        </HStack>
+
       </Link>
     ));
   } else {
     content = filesArray.map((file, index) => (
-      <Text align="center" key={index}>
-        {file.url.split("/").pop().replace(/%20/g, " ")}
-      </Text>
+      <Text key={index}>{file.url.split("/").pop().replace(/%20/g, " ")}</Text>
     ));
   }
 
   return (
-    <VStack spacing={0} style={{ alignItems: "center" }}>
+    <VStack spacing={0} style={{ alignItems: "flex-start" }}>
       {content}
     </VStack>
   );

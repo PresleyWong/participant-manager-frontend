@@ -4,10 +4,11 @@ import { setCredentials } from "../redux/features/auth/authSlice";
 import { Box, Stack, useColorModeValue, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { InputControl } from "formik-chakra-ui";
+// import { InputControl } from "formik-chakra-ui";
 
 import { useLoginMutation } from "../redux/api/authApi";
 import { useCreateNewUserMutation } from "../redux/api/userApi";
+import { InputControl } from "../components/custom-component";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -64,16 +65,12 @@ const Signup = () => {
           <Box rounded={"lg"} bg={backgroundColor} boxShadow={"lg"} p={8}>
             <Stack spacing={4}>
               <Form>
-                <InputControl
-                  name="email"
-                  label="Email"
-                  inputProps={{ type: "email" }}
-                />
+                <InputControl name="email" label="Email" type="email" />
 
                 <InputControl
                   name="password"
                   label="Password"
-                  inputProps={{ type: "password" }}
+                  type="password"
                 />
                 <InputControl name="locality" label="Locality" />
                 <InputControl name="name" label="Name" />

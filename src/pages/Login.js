@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Stack, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { InputControl } from "formik-chakra-ui";
+// import { InputControl } from "formik-chakra-ui";
 
 import { useGetSettingQuery } from "../redux/api/settingApi";
 import { useLoginMutation } from "../redux/api/authApi";
 import { setCredentials } from "../redux/features/auth/authSlice";
-import { Button } from "../components/custom-component";
+import { Button, InputControl } from "../components/custom-component";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -70,22 +70,13 @@ const Login = () => {
             <Stack spacing={4}>
               <Form>
                 <Stack spacing={4}>
-                  <Tooltip label="Hint: test1@gmail.com">
-                    <InputControl
-                      name="email"
-                      label="Email"
-                      inputProps={{ type: "email" }}
-                      variant={"custom"}
-                    />
-                  </Tooltip>
+                  <InputControl name="email" label="Email" type="email" />
 
-                  <Tooltip label="Hint: 123456">
-                    <InputControl
-                      name="password"
-                      label="Password"
-                      inputProps={{ type: "password" }}
-                    />
-                  </Tooltip>
+                  <InputControl
+                    name="password"
+                    label="Password"
+                    type="password"
+                  />
 
                   <Box id="error-message"></Box>
 
