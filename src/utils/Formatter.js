@@ -56,10 +56,11 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
 
   if (isLink) {
     content = filesArray.map((file, index) => (
+
       <Link
         isExternal
         key={index}
-        href={`${process.env.REACT_APP_ROOT_ENDPOINT}${file.url}`}
+        href={file.url}
       >
         <HStack>
           <IconButton
@@ -74,6 +75,7 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
             {file.url.split("/").pop().replace(/%20/g, " ")}
           </Text>
         </HStack>
+
       </Link>
     ));
   } else {
