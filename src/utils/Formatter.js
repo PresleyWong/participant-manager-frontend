@@ -55,11 +55,7 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
 
   if (isLink) {
     content = filesArray.map((file, index) => (
-      <Link
-        isExternal
-        key={index}
-        href={`${process.env.REACT_APP_ROOT_ENDPOINT}${file.url}`}
-      >
+      <Link isExternal key={index} href={file.url}>
         <IconButton
           variant="unstyled"
           colorScheme="teal"

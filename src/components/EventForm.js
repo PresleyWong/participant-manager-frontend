@@ -133,7 +133,7 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                         {file.url.split("/").pop().replace(/%20/g, " ")}
                       </Text>
 
-                      <DeleteAttachment id={data?.id} index={index} />
+                      <DeleteAttachment id={data?.id} index={file.id} />
                     </HStack>
                   ))}
                 </VStack>
