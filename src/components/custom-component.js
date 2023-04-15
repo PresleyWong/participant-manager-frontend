@@ -6,8 +6,11 @@ import {
   IconButton as ChakraIconButton,
   Table as ChakraTable,
   ModalContent as ChakraModalContent,
-  StackDivider as ChakraStackDivider,
-  Text as ChakraText,
+  Link as ChakraLink,
+  Input as ChakraInput,
+  FormControl as ChakraFormControl,
+  FormLabel,
+  FormErrorMessage,
   Thead,
   Tbody,
   Tr,
@@ -17,28 +20,62 @@ import {
   Tooltip,
   Box,
   useColorModeValue,
+  Text,
 } from "@chakra-ui/react";
+import { Field } from "formik";
+import { Link as ReachLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCurrentColorMode } from "../redux/features/colorMode/colorModeSlice";
-import { useGetSettingQuery } from "../redux/api/settingApi";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { flexRender } from "@tanstack/react-table";
+
+import { selectCurrentColorMode } from "../redux/features/colorMode/colorModeSlice";
+import { useGetSettingQuery } from "../redux/api/settingApi";
 import Pagination from "./Pagination";
 
-export const Text = (props) => {
+export const InputControl = ({ label, name, ...rest }) => {
+  const { data } = useGetSettingQuery();
+  const colorMode = useSelector(selectCurrentColorMode);
+
   return (
-    <ChakraText color={useColorModeValue("#1a202c", "#ffffffeb")} {...props}>
-      {props.children}
-    </ChakraText>
+    <Field name={name}>
+      {({ field, form }) => (
+        <ChakraFormControl isInvalid={form.errors[name] && form.touched[name]}>
+          <FormLabel>{label}</FormLabel>
+          <ChakraInput
+            id={name}
+            {...rest}
+            {...field}
+            focusBorderColor={
+              colorMode === "light"
+                ? data?.input_border_light_color
+                : data?.input_border_dark_color
+            }
+            boxShadow="xs"
+          />
+          <FormErrorMessage>{form.errors[name]}</FormErrorMessage>
+        </ChakraFormControl>
+      )}
+    </Field>
   );
 };
 
-export const StackDivider = (props) => {
+export const Link = (props) => {
+  const { data } = useGetSettingQuery();
+
   return (
-    <ChakraStackDivider
-      borderColor={useColorModeValue("#e2e8f0", "#ffffff29")}
-      {...props}
-    />
+    <ChakraLink {...props} as={ReachLink}>
+      <Text
+        fontSize="sm"
+        fontWeight="extrabold"
+        as="u"
+        color={useColorModeValue(
+          data?.primary_button_text_light_color,
+          data?.primary_button_text_dark_color
+        )}
+      >
+        {props.children}
+      </Text>
+    </ChakraLink>
   );
 };
 
@@ -105,7 +142,7 @@ export const CardHeader = (props) => {
       )}
       color={useColorModeValue(
         data?.card_header_text_light_color,
-        data?.card_header_text_light_color
+        data?.card_header_text_dark_color
       )}
       {...props}
     >

@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Link as ReachLink } from "react-router-dom";
 import {
   ButtonGroup,
   useDisclosure,
   Modal,
   ModalOverlay,
-  // ModalContent,
   ModalHeader,
   ModalCloseButton,
   Center,
@@ -33,7 +31,7 @@ import {
   AttachmentsList,
   CustomDateTimeFormat,
 } from "../utils/Formatter";
-import { Table, Button, IconButton, ModalContent } from "./custom-component";
+import { Table, IconButton, ModalContent, Link } from "./custom-component";
 
 const EventTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
@@ -45,13 +43,7 @@ const EventTable = ({ data }) => {
     columns = [
       columnHelper.accessor("title", {
         cell: (info) => (
-          <Button
-            size="sm"
-            variant="primary"
-            as={ReachLink}
-            to={`${info.cell.row.original.id}`}
-            label={info.getValue()}
-          />
+          <Link to={`${info.cell.row.original.id}`}>{info.getValue()}</Link>
         ),
         header: "Title",
       }),
@@ -94,7 +86,11 @@ const EventTable = ({ data }) => {
         header: "End Time",
       }),
       columnHelper.accessor("attachments", {
-        cell: (info) => <AttachmentsList filesArray={info.getValue()} />,
+        cell: (info) => (
+          <Center>
+            <AttachmentsList filesArray={info.getValue()} />
+          </Center>
+        ),
         header: "Attachments",
       }),
       columnHelper.accessor("created_at", {
@@ -110,13 +106,7 @@ const EventTable = ({ data }) => {
     columns = [
       columnHelper.accessor("title", {
         cell: (info) => (
-          <Button
-            size="sm"
-            variant="primary"
-            as={ReachLink}
-            to={`${info.cell.row.original.id}`}
-            label={info.getValue()}
-          />
+          <Link to={`${info.cell.row.original.id}`}>{info.getValue()}</Link>
         ),
         header: "Title",
       }),

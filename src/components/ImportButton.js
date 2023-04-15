@@ -5,7 +5,6 @@ import {
   useColorModeValue,
   Modal,
   ModalOverlay,
-  // ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -14,12 +13,14 @@ import {
 import { useRef } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 
+import { useGetSettingQuery } from "../redux/api/settingApi";
 import { useCreateNewEventMutation } from "../redux/api/eventApi";
 import { useCreateNewParticipantMutation } from "../redux/api/participantApi";
 import { useCreateNewUserMutation } from "../redux/api/userApi";
 import { Button, ModalContent } from "./custom-component";
 
 const ImportButton = ({ model }) => {
+  const { data, isSuccess } = useGetSettingQuery();
   const [createEvent, responseEvent] = useCreateNewEventMutation();
   const [createParticipant, responseParticipant] =
     useCreateNewParticipantMutation();
@@ -28,8 +29,15 @@ const ImportButton = ({ model }) => {
   const fileRef = useRef(null);
 
   const bgColor = useColorModeValue("transparent", "transparent");
-  const textColor = useColorModeValue("#4E843B", "#80BA69");
-  const borderColor = useColorModeValue("#4E843B", "#80BA69");
+
+  const textColor = useColorModeValue(
+    data?.primary_outline_button_text_light_color,
+    data?.primary_outline_button_text_dark_color
+  );
+  const borderColor = useColorModeValue(
+    data?.primary_outline_button_bg_light_color,
+    data?.primary_outline_button_bg_dark_color
+  );
 
   let createAction;
   switch (model) {

@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { InputControl } from "formik-chakra-ui";
+// import { InputControl } from "formik-chakra-ui";
 import { useState } from "react";
 
 import DeleteAttachment from "./DeleteAttachment";
@@ -17,7 +17,7 @@ import {
   useCreateNewEventMutation,
 } from "../redux/api/eventApi";
 import UploadFileButton from "./UploadFileButton";
-import { Button } from "./custom-component";
+import { Button, InputControl } from "./custom-component";
 
 const EventForm = ({ data, onClose, createNew = false }) => {
   const [updateEvent, updateResponse] = useUpdateEventMutation();
@@ -104,25 +104,25 @@ const EventForm = ({ data, onClose, createNew = false }) => {
                   isRequired
                   label="Start Date"
                   name="startDate"
-                  inputProps={{ type: "date" }}
+                  type="date"
                 />
                 <InputControl
                   isRequired
                   label="End Date"
                   name="endDate"
-                  inputProps={{ type: "date" }}
+                  type="date"
                 />
                 <InputControl
                   isRequired
                   label="Start Time"
                   name="startTime"
-                  inputProps={{ type: "time" }}
+                  type="time"
                 />
                 <InputControl
                   isRequired
                   label="End Time"
                   name="endTime"
-                  inputProps={{ type: "time" }}
+                  type="time"
                 />
 
                 <label>Attachments</label>
