@@ -38,7 +38,6 @@ const SimpleEventList = ({ currentUser }) => {
                   }}
                 >
                   <GridItem
-                    style={{ alignSelf: "center" }}
                     colSpan={{
                       base: currentUser ? 4 : 6,
                     }}
@@ -65,25 +64,25 @@ const SimpleEventList = ({ currentUser }) => {
                   </GridItem>
 
                   <GridItem
-                    style={{ alignSelf: "center" }}
                     colSpan={{
                       base: currentUser ? 4 : 6,
                     }}
                   >
-                    <AttachmentsList
-                      filesArray={item.attachments}
-                      isLink={true}
-                    />
+                    <Center>
+                      <AttachmentsList
+                        filesArray={item.attachments}
+                        isLink={true}
+                      />
+                    </Center>
                   </GridItem>
 
                   {currentUser && (
                     <GridItem
-                      style={{ alignSelf: "center", textAlign: "center" }}
                       colSpan={{
                         base: 4,
                       }}
                     >
-                      <VStack style={{ alignItems: "center" }}>
+                      <VStack>
                         <Button
                           size="sm"
                           as={ReachLink}

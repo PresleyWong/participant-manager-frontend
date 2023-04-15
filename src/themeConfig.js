@@ -58,16 +58,16 @@ export const customTheme = extendTheme({
         }),
       },
     },
-    Link: {
-      variants: {
-        custom: (props) => ({
-          _hover: {
-            textDecoration: "none",
-            bg: props.colorMode === "dark" ? "teal.300" : "teal.600",
-          },
-        }),
-      },
-    },
+    // Link: {
+    //   variants: {
+    //     custom: (props) => ({
+    //       _hover: {
+    //         textDecoration: "none",
+    //         bg: props.colorMode === "dark" ? "teal.300" : "teal.600",
+    //       },
+    //     }),
+    //   },
+    // },
     // Modal: {
     //   baseStyle: (props) => ({
     //     dialog: {

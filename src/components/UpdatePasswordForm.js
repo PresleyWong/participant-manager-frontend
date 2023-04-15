@@ -1,8 +1,9 @@
 import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
-import { InputControl } from "formik-chakra-ui";
+// import { InputControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useUpdateUserMutation } from "../redux/api/userApi";
+import { InputControl } from "./custom-component";
 
 const UpdatePasswordForm = ({ data, onClose }) => {
   const [updateUser, updateResponse] = useUpdateUserMutation();
@@ -50,14 +51,14 @@ const UpdatePasswordForm = ({ data, onClose }) => {
                   isRequired
                   name="password"
                   label="New Password"
-                  inputProps={{ type: "password" }}
+                  type="password"
                 />
 
                 <InputControl
                   isRequired
                   name="password_repeat"
                   label="Repeat Password"
-                  inputProps={{ type: "password" }}
+                  type="password"
                 />
               </Stack>
             </ModalBody>

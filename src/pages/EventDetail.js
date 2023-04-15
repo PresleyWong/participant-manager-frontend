@@ -44,7 +44,7 @@ const EventDetail = () => {
 
     mainContent = (
       <>
-        <Stack spacing="24px">
+        <Stack spacing="24px" width="100%">
           <VStack>
             <Heading size="md" textTransform="uppercase">
               {data.event.title}
