@@ -7,8 +7,15 @@ import {
   Table as ChakraTable,
   ModalContent as ChakraModalContent,
   Link as ChakraLink,
-  Input as ChakraInput,
   FormControl as ChakraFormControl,
+  Input as ChakraInput,
+  Select as ChakraSelect,
+  Textarea as ChakraTextArea,
+  NumberInput as ChakraNumberInput,
+  NumberInputField as ChakraNumberInputField,
+  NumberInputStepper as ChakraNumberInputStepper,
+  NumberIncrementStepper as ChakraNumberIncrementStepper,
+  NumberDecrementStepper as ChakraNumberDecrementStepper,
   FormLabel,
   FormErrorMessage,
   Thead,
@@ -24,17 +31,114 @@ import {
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Link as ReachLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { flexRender } from "@tanstack/react-table";
 
-import { selectCurrentColorMode } from "../redux/features/colorMode/colorModeSlice";
 import { useGetSettingQuery } from "../redux/api/settingApi";
 import Pagination from "./Pagination";
 
-export const InputControl = ({ label, name, ...rest }) => {
+export const NumberInputControl = ({ label, name, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
   const { data } = useGetSettingQuery();
-  const colorMode = useSelector(selectCurrentColorMode);
+
+  return (
+    <Field name={name}>
+      {({ field, form }) => (
+        <ChakraFormControl isInvalid={form.errors[name] && form.touched[name]}>
+          <FormLabel>{label}</FormLabel>
+          <ChakraNumberInput
+            id={name}
+            {...rest}
+            {...field}
+            focusBorderColor={
+              colorMode === "light"
+                ? data?.input_border_light_color
+                : data?.input_border_dark_color
+            }
+            boxShadow="xs"
+            onChange={(val) => form.setFieldValue(field.name, val)}
+          >
+            <ChakraNumberInputField />
+            <ChakraNumberInputStepper>
+              <ChakraNumberIncrementStepper />
+              <ChakraNumberDecrementStepper />
+            </ChakraNumberInputStepper>
+          </ChakraNumberInput>
+
+          <FormErrorMessage>{form.errors[name]}</FormErrorMessage>
+        </ChakraFormControl>
+      )}
+    </Field>
+  );
+};
+
+export const Textarea = ({ label, name, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
+  const { data } = useGetSettingQuery();
+
+  return (
+    <Field name={name}>
+      {({ field, form }) => (
+        <ChakraFormControl isInvalid={form.errors[name] && form.touched[name]}>
+          <FormLabel>{label}</FormLabel>
+          <ChakraTextArea
+            size="sm"
+            id={name}
+            {...rest}
+            {...field}
+            focusBorderColor={
+              colorMode === "light"
+                ? data?.input_border_light_color
+                : data?.input_border_dark_color
+            }
+            boxShadow="xs"
+          ></ChakraTextArea>
+          <FormErrorMessage>{form.errors[name]}</FormErrorMessage>
+        </ChakraFormControl>
+      )}
+    </Field>
+  );
+};
+
+export const Select = ({ label, name, options, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
+  const { data } = useGetSettingQuery();
+
+  return (
+    <Field name={name}>
+      {({ field, form }) => (
+        <ChakraFormControl isInvalid={form.errors[name] && form.touched[name]}>
+          <FormLabel>{label}</FormLabel>
+          <ChakraSelect
+            placeholder="Select option"
+            id={name}
+            {...rest}
+            {...field}
+            focusBorderColor={
+              colorMode === "light"
+                ? data?.input_border_light_color
+                : data?.input_border_dark_color
+            }
+            boxShadow="xs"
+          >
+            {options.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+          </ChakraSelect>
+          <FormErrorMessage>{form.errors[name]}</FormErrorMessage>
+        </ChakraFormControl>
+      )}
+    </Field>
+  );
+};
+
+export const InputControl = ({ label, name, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
+  const { data } = useGetSettingQuery();
 
   return (
     <Field name={name}>
@@ -152,8 +256,8 @@ export const CardHeader = (props) => {
 };
 
 export const Button = ({ label, onClick, variant, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
   const { data } = useGetSettingQuery();
-  const colorMode = useSelector(selectCurrentColorMode);
   let bgColor;
   let textColor;
   let borderColor;
@@ -274,8 +378,8 @@ export const Button = ({ label, onClick, variant, ...rest }) => {
 };
 
 export const IconButton = ({ onClick, variant, tooltipLabel, ...rest }) => {
+  const colorMode = useColorModeValue("light", "dark");
   const { data } = useGetSettingQuery();
-  const colorMode = useSelector(selectCurrentColorMode);
   let borderColor;
   let textColor;
 

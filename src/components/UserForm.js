@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 
 import { useGetSettingQuery } from "../redux/api/settingApi";
-// import { InputControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { InputControl } from "./custom-component";

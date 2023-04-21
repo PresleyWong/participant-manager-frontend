@@ -25,7 +25,6 @@ import {
   selectCurrentUser,
   clearCredentials,
 } from "../redux/features/auth/authSlice";
-import { toggleColorMode } from "../redux/features/colorMode/colorModeSlice";
 import { useGetSettingQuery } from "../redux/api/settingApi";
 import { Button, IconButton } from "./custom-component";
 
@@ -49,11 +48,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
-
-  const {
-    colorMode: chakraUIColorMode,
-    toggleColorMode: toggleChakraUIColorMode,
-  } = useColorMode();
+  const { toggleColorMode } = useColorMode();
 
   const titleBg = useColorModeValue(
     data?.header_bg_light_color,
@@ -93,10 +88,10 @@ const Header = () => {
     window.location.reload(false);
   };
 
-  const handleToggleColorMode = () => {
-    toggleChakraUIColorMode();
-    dispatch(toggleColorMode());
-  };
+  // const handleToggleColorMode = () => {
+  //   toggleChakraUIColorMode();
+  //   dispatch(toggleColorMode());
+  // };
 
   let LinkItems = [
     { linkTitle: "Events", href: "/events" },
@@ -170,7 +165,7 @@ const Header = () => {
           </HStack>
           <Flex alignItems={"center"}>
             <Button
-              onClick={handleToggleColorMode}
+              onClick={toggleColorMode}
               rounded={"full"}
               mr={3}
               variant="secondary"

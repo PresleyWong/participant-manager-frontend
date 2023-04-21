@@ -1,5 +1,4 @@
 import { Stack, Button, ModalBody, ModalFooter } from "@chakra-ui/react";
-// import { InputControl } from "formik-chakra-ui";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useUpdateUserMutation } from "../redux/api/userApi";

@@ -1,11 +1,6 @@
 import { Stack, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import {
-  InputControl,
-  SelectControl,
-  NumberInputControl,
-} from "formik-chakra-ui";
 import { useSelector } from "react-redux";
 
 import { selectCurrentUser } from "../redux/features/auth/authSlice";
@@ -13,7 +8,12 @@ import {
   useUpdateParticipantMutation,
   useCreateNewParticipantMutation,
 } from "../redux/api/participantApi";
-import { Button } from "./custom-component";
+import {
+  Button,
+  InputControl,
+  Select,
+  NumberInputControl,
+} from "./custom-component";
 
 const ParticipantForm = ({ data, onClose, createNew = false }) => {
   const [update, updateResponse] = useUpdateParticipantMutation();
@@ -57,13 +57,13 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
 
   const validationSchema = Yup.object({
     english_name: Yup.string().required("Required"),
-    // chinese_name: Yup.string().required("Required"),
+    chinese_name: Yup.string(),
     email: Yup.string().email("Invalid email format").required("Required"),
     phone: Yup.number().required("Required"),
     locality: Yup.string().required("Required"),
     gender: Yup.string().required("Required"),
-    // college: Yup.string().required("Required"),
-    // academic_year: Yup.number().required("Required"),
+    college: Yup.string(),
+    academic_year: Yup.number(),
   });
 
   const onSubmit = async (values) => {
@@ -105,38 +105,36 @@ const ParticipantForm = ({ data, onClose, createNew = false }) => {
                   isRequired
                   label="English Name"
                   name="english_name"
+                  type="text"
                 />
-                <InputControl label="Chinese Name" name="chinese_name" />
-                <SelectControl
+                <InputControl
+                  label="Chinese Name"
+                  name="chinese_name"
+                  type="text"
+                />
+                <Select
                   isRequired
                   label="Gender"
                   name="gender"
-                  selectProps={{ placeholder: "Select option" }}
-                >
-                  {genderOptions.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </SelectControl>
+                  options={genderOptions}
+                />
                 <InputControl
                   isRequired
                   label="Email"
                   name="email"
-                  inputProps={{ type: "email" }}
+                  type="email"
                 />
                 <InputControl
                   isRequired
                   label="Phone"
                   name="phone"
-                  inputProps={{ type: "tel" }}
+                  type="tel"
                 />
                 <InputControl
                   isRequired
                   label="Locality"
                   name="locality"
+                  type="text"
                   hidden={!currentUser.isAdmin}
                 />
                 <InputControl label="College" name="college" />
