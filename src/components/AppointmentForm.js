@@ -11,9 +11,8 @@ import {
 import { useUpdateParticipantAppointmentMutation } from "../redux/api/eventApi";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { SelectControl, TextareaControl } from "formik-chakra-ui";
 import ParticipantForm from "./ParticipantForm";
-import { Button, ModalContent } from "./custom-component";
+import { Button, ModalContent, Select, Textarea } from "./custom-component";
 
 const AppointmentForm = ({ data, onClose }) => {
   const [update, response] = useUpdateParticipantAppointmentMutation();
@@ -72,21 +71,14 @@ const AppointmentForm = ({ data, onClose }) => {
             <Form>
               <ModalBody pb={6}>
                 <Stack spacing={4}>
-                  <SelectControl
+                  <Select
                     isRequired
                     label="Language"
                     name="language"
-                    selectProps={{ placeholder: "Select option" }}
-                  >
-                    {languageOptions.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </SelectControl>
-                  <TextareaControl label="Remarks" name="remarks" />
+                    options={languageOptions}
+                  />
+
+                  <Textarea label="Remarks" name="remarks" />
                 </Stack>
               </ModalBody>
               <ModalFooter>

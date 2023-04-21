@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Stack, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-// import { InputControl } from "formik-chakra-ui";
 
 import { useGetSettingQuery } from "../redux/api/settingApi";
 import { useLoginMutation } from "../redux/api/authApi";

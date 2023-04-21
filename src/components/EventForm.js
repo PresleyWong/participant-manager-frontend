@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-// import { InputControl } from "formik-chakra-ui";
 import { useState } from "react";
 
 import DeleteAttachment from "./DeleteAttachment";

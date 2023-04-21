@@ -40,8 +40,8 @@ const SearchTable = ({
   const { data: dataColor } = useGetSettingQuery();
 
   const borderColor = useColorModeValue(
-    dataColor?.primary_button_bg_light_color,
-    dataColor?.primary_button_bg_dark_color
+    dataColor?.input_border_light_color,
+    dataColor?.input_border_dark_color
   );
 
   const columnHelper = createColumnHelper();
@@ -174,6 +174,7 @@ const SearchTable = ({
     if (isDisabled) {
       return (
         <Select
+          borderRadius={5}
           borderColor={borderColor}
           variant={"custom"}
           size="xs"
@@ -192,6 +193,7 @@ const SearchTable = ({
     } else {
       return (
         <Select
+          borderRadius={5}
           borderColor={borderColor}
           variant={"custom"}
           size="xs"
@@ -314,6 +316,11 @@ const ParticipantSearch = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const { data: dataColor } = useGetSettingQuery();
+  const borderColor = useColorModeValue(
+    dataColor?.input_border_light_color,
+    dataColor?.input_border_dark_color
+  );
 
   const content = (
     <VStack>
@@ -327,6 +334,7 @@ const ParticipantSearch = ({
           placeholder="Search saints"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          focusBorderColor={borderColor}
         />
       </InputGroup>
 
