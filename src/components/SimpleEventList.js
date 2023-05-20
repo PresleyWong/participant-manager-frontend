@@ -68,12 +68,12 @@ const SimpleEventList = ({ currentUser }) => {
                       base: currentUser ? 4 : 6,
                     }}
                   >
-                    <Center>
+                    <VStack align="flex-start" px={20}>
                       <AttachmentsList
                         filesArray={item.attachments}
                         isLink={true}
                       />
-                    </Center>
+                    </VStack>
                   </GridItem>
 
                   {currentUser && (
