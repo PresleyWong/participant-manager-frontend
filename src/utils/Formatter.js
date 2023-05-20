@@ -79,7 +79,7 @@ export const AttachmentsList = ({ filesArray, isLink = false }) => {
   }
 
   return (
-    <VStack spacing={0} style={{ alignItems: "flex-start" }}>
+    <VStack spacing={0} align="flex-start">
       {content}
     </VStack>
   );
