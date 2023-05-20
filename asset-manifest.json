@@ -1,16 +1,28 @@
 {
   "files": {
-    "main.css": "/participant-manager-frontend/static/css/main.bc9bf541.css",
-    "main.js": "/participant-manager-frontend/static/js/main.9691b0b2.js",
+    "main.css": "/participant-manager-frontend/static/css/main.e34f6951.css",
+    "main.js": "/participant-manager-frontend/static/js/main.506d76c8.js",
     "static/js/787.5e2534be.chunk.js": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js",
+    "static/media/cinzel-latin-800.woff": "/participant-manager-frontend/static/media/cinzel-latin-800.4097b3b18539809b7ec0.woff",
+    "static/media/cinzel-latin-700.woff": "/participant-manager-frontend/static/media/cinzel-latin-700.cd44ccde948128dbd333.woff",
+    "static/media/cinzel-latin-600.woff": "/participant-manager-frontend/static/media/cinzel-latin-600.307614a65175a525df67.woff",
+    "static/media/cinzel-latin-500.woff": "/participant-manager-frontend/static/media/cinzel-latin-500.02f828ba41090a2efcc9.woff",
+    "static/media/cinzel-latin-900.woff": "/participant-manager-frontend/static/media/cinzel-latin-900.e44aee63fdda4595bb10.woff",
+    "static/media/cinzel-latin-400.woff": "/participant-manager-frontend/static/media/cinzel-latin-400.dcbcf27063ebdf36e3cb.woff",
+    "static/media/cinzel-latin-800.woff2": "/participant-manager-frontend/static/media/cinzel-latin-800.3937659e6e17cf611511.woff2",
+    "static/media/cinzel-latin-700.woff2": "/participant-manager-frontend/static/media/cinzel-latin-700.a4a77b8af958be5cbbf7.woff2",
+    "static/media/cinzel-latin-600.woff2": "/participant-manager-frontend/static/media/cinzel-latin-600.cf4e7455d901051fb1c6.woff2",
+    "static/media/cinzel-latin-500.woff2": "/participant-manager-frontend/static/media/cinzel-latin-500.259cbb7076a76007a1b2.woff2",
+    "static/media/cinzel-latin-900.woff2": "/participant-manager-frontend/static/media/cinzel-latin-900.cbdd0e6ee2022fd18285.woff2",
+    "static/media/cinzel-latin-400.woff2": "/participant-manager-frontend/static/media/cinzel-latin-400.4a3c7516c48875f95c59.woff2",
     "index.html": "/participant-manager-frontend/index.html",
     "static/media/Sample.csv": "/participant-manager-frontend/static/media/Sample.294b7c79ce18b3806505.csv",
-    "main.bc9bf541.css.map": "/participant-manager-frontend/static/css/main.bc9bf541.css.map",
-    "main.9691b0b2.js.map": "/participant-manager-frontend/static/js/main.9691b0b2.js.map",
+    "main.e34f6951.css.map": "/participant-manager-frontend/static/css/main.e34f6951.css.map",
+    "main.506d76c8.js.map": "/participant-manager-frontend/static/js/main.506d76c8.js.map",
     "787.5e2534be.chunk.js.map": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bc9bf541.css",
-    "static/js/main.9691b0b2.js"
+    "static/css/main.e34f6951.css",
+    "static/js/main.506d76c8.js"
   ]
 }
