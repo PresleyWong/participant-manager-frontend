@@ -27,7 +27,7 @@ import {
   Tooltip,
   Box,
   useColorModeValue,
-  Text,
+  Heading,
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Link as ReachLink } from "react-router-dom";
@@ -168,9 +168,10 @@ export const Link = (props) => {
 
   return (
     <ChakraLink {...props} as={ReachLink}>
-      <Text
+      <Heading
         fontSize="sm"
         fontWeight="extrabold"
+        textDecoration="none"
         as="u"
         color={useColorModeValue(
           data?.primary_button_text_light_color,
@@ -178,7 +179,7 @@ export const Link = (props) => {
         )}
       >
         {props.children}
-      </Text>
+      </Heading>
     </ChakraLink>
   );
 };
@@ -470,13 +471,14 @@ export const Table = ({ table }) => {
   return (
     <>
       <ChakraTable variant="simple" size="small" boxShadow={"lg"}>
-        <Thead bg={headerBg} color={headerTextColor}>
+        <Thead bg={headerBg}>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 const meta = header.column.columnDef.meta;
                 return (
                   <Th
+                    color={headerTextColor}
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
                     isNumeric={meta?.isNumeric}

@@ -5,7 +5,6 @@ import {
   useDisclosure,
   Modal,
   ModalOverlay,
-  // ModalContent,
   ModalHeader,
   ModalCloseButton,
   Center,

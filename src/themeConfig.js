@@ -101,7 +101,7 @@ export const customTheme = extendTheme({
       //   color: mode("neutral.100", "neutral.80")(props),
       // },
       th: {
-        color: "#ffffff !important",
+        // color: "#ffffff !important",
         textTransform: "capitalize !important",
         cursor: "pointer",
       },

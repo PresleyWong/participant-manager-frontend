@@ -3,22 +3,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { TbLogout } from "react-icons/tb";
 import {
+  Container,
   Box,
+  Button as ChakraButton,
   Flex,
   HStack,
+  Icon,
   Link,
-  Button as ChakraButton,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-  useDisclosure,
+  MenuList,
   Stack,
-  Icon,
   Text,
   useColorMode,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
+import "typeface-cinzel";
 
 import { indexApi } from "../redux/api/indexApi";
 import {
@@ -88,11 +90,6 @@ const Header = () => {
     window.location.reload(false);
   };
 
-  // const handleToggleColorMode = () => {
-  //   toggleChakraUIColorMode();
-  //   dispatch(toggleColorMode());
-  // };
-
   let LinkItems = [
     { linkTitle: "Events", href: "/events" },
     { linkTitle: "Saints", href: "/participants" },
@@ -149,7 +146,7 @@ const Header = () => {
 
   return (
     <>
-      <Box px={4} bg={titleBg}>
+      <Container px={4} bg={titleBg} maxW={"1200px"} my="15px">
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
             <Link
@@ -158,8 +155,12 @@ const Header = () => {
               color={"teal"}
               _hover={{ textDecoration: "none" }}
             >
-              <Text as="b" color={titleTxt}>
-                Participant Manager
+              <Text
+                fontFamily="'Cinzel', serif"
+                fontSize="36px"
+                color={titleTxt}
+              >
+                Campus Work
               </Text>
             </Link>
           </HStack>
@@ -175,7 +176,7 @@ const Header = () => {
             <UserMenu />
           </Flex>
         </Flex>
-      </Box>
+      </Container>
       <Box bg={navbarBg} color={navbarColor} px={4}>
         <Flex h={10} align={"center"} justify={"center"}>
           <IconButton
