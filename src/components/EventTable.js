@@ -86,11 +86,7 @@ const EventTable = ({ data }) => {
         header: "End Time",
       }),
       columnHelper.accessor("attachments", {
-        cell: (info) => (
-          <Center>
-            <AttachmentsList filesArray={info.getValue()} />
-          </Center>
-        ),
+        cell: (info) => <AttachmentsList filesArray={info.getValue()} />,
         header: "Attachments",
       }),
       columnHelper.accessor("created_at", {
