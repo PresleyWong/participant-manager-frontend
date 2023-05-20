@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/participant-manager-frontend/static/css/main.e34f6951.css",
-    "main.js": "/participant-manager-frontend/static/js/main.506d76c8.js",
+    "main.js": "/participant-manager-frontend/static/js/main.79793e87.js",
     "static/js/787.5e2534be.chunk.js": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js",
     "static/media/cinzel-latin-800.woff": "/participant-manager-frontend/static/media/cinzel-latin-800.4097b3b18539809b7ec0.woff",
     "static/media/cinzel-latin-700.woff": "/participant-manager-frontend/static/media/cinzel-latin-700.cd44ccde948128dbd333.woff",
@@ -18,11 +18,11 @@
     "index.html": "/participant-manager-frontend/index.html",
     "static/media/Sample.csv": "/participant-manager-frontend/static/media/Sample.294b7c79ce18b3806505.csv",
     "main.e34f6951.css.map": "/participant-manager-frontend/static/css/main.e34f6951.css.map",
-    "main.506d76c8.js.map": "/participant-manager-frontend/static/js/main.506d76c8.js.map",
+    "main.79793e87.js.map": "/participant-manager-frontend/static/js/main.79793e87.js.map",
     "787.5e2534be.chunk.js.map": "/participant-manager-frontend/static/js/787.5e2534be.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e34f6951.css",
-    "static/js/main.506d76c8.js"
+    "static/js/main.79793e87.js"
   ]
 }
